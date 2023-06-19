@@ -9,4 +9,9 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello()
   }
+
+  @Get('/menu')
+  async getMenu(): Promise<any> {
+    return await this.appService.getMenu()
+  }
 }
