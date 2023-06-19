@@ -1,19 +1,17 @@
-version: '3.7'
+version: '3.8'
 services:
   mariadb:
     image: mariadb:latest
-    container_name: talli_db
-    volumes:
-      - ./db/:/var/lib/mysql
+    restart: always
     environment:
-      MYSQL_USER: ${MARIADB_USER}
-      MYSQL_PASSWORD: ${MARIADB_PASSWORD}
-      MYSQL_DATABASE: ${MARIADB_DATABASE}
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE
+    volumes:
+      - mariadb-data:/var/lib/mysql
     ports:
       - '3306:3306'
-    networks:
-      - intra
 
-networks:
-  intra:
-    driver: bridge
+volumes:
+  mariadb-data:
