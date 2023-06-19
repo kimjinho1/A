@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model CarBody {
+  carBodyCode String @id @map("car_body_code") @db.VarChar(10)
+  carBodyName String @unique @map("car_body_name") @db.VarChar(20)
+
+  carType CarType[]
+}
+
+model CarType {
+  carTypeCode String @id @map("car_type_code") @db.VarChar(10)
+  carTypeName String @unique @map("car_type_name") @db.VarChar(10)
+  carBodyCode String @map("car_body_code") @db.VarChar(10)
+
+  carEngine  CarEngine[]
+  carMission CarMission[]
+  carDrive   CarDrive[]
+  carTrim    CarTrim[]
+
+  carBody CarBody @relation(fields: [carBodyCode], references: [carBodyCode], onDelete: Cascade)
+}
+
+model CarEngine {
+  carEngineCode String @id @map("car_engine_code") @db.VarChar(10)
+  carEngineName String @unique @map("car_engine_name") @db.VarChar(20)
+  carTypeCode   String @map("car_type_code") @db.VarChar(10)
+
+  carModel CarModel[]
+
+  carType CarType @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+}
+
+model CarMission {
+  carMissionCode String @id @map("car_mission_code") @db.VarChar(10)
+  carMissionName String @map("car_mission_name") @db.VarChar(20)
+  carTypeCode    String @map("car_type_code") @db.VarChar(10)
+
+  carModel CarModel[]
+
+  carType CarType @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+}
+
+model CarDrive {
+  carDriveCode String @id @map("car_drive_code") @db.VarChar(10)
+  carDriveName String @unique @map("car_drive_name") @db.VarChar(20)
+  carTypeCode  String @map("car_type_code") @db.VarChar(10)
+ 
+  carModel CarModel[]
+
+  carType CarType @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+}
+
+model CarTrim {
+  carTrimCode String @id @map("car_trim_code") @db.VarChar(10)
+  carTrimName String @map("car_trim_name") @db.VarChar(20)
+  carTypeCode String @map("car_type_code") @db.VarChar(10)
+
+  carModel CarModel[]
+
+  carType CarType @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+}
+
+model CarModel {
+  carModelCode  String @id @map("car_model_code") @db.VarChar(10)
+  carModelName  String @unique @map("car_model_name") @db.VarChar(100)
+  carModelPrice Int    @map("car_model_price")
+
+  carEngineCode  String @map("car_engine_code") @db.VarChar(10)
+  carMissionCode String @map("car_mission_code") @db.VarChar(10)
+  carDriveCode   String @map("car_drive_code") @db.VarChar(10)
+  carTrimCode    String @map("car_trim_code")@db.VarChar(10) 
+
+  carEngine  CarEngine  @relation(fields: [carEngineCode], references: [carEngineCode], onDelete: Cascade)
+  carMission CarMission @relation(fields: [carMissionCode], references: [carMissionCode], onDelete: Cascade)
+  carDrive   CarDrive   @relation(fields: [carDriveCode], references: [carDriveCode], onDelete: Cascade)
+  carTrim    CarTrim    @relation(fields: [carTrimCode], references: [carTrimCode], onDelete: Cascade)
+}
