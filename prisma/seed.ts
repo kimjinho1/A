@@ -1,17 +1,17 @@
 import { PrismaClient } from '@prisma/client'
-import { carBody, carDrive, carEngine, carMission, carModel, carTrim, carType } from './model'
+import { car, carDrive, carEngine, carMission, carModel, carTrim, carType } from './model'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  for (const t of carBody) {
-    await prisma.carBody.create({
+  for (const t of carType) {
+    await prisma.carType.create({
       data: t
     })
   }
 
-  for (const t of carType) {
-    await prisma.carType.create({
+  for (const t of car) {
+    await prisma.car.create({
       data: t
     })
   }

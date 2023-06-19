@@ -3,17 +3,17 @@ export const carMission = [
   {
     carMissionCode: 'T',
     carMissionName: 'A/T',
-    carTypeCode: 'CN12'
+    carCode: 'CN12'
   },
   // 투싼
   {
     carMissionCode: 'A,T',
     carMissionName: 'A/T',
-    carTypeCode: 'NX05'
+    carCode: 'NX05'
   },
   {
     carMissionCode: 'D,H',
     carMissionName: 'DCT',
-    carTypeCode: 'NX05'
+    carCode: 'NX05'
   }
 ]

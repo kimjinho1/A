@@ -1,5 +1,5 @@
-export * from './carBody'
 export * from './carType'
+export * from './car'
 export * from './carEngine'
 export * from './carMission'
 export * from './carDrive'
