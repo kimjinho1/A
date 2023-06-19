@@ -1,32 +1,9 @@
 import { PrismaClient } from '@prisma/client'
+import { carBody, carDrive, carEngine, carMission, carModel, carTrim, carType } from './model'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  const carBody = [
-    {
-      carBodyCode: 'S',
-      carBodyName: '승용'
-    },
-    {
-      carBodyCode: 'J',
-      carBodyName: 'SUV'
-    }
-  ]
-
-  const carType = [
-    {
-      carTypeCode: 'CN12',
-      carTypeName: '더 뉴 아반뗴',
-      carBodyCode: 'S'
-    },
-    {
-      carTypeCode: 'NX05',
-      carTypeName: '투싼',
-      carBodyCode: 'J'
-    }
-  ]
-
   for (const t of carBody) {
     await prisma.carBody.create({
       data: t
@@ -35,6 +12,36 @@ async function main() {
 
   for (const t of carType) {
     await prisma.carType.create({
+      data: t
+    })
+  }
+
+  for (const t of carEngine) {
+    await prisma.carEngine.create({
+      data: t
+    })
+  }
+
+  for (const t of carMission) {
+    await prisma.carMission.create({
+      data: t
+    })
+  }
+
+  for (const t of carDrive) {
+    await prisma.carDrive.create({
+      data: t
+    })
+  }
+
+  for (const t of carTrim) {
+    await prisma.carTrim.create({
+      data: t
+    })
+  }
+
+  for (const t of carModel) {
+    await prisma.carModel.create({
       data: t
     })
   }
