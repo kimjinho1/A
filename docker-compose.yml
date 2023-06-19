@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: talli_db
+    volumes:
+      - ./db/:/var/lib/mysql
+    environment:
+      MYSQL_USER: ${MARIADB_USER}
+      MYSQL_PASSWORD: ${MARIADB_PASSWORD}
+      MYSQL_DATABASE: ${MARIADB_DATABASE}
+    ports:
+      - '3306:3306'
+    networks:
+      - intra
+
+networks:
+  intra:
+    driver: bridge
