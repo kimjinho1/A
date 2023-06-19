@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model CarBody {
+  carBodyCode String @id @map("car_body_code") @db.VarChar(10)
+  carBodyName String @unique @map("car_body_name") @db.VarChar(20)
+
+  carType CarType[]
+}
+
+model CarType {
+  carTypeCode String @id @map("car_type_code") @db.VarChar(10)
+  carTypeName String @unique @map("car_type_name") @db.VarChar(10)
+  carBodyCode String @map("car_body_code")
+
+  carBody CarBody @relation(fields: [carBodyCode], references: [carBodyCode], onDelete: Cascade)
+}
