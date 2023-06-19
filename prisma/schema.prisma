@@ -39,7 +39,7 @@ model CarEngine {
 
 model CarMission {
   carMissionCode String @id @map("car_mission_code") @db.VarChar(10)
-  carMissionName String @unique @map("car_mission_name") @db.VarChar(20)
+  carMissionName String @map("car_mission_name") @db.VarChar(20)
   carTypeCode    String @map("car_type_code") @db.VarChar(10)
 
   carModel CarModel[]
@@ -59,7 +59,7 @@ model CarDrive {
 
 model CarTrim {
   carTrimCode String @id @map("car_trim_code") @db.VarChar(10)
-  carTrimName String @unique @map("car_trim_name") @db.VarChar(20)
+  carTrimName String @map("car_trim_name") @db.VarChar(20)
   carTypeCode String @map("car_type_code") @db.VarChar(10)
 
   carModel CarModel[]
