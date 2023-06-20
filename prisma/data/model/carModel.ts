@@ -7,7 +7,6 @@ export const carModel = [
     carCode: 'CN12',
     engineCode: 'R',
     missionCode: 'T',
-    driveCode: '',
     trimCode: 'B'
   },
   {
@@ -17,7 +16,6 @@ export const carModel = [
     carCode: 'CN12',
     engineCode: 'R',
     missionCode: 'T',
-    driveCode: '',
     trimCode: 'D'
   },
   {
@@ -27,7 +25,6 @@ export const carModel = [
     carCode: 'CN12',
     engineCode: 'R',
     missionCode: 'T',
-    driveCode: '',
     trimCode: 'P'
   },
   // 아반떼, LPG
@@ -38,7 +35,6 @@ export const carModel = [
     carCode: 'CN12',
     engineCode: 'L',
     missionCode: 'T',
-    driveCode: '',
     trimCode: 'B'
   },
   {
@@ -48,7 +44,6 @@ export const carModel = [
     carCode: 'CN12',
     engineCode: 'L',
     missionCode: 'T',
-    driveCode: '',
     trimCode: 'D'
   },
   {
@@ -58,7 +53,6 @@ export const carModel = [
     carCode: 'CN12',
     engineCode: 'L',
     missionCode: 'T',
-    driveCode: '',
     trimCode: 'P'
   },
   // 투싼, 디젤, A/T, 2WD

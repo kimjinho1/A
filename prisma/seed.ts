@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
-import { car, carModel, carType, drive, engine, mission, trim } from './model'
-import { carDrive, carEngine, carMission, carTrim } from './model/relation'
+import { ExtColor, IntColor } from './data/color'
+import { car, carModel, carType, drive, engine, mission, trim } from './data/model'
+import { carDrive, carEngine, carMission, carTrim, CarTrimIntColor, IntExtColor } from './data/relation'
 
 const prisma = new PrismaClient()
 
@@ -67,6 +68,30 @@ async function main() {
 
   for (const t of carModel) {
     await prisma.carModel.create({
+      data: t
+    })
+  }
+
+  for (const t of IntColor) {
+    await prisma.intColor.create({
+      data: t
+    })
+  }
+
+  for (const t of ExtColor) {
+    await prisma.extColor.create({
+      data: t
+    })
+  }
+
+  for (const t of IntExtColor) {
+    await prisma.intExtColor.create({
+      data: t
+    })
+  }
+
+  for (const t of CarTrimIntColor) {
+    await prisma.carTrimIntColor.create({
       data: t
     })
   }

@@ -1,9 +1,4 @@
 export const carDrive = [
-  // 아반떼
-  {
-    carCode: 'CN12',
-    driveCode: ''
-  },
   // 투싼
   {
     carCode: 'NX05',

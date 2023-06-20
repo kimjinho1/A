@@ -2,27 +2,27 @@ export const carTrim = [
   // 아반떼
   {
     carCode: 'CN12',
-    trimCode: 'CNB'
+    trimCode: 'B'
   },
   {
     carCode: 'CN12',
-    trimCode: 'CND'
+    trimCode: 'D'
   },
   {
     carCode: 'CN12',
-    trimCode: 'CNP'
+    trimCode: 'P'
   },
   // 투싼
   {
     carCode: 'NX05',
-    trimCode: 'NXD'
+    trimCode: 'D'
   },
   {
     carCode: 'NX05',
-    trimCode: 'NXC'
+    trimCode: 'C'
   },
   {
     carCode: 'NX05',
-    trimCode: 'NXP'
+    trimCode: 'P'
   }
 ]
