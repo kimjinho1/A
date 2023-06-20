@@ -7,78 +7,109 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model CarBody {
-  carBodyCode String @id @map("car_body_code") @db.VarChar(10)
-  carBodyName String @unique @map("car_body_name") @db.VarChar(20)
-
-  carType CarType[]
-}
-
+// 차량 규격
 model CarType {
   carTypeCode String @id @map("car_type_code") @db.VarChar(10)
-  carTypeName String @unique @map("car_type_name") @db.VarChar(10)
-  carBodyCode String @map("car_body_code") @db.VarChar(10)
+  carTypeName String @unique @map("car_type_name") @db.VarChar(20)
+
+  car Car[]
+}
+
+// 차종
+model Car {
+  carCode     String @id @map("car_code") @db.VarChar(10)
+  carName     String @unique @map("car_name") @db.VarChar(10)
+  carTypeCode String @map("car_type_code") @db.VarChar(10)
 
   carEngine  CarEngine[]
   carMission CarMission[]
   carDrive   CarDrive[]
   carTrim    CarTrim[]
 
-  carBody CarBody @relation(fields: [carBodyCode], references: [carBodyCode], onDelete: Cascade)
+  carType  CarType    @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+  carModel CarModel[]
 }
 
-model CarEngine {
-  carEngineCode String @id @map("car_engine_code") @db.VarChar(10)
-  carEngineName String @unique @map("car_engine_name") @db.VarChar(20)
-  carTypeCode   String @map("car_type_code") @db.VarChar(10)
+// 엔진
+model Engine {
+  engineCode String @id @map("engine_code") @db.VarChar(10)
+  engineName String @unique @map("engine_name") @db.VarChar(20)
 
   carModel CarModel[]
+}
 
-  carType CarType @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+// 변속기
+model Mission {
+  missionCode String @id @map("mission_code") @db.VarChar(10)
+  missionName String @map("mission_name") @db.VarChar(20)
+
+  carModel CarModel[]
+}
+
+// 구동방식
+model Drive {
+  driveCode String @id @map("drive_code") @db.VarChar(10)
+  driveName String @unique @map("drive_name") @db.VarChar(20)
+
+  carModel CarModel[]
+}
+
+// 트림
+model Trim {
+  trimCode String @id @map("trim_code") @db.VarChar(10)
+  trimName String @unique @map("trim_name") @db.VarChar(20)
+
+  carModel CarModel[]
+}
+
+// 차종과 선택 가능 품목(엔진, 변속기, 구동방식, 트림)의 호환 관계들
+model CarEngine {
+  id         Int    @id @default(autoincrement())
+  carCode    String @map("car_code") @db.VarChar(10)
+  engineCode String @map("engine_code") @db.VarChar(10)
+
+  car Car @relation(fields: [carCode], references: [carCode], onDelete: Cascade)
 }
 
 model CarMission {
-  carMissionCode String @id @map("car_mission_code") @db.VarChar(10)
-  carMissionName String @map("car_mission_name") @db.VarChar(20)
-  carTypeCode    String @map("car_type_code") @db.VarChar(10)
+  id          Int    @id @default(autoincrement())
+  carCode     String @map("car_code") @db.VarChar(10)
+  missionCode String @map("mission_code") @db.VarChar(10)
 
-  carModel CarModel[]
-
-  carType CarType @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+  car Car @relation(fields: [carCode], references: [carCode], onDelete: Cascade)
 }
 
 model CarDrive {
-  carDriveCode String @id @map("car_drive_code") @db.VarChar(10)
-  carDriveName String @unique @map("car_drive_name") @db.VarChar(20)
-  carTypeCode  String @map("car_type_code") @db.VarChar(10)
- 
-  carModel CarModel[]
+  id        Int    @id @default(autoincrement())
+  carCode   String @map("car_code") @db.VarChar(10)
+  driveCode String @map("drive_code") @db.VarChar(10)
 
-  carType CarType @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+  car Car @relation(fields: [carCode], references: [carCode], onDelete: Cascade)
 }
 
 model CarTrim {
-  carTrimCode String @id @map("car_trim_code") @db.VarChar(10)
-  carTrimName String @map("car_trim_name") @db.VarChar(20)
-  carTypeCode String @map("car_type_code") @db.VarChar(10)
+  id       Int    @id @default(autoincrement())
+  carCode  String @map("car_code") @db.VarChar(10)
+  trimCode String @map("trim_code") @db.VarChar(10)
 
-  carModel CarModel[]
-
-  carType CarType @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+  car Car @relation(fields: [carCode], references: [carCode], onDelete: Cascade)
 }
 
+// 판매 차량 모델
 model CarModel {
-  carModelCode  String @id @map("car_model_code") @db.VarChar(10)
-  carModelName  String @unique @map("car_model_name") @db.VarChar(100)
-  carModelPrice Int    @map("car_model_price")
+  modelCode  String @id @map("model_code") @db.VarChar(10)
+  modelName  String @unique @map("model_name") @db.VarChar(100)
+  modelPrice Int    @map("model_price")
 
-  carEngineCode  String @map("car_engine_code") @db.VarChar(10)
-  carMissionCode String @map("car_mission_code") @db.VarChar(10)
-  carDriveCode   String @map("car_drive_code") @db.VarChar(10)
-  carTrimCode    String @map("car_trim_code")@db.VarChar(10) 
+  carCode     String @map("car_code") @db.VarChar(10)
+  engineCode  String @map("engine_code") @db.VarChar(10)
+  missionCode String @map("mission_code") @db.VarChar(10)
+  driveCode   String @map("drive_code") @db.VarChar(10)
+  trimCode    String @map("trim_code") @db.VarChar(10)
 
-  carEngine  CarEngine  @relation(fields: [carEngineCode], references: [carEngineCode], onDelete: Cascade)
-  carMission CarMission @relation(fields: [carMissionCode], references: [carMissionCode], onDelete: Cascade)
-  carDrive   CarDrive   @relation(fields: [carDriveCode], references: [carDriveCode], onDelete: Cascade)
-  carTrim    CarTrim    @relation(fields: [carTrimCode], references: [carTrimCode], onDelete: Cascade)
+  car     Car     @relation(fields: [carCode], references: [carCode], onDelete: Cascade)
+  engine  Engine  @relation(fields: [engineCode], references: [engineCode], onDelete: Cascade)
+  mission Mission @relation(fields: [missionCode], references: [missionCode], onDelete: Cascade)
+  drive   Drive   @relation(fields: [driveCode], references: [driveCode], onDelete: Cascade)
+  trim    Trim    @relation(fields: [trimCode], references: [trimCode], onDelete: Cascade)
 }
