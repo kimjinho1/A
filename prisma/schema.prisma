@@ -26,8 +26,9 @@ model Car {
   carDrive   CarDrive[]
   carTrim    CarTrim[]
 
-  carType  CarType    @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
-  carModel CarModel[]
+  carType         CarType           @relation(fields: [carTypeCode], references: [carTypeCode], onDelete: Cascade)
+  carModel        CarModel[]
+  carTrimIntColor CarTrimIntColor[]
 }
 
 // 엔진
@@ -59,7 +60,8 @@ model Trim {
   trimCode String @id @map("trim_code") @db.VarChar(10)
   trimName String @unique @map("trim_name") @db.VarChar(20)
 
-  carModel CarModel[]
+  carModel        CarModel[]
+  carTrimIntColor CarTrimIntColor[]
 }
 
 // 차종과 선택 가능 품목(엔진, 변속기, 구동방식, 트림)의 호환 관계들
@@ -98,18 +100,59 @@ model CarTrim {
 // 판매 차량 모델
 model CarModel {
   modelCode  String @id @map("model_code") @db.VarChar(10)
-  modelName  String @unique @map("model_name") @db.VarChar(100)
+  modelName  String @unique @map("model_name") @db.VarChar(50)
   modelPrice Int    @map("model_price")
 
-  carCode     String @map("car_code") @db.VarChar(10)
-  engineCode  String @map("engine_code") @db.VarChar(10)
-  missionCode String @map("mission_code") @db.VarChar(10)
-  driveCode   String @map("drive_code") @db.VarChar(10)
-  trimCode    String @map("trim_code") @db.VarChar(10)
+  carCode     String  @map("car_code") @db.VarChar(10)
+  engineCode  String  @map("engine_code") @db.VarChar(10)
+  missionCode String  @map("mission_code") @db.VarChar(10)
+  driveCode   String? @map("drive_code") @db.VarChar(10)
+  trimCode    String  @map("trim_code") @db.VarChar(10)
 
   car     Car     @relation(fields: [carCode], references: [carCode], onDelete: Cascade)
   engine  Engine  @relation(fields: [engineCode], references: [engineCode], onDelete: Cascade)
   mission Mission @relation(fields: [missionCode], references: [missionCode], onDelete: Cascade)
-  drive   Drive   @relation(fields: [driveCode], references: [driveCode], onDelete: Cascade)
+  drive   Drive?  @relation(fields: [driveCode], references: [driveCode], onDelete: Cascade)
   trim    Trim    @relation(fields: [trimCode], references: [trimCode], onDelete: Cascade)
+}
+
+// 내장색상
+model IntColor {
+  intColorCode  String @id @map("int_color_code") @db.VarChar(10)
+  intColorName  String @unique @map("int_color_name") @db.VarChar(50)
+  intColorPrice Int    @map("int_color_price")
+
+  intExtColor     IntExtColor[]
+  carTrimIntColor CarTrimIntColor[]
+}
+
+// 외장색상
+model ExtColor {
+  extColorCode  String @id @map("ext_color_code") @db.VarChar(10)
+  extColorName  String @unique @map("ext_color_name") @db.VarChar(50)
+  extColorPrice Int    @map("ext_color_price")
+
+  intExtColor IntExtColor[]
+}
+
+// Car, Trim, IntColor 호환 관계
+model CarTrimIntColor {
+  id           Int    @id @default(autoincrement())
+  carCode      String @map("car_code") @db.VarChar(10)
+  trimCode     String @map("trim_code") @db.VarChar(10)
+  intColorCode String @map("int_color_code") @db.VarChar(10)
+
+  car      Car      @relation(fields: [carCode], references: [carCode], onDelete: Cascade)
+  trim     Trim     @relation(fields: [trimCode], references: [trimCode], onDelete: Cascade)
+  intColor IntColor @relation(fields: [intColorCode], references: [intColorCode], onDelete: Cascade)
+}
+
+// 내장색상과 외장색상 호환 관계
+model IntExtColor {
+  id           Int    @id @default(autoincrement())
+  intColorCode String @map("int_color_code") @db.VarChar(10)
+  extColorCode String @map("ext_color_code") @db.VarChar(10)
+
+  intColor IntColor @relation(fields: [intColorCode], references: [intColorCode], onDelete: Cascade)
+  extColor ExtColor @relation(fields: [extColorCode], references: [extColorCode], onDelete: Cascade)
 }

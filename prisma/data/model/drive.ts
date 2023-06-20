@@ -1,9 +1,4 @@
 export const drive = [
-  // 아반떼
-  {
-    driveCode: '',
-    driveName: ''
-  },
   // 투싼
   {
     driveCode: 'D,T',

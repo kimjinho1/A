@@ -91,16 +91,55 @@ CREATE TABLE `CarTrim` (
 -- CreateTable
 CREATE TABLE `CarModel` (
     `model_code` VARCHAR(10) NOT NULL,
-    `model_name` VARCHAR(100) NOT NULL,
+    `model_name` VARCHAR(50) NOT NULL,
     `model_price` INTEGER NOT NULL,
     `car_code` VARCHAR(10) NOT NULL,
     `engine_code` VARCHAR(10) NOT NULL,
     `mission_code` VARCHAR(10) NOT NULL,
-    `drive_code` VARCHAR(10) NOT NULL,
+    `drive_code` VARCHAR(10) NULL,
     `trim_code` VARCHAR(10) NOT NULL,
 
     UNIQUE INDEX `CarModel_model_name_key`(`model_name`),
     PRIMARY KEY (`model_code`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `IntColor` (
+    `int_color_code` VARCHAR(10) NOT NULL,
+    `int_color_name` VARCHAR(50) NOT NULL,
+    `int_color_price` INTEGER NOT NULL,
+
+    UNIQUE INDEX `IntColor_int_color_name_key`(`int_color_name`),
+    PRIMARY KEY (`int_color_code`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ExtColor` (
+    `ext_color_code` VARCHAR(10) NOT NULL,
+    `ext_color_name` VARCHAR(50) NOT NULL,
+    `ext_color_price` INTEGER NOT NULL,
+
+    UNIQUE INDEX `ExtColor_ext_color_name_key`(`ext_color_name`),
+    PRIMARY KEY (`ext_color_code`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `CarTrimIntColor` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `car_code` VARCHAR(10) NOT NULL,
+    `trim_code` VARCHAR(10) NOT NULL,
+    `int_color_code` VARCHAR(10) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `IntExtColor` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `int_color_code` VARCHAR(10) NOT NULL,
+    `ext_color_code` VARCHAR(10) NOT NULL,
+
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
@@ -132,3 +171,18 @@ ALTER TABLE `CarModel` ADD CONSTRAINT `CarModel_drive_code_fkey` FOREIGN KEY (`d
 
 -- AddForeignKey
 ALTER TABLE `CarModel` ADD CONSTRAINT `CarModel_trim_code_fkey` FOREIGN KEY (`trim_code`) REFERENCES `Trim`(`trim_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `CarTrimIntColor` ADD CONSTRAINT `CarTrimIntColor_car_code_fkey` FOREIGN KEY (`car_code`) REFERENCES `Car`(`car_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `CarTrimIntColor` ADD CONSTRAINT `CarTrimIntColor_trim_code_fkey` FOREIGN KEY (`trim_code`) REFERENCES `Trim`(`trim_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `CarTrimIntColor` ADD CONSTRAINT `CarTrimIntColor_int_color_code_fkey` FOREIGN KEY (`int_color_code`) REFERENCES `IntColor`(`int_color_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `IntExtColor` ADD CONSTRAINT `IntExtColor_int_color_code_fkey` FOREIGN KEY (`int_color_code`) REFERENCES `IntColor`(`int_color_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `IntExtColor` ADD CONSTRAINT `IntExtColor_ext_color_code_fkey` FOREIGN KEY (`ext_color_code`) REFERENCES `ExtColor`(`ext_color_code`) ON DELETE CASCADE ON UPDATE CASCADE;
