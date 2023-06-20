@@ -14,31 +14,32 @@ export class AppService {
     const carList = await this.prisma.car.findMany()
     const data = Promise.all(
       carList.map(async car => {
-        const carType = await this.prisma.carType.findUnique({
+        const type = await this.prisma.carType.findUnique({
           where: {
             carTypeCode: car.carTypeCode
-          },
-          select: {
-            carTypeName: true
           }
         })
-        const carModels: CarModel[] = []
-        const engines = await this.prisma.carEngine.findMany({
-          where: { carCode: car.carCode }
-        })
-        for (const carEngine of engines) {
-          const models = await this.prisma.carModel.findMany({
-            where: { carEngineCode: carEngine.carEngineCode }
-          })
-          carModels.push(...models)
+        if (type === null) {
+          return
         }
-        carModels.sort((a, b) => a.carModelPrice - b.carModelPrice)
+        const carModels = await this.prisma.carModel.findMany({
+          where: {
+            carCode: car.carCode
+          },
+          select: {
+            modelPrice: true
+          },
+          orderBy: {
+            modelPrice: 'asc'
+          },
+          take: 1
+        })
         return {
-          carTypeCode: car.carTypeCode,
-          carTypeName: carType?.carTypeName,
           carCode: car.carCode,
           carName: car.carName,
-          carLowPrice: carModels[0].carModelPrice
+          carTypeCode: car.carTypeCode,
+          carTypeName: type.carTypeName,
+          carLowPrice: carModels[0].modelPrice
         }
       })
     )
