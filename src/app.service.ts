@@ -96,4 +96,55 @@ export class AppService {
 
     return extColors.map(extColor => extColor.extColor)
   }
+
+  async getOptionsByModelCode(modelCode: string) {
+    const carModel = await this.prisma.carModel.findUnique({
+      where: {
+        modelCode
+      }
+    })
+
+    if (!carModel) {
+      throw new Error('carModel not found')
+    }
+
+    const options = await this.prisma.carModelOption.findMany({
+      where: { modelId: carModel.modelId },
+      select: {
+        option: true
+      }
+    })
+
+    return options.map(option => option.option)
+  }
+
+  async getDisabledOptionsBySelectedOptionCodes(optionCodes: string[]) {
+    const data: any = []
+    await Promise.all(
+      optionCodes.map(async optionCode => {
+        const option = await this.prisma.option.findUnique({
+          where: {
+            optionCode
+          }
+        })
+
+        if (!option) {
+          throw new Error('option not found')
+        }
+
+        const disabledOptions = await this.prisma.disabledOption.findMany({
+          where: {
+            optionId: option.optionId
+          },
+          select: {
+            disabledOption: true
+          }
+        })
+        disabledOptions.map(disabledOption => {
+          data.push(disabledOption.disabledOption)
+        })
+      })
+    )
+    return data
+  }
 }

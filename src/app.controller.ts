@@ -24,4 +24,15 @@ export class AppController {
   async getExtColorsByIntColorCode(@Query('intColorCode') intColorCode: string): Promise<any> {
     return await this.appService.getExtColorsByIntColorCode(intColorCode)
   }
+
+  @Get('/option')
+  async getOptionsByModelCode(@Query('modelCode') modelCode: string): Promise<any> {
+    return await this.appService.getOptionsByModelCode(modelCode)
+  }
+
+  @Get('/disable-option')
+  async getDisabledOptionsBySelectedOptionCodes(@Query('optionCodes') optionCodes: string): Promise<any> {
+    const optionCodeList = optionCodes.split(',')
+    return await this.appService.getDisabledOptionsBySelectedOptionCodes(optionCodeList)
+  }
 }
