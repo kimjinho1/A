@@ -184,7 +184,7 @@ model CarTrimIntColor {
 // 상세 품목
 model Option {
   optionId    Int    @id @default(autoincrement()) @map("option_id")
-  optionCode  String @map("option_code") @db.VarChar(10)
+  optionCode  String @unique @map("option_code") @db.VarChar(10)
   optionName  String @map("option_name") @db.VarChar(50)
   optionPrice Int    @map("option_price")
 
@@ -213,7 +213,7 @@ model RequiredOption {
   requiredOptionId Int @map("required_option_id")
 
   option          Option @relation(name: "requiredOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
-  requiredOption2 Option @relation(name: "requiredOption2", fields: [requiredOptionId], references: [optionId], onDelete: Cascade)
+  requiredOption Option @relation(name: "requiredOption2", fields: [requiredOptionId], references: [optionId], onDelete: Cascade)
 
   @@id([optionId, requiredOptionId])
 }
@@ -224,14 +224,14 @@ model DisabledOption {
   disabledOptionId Int @map("disabled_option_id")
 
   option          Option @relation(name: "disabledOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
-  disabledOption2 Option @relation(name: "disabledOption2", fields: [disabledOptionId], references: [optionId], onDelete: Cascade)
+  disabledOption Option @relation(name: "disabledOption2", fields: [disabledOptionId], references: [optionId], onDelete: Cascade)
 
   @@id([optionId, disabledOptionId])
 }
 
 model CarModelOption {
-  modelId Int @map("car_model_id")
-  optionId   Int @map("option_id")
+  modelId  Int @map("model_id")
+  optionId Int @map("option_id")
 
   carModel CarModel @relation(fields: [modelId], references: [modelId], onDelete: Cascade)
   option   Option   @relation(fields: [optionId], references: [optionId], onDelete: Cascade)
