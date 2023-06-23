@@ -1,4 +1,4 @@
-export const engine = [
+export const engines = [
   // 아반떼
   {
     engineCode: 'R',

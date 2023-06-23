@@ -1,4 +1,4 @@
-export const mission = [
+export const missions = [
   // 아반떼
   {
     missionCode: 'T',

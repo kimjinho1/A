@@ -6,6 +6,7 @@ nest:
 
 migrate:
 	npx prisma migrate dev --name init
+	npm run seed
 
 seed:
 	npm run seed
@@ -24,3 +25,5 @@ clean:
 
 fclean:	clean
 	sudo rm -rf db
+
+re: fclean all

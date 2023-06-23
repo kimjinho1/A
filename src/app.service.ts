@@ -16,15 +16,15 @@ export class AppService {
       carList.map(async car => {
         const type = await this.prisma.carType.findUnique({
           where: {
-            carTypeCode: car.carTypeCode
+            carTypeId: car.carTypeId
           }
         })
-        if (type === null) {
+        if (!type) {
           return
         }
         const carModels = await this.prisma.carModel.findMany({
           where: {
-            carCode: car.carCode
+            carId: car.carId
           },
           select: {
             modelPrice: true
@@ -37,7 +37,7 @@ export class AppService {
         return {
           carCode: car.carCode,
           carName: car.carName,
-          carTypeCode: car.carTypeCode,
+          carTypeCode: type.carTypeCode,
           carTypeName: type.carTypeName,
           carLowPrice: carModels[0].modelPrice
         }
@@ -47,41 +47,36 @@ export class AppService {
   }
 
   async getIntColors(modelCode: string, extColorCode: string) {
-    // const modelCode = 'NXJJ5DCT2'
-    // const extColorCode = 'B6S'
-
-    const carModel = await this.prisma.carModel.findUnique({
-      where: { modelCode },
-      include: {
-        trim: {
-          include: {
-            carTrimIntColor: {
-              include: {
-                intColor: {
-                  include: {
-                    intExtColor: true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    })
-
-    if (!carModel) {
-      throw new Error('CarModel not found')
-    }
-
-    console.log(carModel)
-    console.log(carModel.trim)
-    console.log(carModel.trim.carTrimIntColor)
-
-    const intColors = carModel.trim.carTrimIntColor
-      .map(trimIntColor => trimIntColor.intColor)
-      .filter(intColor => intColor.intExtColor.some(intExt => intExt.extColorCode === extColorCode))
-      .map(({ intExtColor, ...rest }) => rest)
-
-    return intColors
+    //   // const modelCode = 'NXJJ5DCT2'
+    //   // const extColorCode = 'B6S'
+    //   const carModel = await this.prisma.carModel.findUnique({
+    //     where: { modelCode },
+    //     include: {
+    //       trim: {
+    //         include: {
+    //           carTrimIntColor: {
+    //             include: {
+    //               intColor: {
+    //                 include: {
+    //                   intExtColor: true
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   })
+    //   if (!carModel) {
+    //     throw new Error('CarModel not found')
+    //   }
+    //   console.log(carModel)
+    //   console.log(carModel.trim)
+    //   console.log(carModel.trim.carTrimIntColor)
+    //   const intColors = carModel.trim.carTrimIntColor
+    //     .map(trimIntColor => trimIntColor.intColor)
+    //     .filter(intColor => intColor.intExtColor.some(intExt => intExt.extColorCode === extColorCode))
+    //     .map(({ intExtColor, ...rest }) => rest)
+    //   return intColors
   }
 }

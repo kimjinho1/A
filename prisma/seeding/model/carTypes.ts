@@ -1,4 +1,4 @@
-export const carType = [
+export const carTypes = [
   {
     carTypeCode: 'S',
     carTypeName: '승용'

@@ -1,4 +1,4 @@
-export const drive = [
+export const drives = [
   // 투싼
   {
     driveCode: 'D,T',

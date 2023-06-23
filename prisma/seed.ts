@@ -1,100 +1,113 @@
 import { PrismaClient } from '@prisma/client'
-import { ExtColor, IntColor } from './data/color'
-import { car, carModel, carType, drive, engine, mission, trim } from './data/model'
-import { carDrive, carEngine, carMission, carTrim, CarTrimIntColor, IntExtColor } from './data/relation'
+import { ExtColors, IntColors } from './seeding/color'
+import { cars, carModels, carTypes, drives, engines, missions, trims } from './seeding/model'
+import { carDrives, carEngines, carMissions, carTrims, CarTrimIntColors, IntExtColors } from './seeding/relation'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  for (const t of carType) {
+  for (const carType of carTypes) {
     await prisma.carType.create({
-      data: t
+      data: carType
     })
   }
 
-  for (const t of car) {
+  for (const car of cars) {
     await prisma.car.create({
-      data: t
+      data: car
     })
   }
 
-  for (const t of engine) {
+  for (const engine of engines) {
     await prisma.engine.create({
-      data: t
+      data: engine
     })
   }
 
-  for (const t of mission) {
+  for (const mission of missions) {
     await prisma.mission.create({
-      data: t
+      data: mission
     })
   }
 
-  for (const t of drive) {
+  for (const drive of drives) {
     await prisma.drive.create({
-      data: t
+      data: drive
     })
   }
 
-  for (const t of trim) {
+  for (const trim of trims) {
     await prisma.trim.create({
-      data: t
+      data: trim
     })
   }
 
-  for (const t of carEngine) {
+  for (const carEngine of carEngines) {
     await prisma.carEngine.create({
-      data: t
+      data: carEngine
     })
   }
 
-  for (const t of carMission) {
+  for (const carMission of carMissions) {
     await prisma.carMission.create({
-      data: t
+      data: carMission
     })
   }
 
-  for (const t of carDrive) {
+  for (const carDrive of carDrives) {
     await prisma.carDrive.create({
-      data: t
+      data: carDrive
     })
   }
 
-  for (const t of carTrim) {
+  for (const carDrive of carTrims) {
     await prisma.carTrim.create({
-      data: t
+      data: carDrive
     })
   }
 
-  for (const t of carModel) {
+  for (const carModel of carModels) {
+    const checkDriveCode = drives.findIndex(drive => drive.driveCode === carModel.driveCode)
     await prisma.carModel.create({
-      data: t
+      data: {
+        modelCode: carModel.modelCode,
+        modelName: carModel.modelName,
+        modelPrice: carModel.modelPrice,
+        carId: cars.findIndex(car => car.carCode === carModel.carCode) + 1,
+        engineId: engines.findIndex(engine => engine.engineCode === carModel.engineCode) + 1,
+        missionId: missions.findIndex(mission => mission.missionCode === carModel.missionCode) + 1,
+        driveId: checkDriveCode === -1 ? null : checkDriveCode + 1,
+        trimId: trims.findIndex(trim => trim.trimCode === carModel.trimCode) + 1
+      }
     })
   }
 
-  for (const t of IntColor) {
+  for (const IntColor of IntColors) {
     await prisma.intColor.create({
-      data: t
+      data: IntColor
     })
   }
 
-  for (const t of ExtColor) {
+  for (const ExtColor of ExtColors) {
     await prisma.extColor.create({
-      data: t
+      data: ExtColor
     })
   }
 
-  for (const t of IntExtColor) {
+  for (const intExtColor of IntExtColors) {
     await prisma.intExtColor.create({
-      data: t
+      data: {
+        intColorId: IntColors.findIndex(intColor => intColor.intColorCode === intExtColor.intColorCode) + 1,
+        extColorId: ExtColors.findIndex(extColor => extColor.extColorCode === intExtColor.extColorCode) + 1
+      }
     })
   }
 
-  for (const t of CarTrimIntColor) {
-    await prisma.carTrimIntColor.create({
-      data: t
-    })
-  }
+  // for (const t of CarTrimIntColor) {
+  //   await prisma.carTrimIntColor.create({
+  //     data: t
+  //   })
+  // }
 }
 
 main()

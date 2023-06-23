@@ -1,4 +1,4 @@
-export const CarTrimIntColor = [
+export const CarTrimIntColors = [
   // 아반떼
   {
     carCode: 'NX05',

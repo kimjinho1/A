@@ -1,4 +1,4 @@
-export const carModel = [
+export const carModels = [
   // 아반떼, 가솔린
   {
     modelCode: 'CNJS4RBT3',
