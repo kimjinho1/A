@@ -6,9 +6,12 @@ nest:
 
 migrate:
 	npx prisma migrate dev --name init
-	npm run seed
 
 seed:
+	npm run seed
+
+m:
+	npx prisma migrate dev --name init
 	npm run seed
 
 studio:

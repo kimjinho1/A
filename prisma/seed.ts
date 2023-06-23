@@ -1,7 +1,18 @@
 import { PrismaClient } from '@prisma/client'
 import { ExtColors, IntColors } from './seeding/color'
-import { cars, carModels, carTypes, drives, engines, missions, trims } from './seeding/model'
-import { carDrives, carEngines, carMissions, carTrims, CarTrimIntColors, IntExtColors } from './seeding/relation'
+import { cars, carModels, carTypes, drives, engines, missions, trims, options } from './seeding/model'
+import {
+  carDrives,
+  carEngines,
+  carMissions,
+  carTrims,
+  CarTrimIntColors,
+  IntExtColors,
+  autoChoiceOptions,
+  requiredOptions,
+  disabledOptions,
+  carModelOptions
+} from './seeding/relation'
 
 const prisma = new PrismaClient()
 
@@ -103,11 +114,61 @@ async function main() {
     })
   }
 
-  // for (const t of CarTrimIntColor) {
-  //   await prisma.carTrimIntColor.create({
-  //     data: t
-  //   })
-  // }
+  for (const CarTrimIntColor of CarTrimIntColors) {
+    await prisma.carTrimIntColor.create({
+      data: {
+        carId: cars.findIndex(car => car.carCode === CarTrimIntColor.carCode) + 1,
+        trimId: trims.findIndex(trim => trim.trimCode === CarTrimIntColor.trimCode) + 1,
+        intColorId: IntColors.findIndex(intColor => intColor.intColorCode === CarTrimIntColor.intColorCode) + 1
+      }
+    })
+  }
+
+  for (const option of options) {
+    await prisma.option.create({
+      data: option
+    })
+  }
+
+  for (const autoChoiceOption of autoChoiceOptions) {
+    await prisma.autoChoiceOption.create({
+      data: {
+        intColorId: IntColors.findIndex(intColor => intColor.intColorCode === autoChoiceOption.intColorCode) + 1,
+        optionId: options.findIndex(option => option.optionCode === autoChoiceOption.optionCode) + 1
+      }
+    })
+  }
+
+  for (const requiredOption of requiredOptions) {
+    await prisma.requiredOption.create({
+      data: {
+        optionId: options.findIndex(option => option.optionCode === requiredOption.optionCode) + 1,
+        requiredOptionId: options.findIndex(option => option.optionCode === requiredOption.requiredOptionCode) + 1
+      }
+    })
+  }
+
+  for (const disabledOption of disabledOptions) {
+    await prisma.disabledOption.create({
+      data: {
+        optionId: options.findIndex(option => option.optionCode === disabledOption.optionCode) + 1,
+        disabledOptionId: options.findIndex(option => option.optionCode === disabledOption.disabledOptionCode) + 1
+      }
+    })
+  }
+
+  for (const carModelOption of carModelOptions) {
+    const modelCode = carModelOption.modelCode
+    const optionCodes = carModelOption.optionCodes
+    for (const optionCode of optionCodes) {
+      await prisma.carModelOption.create({
+        data: {
+          modelId: carModels.findIndex(carModel => carModel.modelCode === modelCode) + 1,
+          optionId: options.findIndex(option => option.optionCode === optionCode) + 1
+        }
+      })
+    }
+  }
 }
 
 main()

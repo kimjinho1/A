@@ -28,9 +28,9 @@ model Car {
   carDrive   CarDrive[]
   carTrim    CarTrim[]
 
-  carType  CarType    @relation(fields: [carTypeId], references: [carTypeId], onDelete: Cascade)
-  carModel CarModel[]
-  // carTrimIntColor CarTrimIntColor[]
+  carType         CarType           @relation(fields: [carTypeId], references: [carTypeId], onDelete: Cascade)
+  carModel        CarModel[]
+  carTrimIntColor CarTrimIntColor[]
 }
 
 // 엔진
@@ -69,12 +69,12 @@ model Trim {
   trimCode String @unique @map("trim_code") @db.VarChar(10)
   trimName String @unique @map("trim_name") @db.VarChar(20)
 
-  carTrim  CarTrim[]
-  carModel CarModel[]
-  // carTrimIntColor CarTrimIntColor[]
+  carTrim         CarTrim[]
+  carModel        CarModel[]
+  carTrimIntColor CarTrimIntColor[]
 }
 
-// // 차종과 선택 가능 품목(엔진, 변속기, 구동방식, 트림)의 호환 관계들
+// 차종과 선택 가능 품목(엔진, 변속기, 구동방식, 트림)의 호환 관계들
 model CarEngine {
   carId    Int @map("car_id")
   engineId Int @map("engine_id")
@@ -128,6 +128,8 @@ model CarModel {
   driveId   Int? @map("drive_id")
   trimId    Int  @map("trim_id")
 
+  carModelOption CarModelOption[]
+
   car     Car     @relation(fields: [carId], references: [carId], onDelete: Cascade)
   engine  Engine  @relation(fields: [engineId], references: [engineId], onDelete: Cascade)
   mission Mission @relation(fields: [missionId], references: [missionId], onDelete: Cascade)
@@ -141,8 +143,9 @@ model IntColor {
   intColorCode String @unique @map("int_color_code") @db.VarChar(10)
   intColorName String @map("int_color_name") @db.VarChar(50)
 
-  intExtColor IntExtColor[]
-  // carTrimIntColor CarTrimIntColor[]
+  intExtColor      IntExtColor[]
+  carTrimIntColor  CarTrimIntColor[]
+  autoChoiceOption AutoChoiceOption[]
 }
 
 // 외장색상
@@ -165,13 +168,73 @@ model IntExtColor {
   @@id([intColorId, extColorId])
 }
 
-// // Car, Trim, IntColor 호환 관계
-// model CarTrimIntColor {
-//   carId        Int    @map("car_id")
-//   trimId       Int    @map("trim_id")
-//   intColorCode String @map("int_color_code") @db.VarChar(10)
+// Car, Trim, IntColor 호환 관계
+model CarTrimIntColor {
+  carId      Int @map("car_id")
+  trimId     Int @map("trim_id")
+  intColorId Int @map("int_color_id")
 
-//   car      Car      @relation(fields: [carId], references: [carId], onDelete: Cascade)
-//   trim     Trim     @relation(fields: [trimId], references: [trimId], onDelete: Cascade)
-//   intColor IntColor @relation(fields: [intColorCode], references: [intColorCode], onDelete: Cascade)
-// }
+  car      Car      @relation(fields: [carId], references: [carId], onDelete: Cascade)
+  trim     Trim     @relation(fields: [trimId], references: [trimId], onDelete: Cascade)
+  intColor IntColor @relation(fields: [intColorId], references: [intColorId], onDelete: Cascade)
+
+  @@id([carId, trimId, intColorId])
+}
+
+// 상세 품목
+model Option {
+  optionId    Int    @id @default(autoincrement()) @map("option_id")
+  optionCode  String @map("option_code") @db.VarChar(10)
+  optionName  String @map("option_name") @db.VarChar(50)
+  optionPrice Int    @map("option_price")
+
+  autoChoiceOption AutoChoiceOption[]
+  requiredOption1  RequiredOption[]   @relation(name: "requiredOption1")
+  requiredOption2  RequiredOption[]   @relation(name: "requiredOption2")
+  disabledOption1  DisabledOption[]   @relation(name: "disabledOption1")
+  disabledOption2  DisabledOption[]   @relation(name: "disabledOption2")
+  carModelOption   CarModelOption[]
+}
+
+// 특정 옵션이 선택되면 비활성화되는 옵션
+model AutoChoiceOption {
+  intColorId Int @map("int_color_id")
+  optionId   Int @map("option_id")
+
+  intColor IntColor @relation(fields: [intColorId], references: [intColorId], onDelete: Cascade)
+  option   Option   @relation(fields: [optionId], references: [optionId], onDelete: Cascade)
+
+  @@id([intColorId, optionId])
+}
+
+// 특정 옵션이 선택되면 활성화되는 옵션
+model RequiredOption {
+  optionId         Int @map("option_id")
+  requiredOptionId Int @map("required_option_id")
+
+  option          Option @relation(name: "requiredOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
+  requiredOption2 Option @relation(name: "requiredOption2", fields: [requiredOptionId], references: [optionId], onDelete: Cascade)
+
+  @@id([optionId, requiredOptionId])
+}
+
+// 특정 옵션이 선택되면 비활성화되는 옵션
+model DisabledOption {
+  optionId         Int @map("option_id")
+  disabledOptionId Int @map("disabled_option_id")
+
+  option          Option @relation(name: "disabledOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
+  disabledOption2 Option @relation(name: "disabledOption2", fields: [disabledOptionId], references: [optionId], onDelete: Cascade)
+
+  @@id([optionId, disabledOptionId])
+}
+
+model CarModelOption {
+  modelId Int @map("car_model_id")
+  optionId   Int @map("option_id")
+
+  carModel CarModel @relation(fields: [modelId], references: [modelId], onDelete: Cascade)
+  option   Option   @relation(fields: [optionId], references: [optionId], onDelete: Cascade)
+
+  @@id([modelId, optionId])
+}
