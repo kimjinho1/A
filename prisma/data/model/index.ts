@@ -1,7 +1,0 @@
-export * from './carType'
-export * from './car'
-export * from './engine'
-export * from './mission'
-export * from './drive'
-export * from './trim'
-export * from './carModel'

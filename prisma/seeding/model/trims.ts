@@ -1,4 +1,4 @@
-export const trim = [
+export const trims = [
   {
     trimCode: 'B',
     trimName: 'Smart'

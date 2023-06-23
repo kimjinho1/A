@@ -10,6 +10,10 @@ migrate:
 seed:
 	npm run seed
 
+m:
+	npx prisma migrate dev --name init
+	npm run seed
+
 studio:
 	npx prisma studio
 
@@ -24,3 +28,5 @@ clean:
 
 fclean:	clean
 	sudo rm -rf db
+
+re: fclean all
