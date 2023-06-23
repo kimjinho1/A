@@ -16,7 +16,12 @@ export class AppController {
   }
 
   @Get('/intColor')
-  async getIntColors(@Query('modelCode') modelCode: string, @Query('extColorCode') extColorCode: string): Promise<any> {
-    return await this.appService.getIntColors(modelCode, extColorCode)
+  async getIntColorsByModelCode(@Query('modelCode') modelCode: string): Promise<any> {
+    return await this.appService.getIntColorsByModelCode(modelCode)
+  }
+
+  @Get('/extColor')
+  async getExtColorsByIntColorCode(@Query('intColorCode') intColorCode: string): Promise<any> {
+    return await this.appService.getExtColorsByIntColorCode(intColorCode)
   }
 }
