@@ -145,4 +145,55 @@ export class AppService {
     )
     return data
   }
+
+  async getTuixsByOptionCode(modelCode: string) {
+    const carModel = await this.prisma.carModel.findUnique({
+      where: {
+        modelCode
+      }
+    })
+
+    if (!carModel) {
+      throw new Error('carModel not found')
+    }
+
+    const tuixs = await this.prisma.carModelTuix.findMany({
+      where: { modelId: carModel.modelId },
+      select: {
+        tuix: true
+      }
+    })
+
+    return tuixs.map(tuix => tuix.tuix)
+  }
+
+  async getAddPosibleTuixBySelectedOptionCode(optionCodes: string[]) {
+    const data: any = []
+    await Promise.all(
+      optionCodes.map(async optionCode => {
+        const option = await this.prisma.option.findUnique({
+          where: {
+            optionCode
+          }
+        })
+
+        if (!option) {
+          throw new Error('option not found')
+        }
+
+        const tuixRequiredOptions = await this.prisma.tuixRequiredOption.findMany({
+          where: {
+            optionId: option.optionId
+          },
+          select: {
+            tuix: true
+          }
+        })
+        tuixRequiredOptions.map(tuixRequiredOption => {
+          data.push(tuixRequiredOption.tuix)
+        })
+      })
+    )
+    return data
+  }
 }

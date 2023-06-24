@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { ExtColors, IntColors } from './seeding/color'
 import { cars, carModels, carTypes, drives, engines, missions, trims } from './seeding/model'
-import { options } from './seeding/option'
+import { options, tuixs } from './seeding/option'
 import {
   carDrives,
   carEngines,
@@ -12,7 +12,10 @@ import {
   autoChoiceOptions,
   requiredOptions,
   disabledOptions,
-  carModelOptions
+  carModelOptions,
+  carModelTuixs,
+  disabledTuixs,
+  tuixRequiredOptions
 } from './seeding/relation'
 
 const prisma = new PrismaClient()
@@ -134,6 +137,19 @@ async function main() {
     })
   }
 
+  for (const carModelOption of carModelOptions) {
+    const modelCode = carModelOption.modelCode
+    const optionCodes = carModelOption.optionCodes
+    for (const optionCode of optionCodes) {
+      await prisma.carModelOption.create({
+        data: {
+          modelId: carModels.findIndex(carModel => carModel.modelCode === modelCode) + 1,
+          optionId: options.findIndex(option => option.optionCode === optionCode) + 1
+        }
+      })
+    }
+  }
+
   for (const autoChoiceOption of autoChoiceOptions) {
     await prisma.autoChoiceOption.create({
       data: {
@@ -161,17 +177,41 @@ async function main() {
     })
   }
 
-  for (const carModelOption of carModelOptions) {
-    const modelCode = carModelOption.modelCode
-    const optionCodes = carModelOption.optionCodes
-    for (const optionCode of optionCodes) {
-      await prisma.carModelOption.create({
+  for (const tuix of tuixs) {
+    await prisma.tuix.create({
+      data: tuix
+    })
+  }
+
+  for (const carModelTuix of carModelTuixs) {
+    const modelCode = carModelTuix.modelCode
+    const tuixCodes = carModelTuix.tuixCodes
+    for (const tuixCode of tuixCodes) {
+      await prisma.carModelTuix.create({
         data: {
           modelId: carModels.findIndex(carModel => carModel.modelCode === modelCode) + 1,
-          optionId: options.findIndex(option => option.optionCode === optionCode) + 1
+          tuixId: tuixs.findIndex(tuix => tuix.tuixCode === tuixCode) + 1
         }
       })
     }
+  }
+
+  for (const disabledTuix of disabledTuixs) {
+    await prisma.disabledTuix.create({
+      data: {
+        tuixId: tuixs.findIndex(tuix => tuix.tuixCode === disabledTuix.tuixCode) + 1,
+        disabledTuixId: tuixs.findIndex(tuix => tuix.tuixCode === disabledTuix.disabledTuixCode) + 1
+      }
+    })
+  }
+
+  for (const tuixRequiredOption of tuixRequiredOptions) {
+    await prisma.tuixRequiredOption.create({
+      data: {
+        tuixId: tuixs.findIndex(tuix => tuix.tuixCode === tuixRequiredOption.tuixCode) + 1,
+        optionId: options.findIndex(option => option.optionCode === tuixRequiredOption.optionCode) + 1
+      }
+    })
   }
 }
 

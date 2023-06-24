@@ -209,7 +209,7 @@ model CarModelOption {
   @@id([modelId, optionId])
 }
 
-// 특정 옵션이 선택되면 비활성화되는 옵션
+// 특정 내장색상이 선택되면 자동으로 선택되는 옵션
 model AutoChoiceOption {
   intColorId Int @map("int_color_id")
   optionId   Int @map("option_id")
@@ -266,7 +266,7 @@ model CarModelTuix {
   @@id([modelId, tuixId])
 }
 
-// 특정 tuix가 선택되면 비활성화되는 옵션
+// 특정 tuix가 선택되면 비활성화되는 tuix
 model DisabledTuix {
   tuixId         Int @map("tuix_id")
   disabledTuixId Int @map("disabled_tuix_id")
