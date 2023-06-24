@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Prisma } from '@prisma/client'
+import { CarModel, CarType, Drive, Engine, Mission, Prisma, Trim } from '@prisma/client'
 import { PrismaService } from './prisma.service'
 
 type CarWithIncludes = Prisma.CarGetPayload<{
@@ -27,15 +27,22 @@ type CarWithIncludes = Prisma.CarGetPayload<{
   }
 }>
 
+class a {
+  engine: Engine[]
+  mission: Mission[]
+  drive: Drive[]
+  trim: Trim[]
+}
+
 @Injectable()
 export class AppService {
   constructor(private prisma: PrismaService) {}
 
   async getMenus(): Promise<any> {
     const carList = await this.prisma.car.findMany()
-    const data = Promise.all(
+    const data = await Promise.all(
       carList.map(async car => {
-        const carType = await this.prisma.carType.findUnique({
+        const carType: CarType | null = await this.prisma.carType.findUnique({
           where: {
             carTypeId: car.carTypeId
           }
@@ -102,7 +109,7 @@ export class AppService {
       throw new Error('car not found')
     }
 
-    const result = {
+    const result: a = {
       engine: car.carEngine.map(t => t.engine),
       mission: car.carMission.map(t => t.mission),
       drive: car.carDrive.map(t => t.drive),
