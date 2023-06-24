@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import { CarModel } from '@prisma/client'
 import { PrismaService } from './prisma.service'
 
 @Injectable()
@@ -37,7 +36,6 @@ export class AppService {
         return {
           carCode: car.carCode,
           carName: car.carName,
-          carTypeCode: type.carTypeCode,
           carTypeName: type.carTypeName,
           carLowPrice: carModels[0].modelPrice
         }

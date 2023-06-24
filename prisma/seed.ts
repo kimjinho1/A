@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { ExtColors, IntColors } from './seeding/color'
-import { cars, carModels, carTypes, drives, engines, missions, trims, options } from './seeding/model'
+import { cars, carModels, carTypes, drives, engines, missions, trims } from './seeding/model'
+import { options } from './seeding/option'
 import {
   carDrives,
   carEngines,
@@ -78,7 +79,6 @@ async function main() {
   }
 
   for (const carModel of carModels) {
-    const checkDriveCode = drives.findIndex(drive => drive.driveCode === carModel.driveCode)
     await prisma.carModel.create({
       data: {
         modelCode: carModel.modelCode,
@@ -87,7 +87,7 @@ async function main() {
         carId: cars.findIndex(car => car.carCode === carModel.carCode) + 1,
         engineId: engines.findIndex(engine => engine.engineCode === carModel.engineCode) + 1,
         missionId: missions.findIndex(mission => mission.missionCode === carModel.missionCode) + 1,
-        driveId: checkDriveCode === -1 ? null : checkDriveCode + 1,
+        driveId: drives.findIndex(drive => drive.driveCode === carModel.driveCode) + 1,
         trimId: trims.findIndex(trim => trim.trimCode === carModel.trimCode) + 1
       }
     })
@@ -106,12 +106,16 @@ async function main() {
   }
 
   for (const intExtColor of IntExtColors) {
-    await prisma.intExtColor.create({
-      data: {
-        intColorId: IntColors.findIndex(intColor => intColor.intColorCode === intExtColor.intColorCode) + 1,
-        extColorId: ExtColors.findIndex(extColor => extColor.extColorCode === intExtColor.extColorCode) + 1
-      }
-    })
+    const intColorCode = intExtColor.intColorCode
+    const extColorCodes = intExtColor.extColorCodes
+    for (const extColorCode of extColorCodes) {
+      await prisma.intExtColor.create({
+        data: {
+          intColorId: IntColors.findIndex(intColor => intColor.intColorCode === intColorCode) + 1,
+          extColorId: ExtColors.findIndex(extColor => extColor.extColorCode === extColorCode) + 1
+        }
+      })
+    }
   }
 
   for (const CarTrimIntColor of CarTrimIntColors) {
