@@ -42,10 +42,6 @@ export const ExtColors = [
     extColorName: '실키 브론즈 메탈릭'
   },
   {
-    extColorCode: 'YP6',
-    extColorName: '크림슨 레드 펄'
-  },
-  {
     extColorCode: 'R2T',
     extColorName: '쉬머링 실버 메탈릭'
   },

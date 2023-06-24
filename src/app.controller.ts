@@ -16,7 +16,34 @@ export class AppController {
   }
 
   @Get('/intColor')
-  async getIntColors(@Query('modelCode') modelCode: string, @Query('extColorCode') extColorCode: string): Promise<any> {
-    return await this.appService.getIntColors(modelCode, extColorCode)
+  async getIntColorsByModelCode(@Query('modelCode') modelCode: string): Promise<any> {
+    return await this.appService.getIntColorsByModelCode(modelCode)
+  }
+
+  @Get('/extColor')
+  async getExtColorsByIntColorCode(@Query('intColorCode') intColorCode: string): Promise<any> {
+    return await this.appService.getExtColorsByIntColorCode(intColorCode)
+  }
+
+  @Get('/option')
+  async getOptionsByModelCode(@Query('modelCode') modelCode: string): Promise<any> {
+    return await this.appService.getOptionsByModelCode(modelCode)
+  }
+
+  @Get('/disable-option')
+  async getDisabledOptionsBySelectedOptionCodes(@Query('optionCodes') optionCodes: string): Promise<any> {
+    const optionCodeList = optionCodes.split(',')
+    return await this.appService.getDisabledOptionsBySelectedOptionCodes(optionCodeList)
+  }
+
+  @Get('/tuix')
+  async getTuixsByOptionCode(@Query('modelCode') modelCode: string): Promise<any> {
+    return await this.appService.getTuixsByOptionCode(modelCode)
+  }
+
+  @Get('/add-possible-option')
+  async getAddPosibleTuixBySelectedOptionCode(@Query('optionCodes') optionCodes: string): Promise<any> {
+    const optionCodeList = optionCodes.split(',')
+    return await this.appService.getAddPosibleTuixBySelectedOptionCode(optionCodeList)
   }
 }

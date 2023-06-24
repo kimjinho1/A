@@ -84,7 +84,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'NXJJ5DCT2',
-    optionCodes: ['ID2', 'PL2', 'BIC2', 'COM', 'EX2', 'PSL']
+    optionCodes: ['ID2', 'PL2', 'HSS', 'BIC2', 'COM', 'EX2', 'PSL']
   },
 
   /*
@@ -92,7 +92,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'NXJJ5DCA2',
-    optionCodes: ['ID2', 'PL2', 'BIC2', 'COM', 'EX2', 'PSL']
+    optionCodes: ['ID2', 'PL2', 'HSS', 'BIC2', 'COM', 'EX2', 'PSL']
   },
 
   /*
@@ -100,7 +100,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'NXJJ5TCD2',
-    optionCodes: ['ID2', 'PL1', 'BIC2', 'COM', 'EX2', 'PSL']
+    optionCodes: ['ID2', 'PL1', 'HSS', 'BIC2', 'COM', 'EX2', 'PSL']
   },
 
   /*
@@ -108,7 +108,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'NXJJ5TCH2',
-    optionCodes: ['ID2', 'PL1', 'BIC2', 'COM', 'EX2', 'PSL']
+    optionCodes: ['ID2', 'PL1', 'HSS', 'BIC2', 'COM', 'EX2', 'PSL']
   },
 
   /*
@@ -116,7 +116,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'NXJJ5DPT2',
-    optionCodes: ['AVP', 'PSF', 'PL4']
+    optionCodes: ['AVP', 'PSF', 'BIC2', 'PL4']
   },
 
   /*
@@ -124,7 +124,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'NXJJ5DPA2',
-    optionCodes: ['AVP', 'PSF', 'PL4']
+    optionCodes: ['AVP', 'PSF', 'BIC2', 'PL4']
   },
 
   /*
@@ -132,7 +132,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'NXJJ5TPD2',
-    optionCodes: ['AVP', 'PSF', 'PL3']
+    optionCodes: ['AVP', 'PSF', 'BIC2', 'PL3']
   },
 
   /*
@@ -140,6 +140,6 @@ export const carModelOptions = [
    */
   {
     modelCode: 'NXJJ5TPH2',
-    optionCodes: ['AVP', 'PSF', 'PL3']
+    optionCodes: ['AVP', 'PSF', 'BIC2', 'PL3']
   }
 ]

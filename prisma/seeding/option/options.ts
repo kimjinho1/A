@@ -92,12 +92,12 @@ export const options = [
    */
   {
     optionCode: 'ID1',
-    optionName: '인테리어디자인Ⅰ',
+    optionName: '인테리어디자인 Ⅰ',
     optionPrice: 250000
   },
   {
     optionCode: 'MN1',
-    optionName: '멀티미디어 내비Ⅰ',
+    optionName: '멀티미디어 내비 Ⅰ',
     optionPrice: 1300000
   },
   {
@@ -136,19 +136,19 @@ export const options = [
    */
   {
     optionCode: 'ID2',
-    optionName: '인테리어디자인Ⅱ',
+    optionName: '인테리어디자인 Ⅱ',
     optionPrice: 600000
   },
 
-  // 가솔린 터보 -> 플래티넘Ⅰ, 디젤 -> 플래티넘2
+  // 가솔린 터보 -> 플래티넘 Ⅰ, 디젤 -> 플래티넘 Ⅱ
   {
     optionCode: 'PL1',
-    optionName: '플래티넘Ⅰ',
+    optionName: '플래티넘 Ⅰ',
     optionPrice: 2250000
   },
   {
     optionCode: 'PL2',
-    optionName: '플래티넘2',
+    optionName: '플래티넘 Ⅱ',
     optionPrice: 2550000
   },
 
