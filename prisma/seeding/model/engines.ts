@@ -2,11 +2,11 @@ export const engines = [
   // 아반떼
   {
     engineCode: 'R',
-    engineName: '자가용 가솔린 1.6'
+    engineName: '가솔린 1.6'
   },
   {
     engineCode: 'L',
-    engineName: '자가용 LPG 1.6'
+    engineName: 'LPG 1.6'
   },
   // 투싼
   {
