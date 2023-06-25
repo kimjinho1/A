@@ -1,8 +1,27 @@
 import { Injectable } from '@nestjs/common'
-import { Car, CarType } from '@prisma/client'
+import { Car, CarDrive, CarEngine, CarMission, CarType, Drive, Engine, Mission, Prisma } from '@prisma/client'
 import { PrismaService } from 'src/prisma.service'
 
 type CarLowPrice = { modelPrice: number }
+type ModelFilters = Prisma.CarGetPayload<{
+  select: {
+    carEngine: {
+      select: {
+        engine: true
+      }
+    }
+    carMission: {
+      select: {
+        mission: true
+      }
+    }
+    carDrive: {
+      select: {
+        drive: true
+      }
+    }
+  }
+}>
 
 @Injectable()
 export class modelRepository {
@@ -32,6 +51,31 @@ export class modelRepository {
         modelPrice: 'asc'
       },
       take: 1
+    })
+  }
+
+  async getModelFilters(carCode: string): Promise<ModelFilters | null> {
+    return await this.prisma.car.findUnique({
+      where: {
+        carCode
+      },
+      select: {
+        carEngine: {
+          select: {
+            engine: true
+          }
+        },
+        carMission: {
+          select: {
+            mission: true
+          }
+        },
+        carDrive: {
+          select: {
+            drive: true
+          }
+        }
+      }
     })
   }
 }

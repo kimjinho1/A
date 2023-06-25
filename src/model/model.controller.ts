@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common'
-import CarInfos from '../dto/response/car-info-response.dto'
+import CarInfos from './dto/response/car-info-response.dto'
 import { ModelService } from './model.service'
 
 @Controller('model')
@@ -14,7 +14,9 @@ export class ModelController {
     return await this.modelService.getCarInfos()
   }
 
-  // 차량 모델 선택 필터들 반환
+  /*
+   * 선택된 차량의 엔진, 변속기, 구동방식 정보(코드, 이름)를 반환합니다.
+   */
   @Get('/filters/:carCode')
   async getModelFilters(@Param('carCode') carCode: string): Promise<any> {
     return await this.modelService.getModelFilters(carCode)
