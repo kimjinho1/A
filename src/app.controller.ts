@@ -7,19 +7,7 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return '내 차 만들기!!'
-  }
-
-  // 차량 정보 반환
-  @Get('/menus')
-  async getMenus(): Promise<any> {
-    return await this.appService.getMenus()
-  }
-
-  // 차량 모델 선택 필터들 반환
-  @Get('/model-filters/:carCode')
-  async getModelFilters(@Param('carCode') carCode: string): Promise<any> {
-    return await this.appService.getModelFilters(carCode)
+    return this.appService.getHello()
   }
 
   // @Get('/intColor')
