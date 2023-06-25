@@ -122,11 +122,11 @@ model CarModel {
   modelName  String @unique @map("model_name") @db.VarChar(50)
   modelPrice Int    @map("model_price")
 
-  carId     Int @map("car_id")
-  engineId  Int @map("engine_id")
-  missionId Int @map("mission_id")
-  driveId   Int @map("drive_id")
-  trimId    Int @map("trim_id")
+  carId     Int  @map("car_id")
+  engineId  Int  @map("engine_id")
+  missionId Int  @map("mission_id")
+  driveId   Int? @map("drive_id")
+  trimId    Int  @map("trim_id")
 
   carModelOption CarModelOption[]
   carModelTuix   CarModelTuix[]
@@ -134,7 +134,7 @@ model CarModel {
   car     Car     @relation(fields: [carId], references: [carId], onDelete: Cascade)
   engine  Engine  @relation(fields: [engineId], references: [engineId], onDelete: Cascade)
   mission Mission @relation(fields: [missionId], references: [missionId], onDelete: Cascade)
-  drive   Drive   @relation(fields: [driveId], references: [driveId], onDelete: Cascade)
+  drive   Drive?  @relation(fields: [driveId], references: [driveId], onDelete: Cascade)
   trim    Trim    @relation(fields: [trimId], references: [trimId], onDelete: Cascade)
 }
 

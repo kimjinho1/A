@@ -2,63 +2,63 @@ export const carModels = [
   // 아반떼, 가솔린
   {
     modelCode: 'CNJS4RBT3',
-    modelName: '더 뉴 아반떼 자가용 가솔린 1.6 Smart A/T',
+    modelName: '더 뉴 아반떼 가솔린 1.6 Smart A/T',
     modelPrice: 19970000,
     carCode: 'CN12',
     engineCode: 'R',
     missionCode: 'T',
-    driveCode: 'D,T',
+    driveCode: null,
     trimCode: 'B'
   },
   {
     modelCode: 'CNJS4RDT3',
-    modelName: '더 뉴 아반떼 자가용 가솔린 1.6 Modern A/T',
+    modelName: '더 뉴 아반떼 가솔린 1.6 Modern A/T',
     modelPrice: 22980000,
     carCode: 'CN12',
     engineCode: 'R',
     missionCode: 'T',
-    driveCode: 'D,T',
+    driveCode: null,
     trimCode: 'D'
   },
   {
     modelCode: 'CNJS4RGT3',
-    modelName: '더 뉴 아반떼 자가용 가솔린 1.6 Inspiration A/T',
+    modelName: '더 뉴 아반떼 가솔린 1.6 Inspiration A/T',
     modelPrice: 27210000,
     carCode: 'CN12',
     engineCode: 'R',
     missionCode: 'T',
-    driveCode: 'D,T',
+    driveCode: null,
     trimCode: 'P'
   },
   // 아반떼, LPG
   {
     modelCode: 'CNJS4LBT3',
-    modelName: '더 뉴 아반떼 자가용 LPG 1.6 Smart A/T',
+    modelName: '더 뉴 아반떼 LPG 1.6 Smart A/T',
     modelPrice: 21380000,
     carCode: 'CN12',
     engineCode: 'L',
     missionCode: 'T',
-    driveCode: 'D,T',
+    driveCode: null,
     trimCode: 'B'
   },
   {
     modelCode: 'CNJS4LDT3',
-    modelName: '더 뉴 아반떼 자가용 LPG 1.6 Modern A/T',
+    modelName: '더 뉴 아반떼 LPG 1.6 Modern A/T',
     modelPrice: 24390000,
     carCode: 'CN12',
     engineCode: 'L',
     missionCode: 'T',
-    driveCode: 'D,T',
+    driveCode: null,
     trimCode: 'D'
   },
   {
     modelCode: 'CNJS4LGT3',
-    modelName: '더 뉴 아반떼 자가용 LPG 1.6 Inspiration A/T',
+    modelName: '더 뉴 아반떼 LPG 1.6 Inspiration A/T',
     modelPrice: 28490000,
     carCode: 'CN12',
     engineCode: 'L',
     missionCode: 'T',
-    driveCode: 'D,T',
+    driveCode: null,
     trimCode: 'P'
   },
   // 투싼, 디젤, A/T, 2WD

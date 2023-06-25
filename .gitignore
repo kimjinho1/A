@@ -1,6 +1,9 @@
 # env
 .env
 
+# prisma
+prisma/migrations
+
 # database
 db/
 
