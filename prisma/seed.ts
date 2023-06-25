@@ -82,6 +82,7 @@ async function main() {
   }
 
   for (const carModel of carModels) {
+    const checkDrive = drives.findIndex(drive => drive.driveCode === carModel.driveCode)
     await prisma.carModel.create({
       data: {
         modelCode: carModel.modelCode,
@@ -90,7 +91,7 @@ async function main() {
         carId: cars.findIndex(car => car.carCode === carModel.carCode) + 1,
         engineId: engines.findIndex(engine => engine.engineCode === carModel.engineCode) + 1,
         missionId: missions.findIndex(mission => mission.missionCode === carModel.missionCode) + 1,
-        driveId: drives.findIndex(drive => drive.driveCode === carModel.driveCode) + 1,
+        driveId: checkDrive != -1 ? checkDrive + 1 : null,
         trimId: trims.findIndex(trim => trim.trimCode === carModel.trimCode) + 1
       }
     })
