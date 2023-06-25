@@ -1,37 +1,51 @@
 import { Injectable } from '@nestjs/common'
-import { Car, CarDrive, CarEngine, CarMission, CarType, Drive, Engine, Mission, Prisma } from '@prisma/client'
+import { Car, CarType, Drive, Engine, Mission } from '@prisma/client'
 import { PrismaService } from 'src/prisma.service'
-
-type CarLowPrice = { modelPrice: number }
-type ModelFilters = Prisma.CarGetPayload<{
-  select: {
-    carEngine: {
-      select: {
-        engine: true
-      }
-    }
-    carMission: {
-      select: {
-        mission: true
-      }
-    }
-    carDrive: {
-      select: {
-        drive: true
-      }
-    }
-  }
-}>
+import internal from 'stream'
+import { CarLowPriceDto, ModelFiltersDto, TrimInfosDto } from './dto'
+import { ModelFiltersRequestDto, ValidatedModelFiltersRequestDto } from './dto/request'
 
 @Injectable()
 export class modelRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findCars(): Promise<Car[]> {
+  async getCar(carCode: string): Promise<Car | null> {
+    return await this.prisma.car.findUnique({
+      where: {
+        carCode
+      }
+    })
+  }
+
+  async getCars(): Promise<Car[]> {
     return await this.prisma.car.findMany()
   }
 
-  async findCarType(carTypeId: number): Promise<CarType | null> {
+  async getEngine(engineCode: string): Promise<Engine | null> {
+    return await this.prisma.engine.findUnique({
+      where: {
+        engineCode
+      }
+    })
+  }
+
+  async getMission(missionCode: string): Promise<Mission | null> {
+    return await this.prisma.mission.findUnique({
+      where: {
+        missionCode
+      }
+    })
+  }
+
+  async getDrive(driveCode: string): Promise<Drive | null> {
+    return await this.prisma.drive.findUnique({
+      where: {
+        driveCode
+      }
+    })
+  }
+
+  async getCarType(carTypeId: number): Promise<CarType | null> {
     return await this.prisma.carType.findUnique({
       where: {
         carTypeId
@@ -39,7 +53,7 @@ export class modelRepository {
     })
   }
 
-  async getCarLowPrice(carId: number): Promise<CarLowPrice | null> {
+  async getCarLowPrice(carId: number): Promise<CarLowPriceDto | null> {
     return await this.prisma.carModel.findFirst({
       where: {
         carId
@@ -54,7 +68,7 @@ export class modelRepository {
     })
   }
 
-  async getModelFilters(carCode: string): Promise<ModelFilters | null> {
+  async getModelFilters(carCode: string): Promise<ModelFiltersDto | null> {
     return await this.prisma.car.findUnique({
       where: {
         carCode
@@ -75,6 +89,29 @@ export class modelRepository {
             drive: true
           }
         }
+      }
+    })
+  }
+
+  async getTrims(vaildatedModelFilters: ValidatedModelFiltersRequestDto): Promise<TrimInfosDto[]> {
+    const { carId, engineId, missionId, driveId } = vaildatedModelFilters
+    return await this.prisma.carModel.findMany({
+      where: {
+        carId,
+        engineId,
+        missionId,
+        driveId
+      },
+      select: {
+        trim: {
+          select: {
+            trimCode: true,
+            trimName: true
+          }
+        },
+        modelId: true,
+        modelCode: true,
+        modelPrice: true
       }
     })
   }

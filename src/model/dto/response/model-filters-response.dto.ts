@@ -1,6 +1,6 @@
 import { Drive, Engine, Mission } from '@prisma/client'
 
-export default class ModelFilters {
+export class ModelFiltersResponseDto {
   engines: Engine[]
   missions: Mission[]
   drives: Drive[]

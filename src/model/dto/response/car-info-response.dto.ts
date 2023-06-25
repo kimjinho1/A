@@ -1,4 +1,4 @@
-export default class CarInfos {
+export class CarInfosResponseDto {
   carCode: string
 
   carName: string
