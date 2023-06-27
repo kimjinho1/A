@@ -123,6 +123,7 @@ export class ModelRepository {
       },
       select: {
         modelId: true,
+        modelCode: true,
         modelName: true,
         modelPrice: true,
         car: {

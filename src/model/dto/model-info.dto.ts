@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client'
 export type ModelInfoDto = Prisma.CarModelGetPayload<{
   select: {
     modelId: true
+    modelCode: true
     modelName: true
     modelPrice: true
     car: {

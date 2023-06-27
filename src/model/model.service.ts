@@ -109,6 +109,7 @@ export class ModelService {
 
     const result = {
       modelId: modelInfo.modelId,
+      modelCode: modelInfo.modelCode,
       modelName: modelInfo.modelName,
       modelPrice: modelInfo.modelPrice,
       ...modelInfo.car,
