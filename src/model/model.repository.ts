@@ -111,6 +111,7 @@ export class modelRepository {
         },
         modelId: true,
         modelCode: true,
+        modelImagePath: true,
         modelPrice: true
       }
     })

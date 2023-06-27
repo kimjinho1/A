@@ -3,6 +3,7 @@ export const carModels = [
   {
     modelCode: 'CNJS4RBT3',
     modelName: '더 뉴 아반떼 가솔린 1.6 Smart A/T',
+    modelImagePath: '/images/CN12-smart.png',
     modelPrice: 19970000,
     carCode: 'CN12',
     engineCode: 'R',
@@ -13,6 +14,7 @@ export const carModels = [
   {
     modelCode: 'CNJS4RDT3',
     modelName: '더 뉴 아반떼 가솔린 1.6 Modern A/T',
+    modelImagePath: '/images/CN12-modern.png',
     modelPrice: 22980000,
     carCode: 'CN12',
     engineCode: 'R',
@@ -23,6 +25,7 @@ export const carModels = [
   {
     modelCode: 'CNJS4RGT3',
     modelName: '더 뉴 아반떼 가솔린 1.6 Inspiration A/T',
+    modelImagePath: '/images/CN12-inspiration.png',
     modelPrice: 27210000,
     carCode: 'CN12',
     engineCode: 'R',
@@ -34,6 +37,7 @@ export const carModels = [
   {
     modelCode: 'CNJS4LBT3',
     modelName: '더 뉴 아반떼 LPG 1.6 Smart A/T',
+    modelImagePath: '/images/CN12-smart.png',
     modelPrice: 21380000,
     carCode: 'CN12',
     engineCode: 'L',
@@ -44,6 +48,7 @@ export const carModels = [
   {
     modelCode: 'CNJS4LDT3',
     modelName: '더 뉴 아반떼 LPG 1.6 Modern A/T',
+    modelImagePath: '/images/CN12-modern.png',
     modelPrice: 24390000,
     carCode: 'CN12',
     engineCode: 'L',
@@ -54,6 +59,7 @@ export const carModels = [
   {
     modelCode: 'CNJS4LGT3',
     modelName: '더 뉴 아반떼 LPG 1.6 Inspiration A/T',
+    modelImagePath: '/images/CN12-inspiration.png',
     modelPrice: 28490000,
     carCode: 'CN12',
     engineCode: 'L',
@@ -65,6 +71,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5DDT2',
     modelName: '투싼 디젤 Modern 2WD A/T',
+    modelImagePath: '/images/NX05-modern.png',
     modelPrice: 28500000,
     carCode: 'NX05',
     engineCode: 'D',
@@ -75,6 +82,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5DCT2',
     modelName: '투싼 디젤 Premium 2WD A/T',
+    modelImagePath: '/images/NX05-premium.png',
     modelPrice: 31440000,
     carCode: 'NX05',
     engineCode: 'D',
@@ -85,6 +93,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5DPT2',
     modelName: '투싼 디젤 Inspiration 2WD A/T',
+    modelImagePath: '/images/NX05-inspiration.png',
     modelPrice: 35160000,
     carCode: 'NX05',
     engineCode: 'D',
@@ -96,6 +105,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5DDA2',
     modelName: '투싼 디젤 Modern 4WD A/T',
+    modelImagePath: '/images/NX05-modern.png',
     modelPrice: 30750000,
     carCode: 'NX05',
     engineCode: 'D',
@@ -106,6 +116,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5DCA2',
     modelName: '투싼 디젤 Premium 4WD A/T',
+    modelImagePath: '/images/NX05-premium.png',
     modelPrice: 33690000,
     carCode: 'NX05',
     engineCode: 'D',
@@ -116,6 +127,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5DPA2',
     modelName: '투싼 디젤 Inspiration 4WD A/T',
+    modelImagePath: '/images/NX05-inspiration.png',
     modelPrice: 37410000,
     carCode: 'NX05',
     engineCode: 'D',
@@ -127,6 +139,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5TDD2',
     modelName: '투싼 1.6 가솔린 터보 Modern 2WD DCT',
+    modelImagePath: '/images/NX05-modern.png',
     modelPrice: 26320000,
     carCode: 'NX05',
     engineCode: 'T',
@@ -137,6 +150,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5TCD2',
     modelName: '투싼 1.6 가솔린 터보 Premium 2WD DCT',
+    modelImagePath: '/images/NX05-premium.png',
     modelPrice: 29260000,
     carCode: 'NX05',
     engineCode: 'T',
@@ -147,6 +161,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5TPD2',
     modelName: '투싼 1.6 가솔린 터보 Inspiration 2WD DCT',
+    modelImagePath: '/images/NX05-inspiration.png',
     modelPrice: 32980000,
     carCode: 'NX05',
     engineCode: 'T',
@@ -158,6 +173,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5TDH2',
     modelName: '투싼 1.6 가솔린 터보 Modern 4WD DCT',
+    modelImagePath: '/images/NX05-modern.png',
     modelPrice: 28320000,
     carCode: 'NX05',
     engineCode: 'T',
@@ -168,6 +184,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5TCH2',
     modelName: '투싼 1.6 가솔린 터보 Premium 4WD DCT',
+    modelImagePath: '/images/NX05-premium.png',
     modelPrice: 31260000,
     carCode: 'NX05',
     engineCode: 'T',
@@ -178,6 +195,7 @@ export const carModels = [
   {
     modelCode: 'NXJJ5TPH2',
     modelName: '투싼 1.6 가솔린 터보 Inspiration 4WD DCT',
+    modelImagePath: '/images/NX05-inspiration.png',
     modelPrice: 34980000,
     carCode: 'NX05',
     engineCode: 'T',
