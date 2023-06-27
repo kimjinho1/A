@@ -1,5 +1,6 @@
 export class ModelInfoResponseDto {
   modelId: number
+  modelCode: string
   modelName: string
   modelPrice: number
 
