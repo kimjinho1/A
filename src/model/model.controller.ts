@@ -2,7 +2,12 @@ import { Car } from '@prisma/client'
 import { Controller, Get, Param, Query, UsePipes } from '@nestjs/common'
 import { ValidateModelFiltersPipe } from 'src/pipe/validate-model-filters.pipe'
 import { ValidatedModelFiltersRequestDto } from './dto/request'
-import { CarInfosResponseDto, ModelFiltersResponseDto, TrimInfosResponseDto } from './dto/response'
+import {
+  CarInfosResponseDto,
+  ModelFiltersResponseDto,
+  ModelInfoResponseDto,
+  TrimInfosResponseDto
+} from './dto/response'
 import { ModelService } from './model.service'
 
 @Controller('model')
@@ -10,7 +15,7 @@ export class ModelController {
   constructor(private readonly modelService: ModelService) {}
 
   /*
-   * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다.
+   * 차량 정보를 반환합니다.
    */
   @Get('carInfo/:carCode')
   async getCarInfo(@Param('carCode') carCode: string): Promise<Car> {
@@ -40,5 +45,13 @@ export class ModelController {
   @UsePipes(ValidateModelFiltersPipe)
   async getTrims(@Query() modelFilters: ValidatedModelFiltersRequestDto): Promise<TrimInfosResponseDto[]> {
     return await this.modelService.getTrims(modelFilters)
+  }
+
+  /*
+   * 차량 모델 정보 반환
+   */
+  @Get('modelInfo/:modelCode')
+  async getModelInfo(@Param('modelCode') modelCode: string): Promise<ModelInfoResponseDto> {
+    return await this.modelService.getModelInfo(modelCode)
   }
 }

@@ -2,7 +2,7 @@ export const cars = [
   // 아반떼
   {
     carCode: 'CN12',
-    carName: '더 뉴 아반뗴',
+    carName: '더 뉴 아반떼',
     carTypeId: 1,
     carImagePath: '/images/CN12.png'
   },
