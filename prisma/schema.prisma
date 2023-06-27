@@ -18,10 +18,11 @@ model CarType {
 
 // 차종
 model Car {
-  carId     Int    @id @default(autoincrement()) @map("car_id")
-  carCode   String @unique @map("car_code") @db.VarChar(10)
-  carName   String @unique @map("car_name") @db.VarChar(10)
-  carTypeId Int    @map("car_type_id")
+  carId        Int    @id @default(autoincrement()) @map("car_id")
+  carCode      String @unique @map("car_code") @db.VarChar(10)
+  carName      String @unique @map("car_name") @db.VarChar(10)
+  carImagePath String @unique @map("car_image_path") @db.VarChar(50)
+  carTypeId    Int    @map("car_type_id")
 
   carEngine  CarEngine[]
   carMission CarMission[]

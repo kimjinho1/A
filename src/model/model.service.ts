@@ -32,6 +32,7 @@ export class ModelService {
           carCode: car.carCode,
           carName: car.carName,
           carTypeName: carType.carTypeName,
+          carImagePath: car.carImagePath,
           carLowPrice: carLowPrice.modelPrice
         }
       })
