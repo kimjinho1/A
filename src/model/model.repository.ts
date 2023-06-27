@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { Car, CarType, Drive, Engine, Mission } from '@prisma/client'
 import { PrismaService } from 'src/prisma.service'
-import internal from 'stream'
 import { CarLowPriceDto, ModelFiltersDto, TrimInfosDto } from './dto'
-import { ModelFiltersRequestDto, ValidatedModelFiltersRequestDto } from './dto/request'
+import { ValidatedModelFiltersRequestDto } from './dto/request'
 
 @Injectable()
-export class modelRepository {
+export class ModelRepository {
   constructor(private prisma: PrismaService) {}
 
   async getCar(carCode: string): Promise<Car | null> {

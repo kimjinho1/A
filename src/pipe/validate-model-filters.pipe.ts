@@ -1,10 +1,10 @@
 import { ArgumentMetadata, BadRequestException, Injectable, NotFoundException, PipeTransform } from '@nestjs/common'
-import { ModelFiltersRequestDto, ValidatedModelFiltersRequestDto } from 'src/model/dto/request'
-import { modelRepository } from 'src/model/model.repository'
+import { ValidatedModelFiltersRequestDto } from 'src/model/dto/request'
+import { ModelRepository } from 'src/model/model.repository'
 
 @Injectable()
 export class ValidateModelFiltersPipe implements PipeTransform {
-  constructor(private modelRepository: modelRepository) {}
+  constructor(private modelRepository: ModelRepository) {}
 
   async transform(
     value: ValidatedModelFiltersRequestDto,
