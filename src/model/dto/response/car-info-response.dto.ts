@@ -5,5 +5,7 @@ export class CarInfosResponseDto {
 
   carTypeName: string
 
+  carImagePath: string
+
   carLowPrice: number
 }

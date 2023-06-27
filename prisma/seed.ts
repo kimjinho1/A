@@ -87,6 +87,7 @@ async function main() {
       data: {
         modelCode: carModel.modelCode,
         modelName: carModel.modelName,
+        modelImagePath: carModel.modelImagePath,
         modelPrice: carModel.modelPrice,
         carId: cars.findIndex(car => car.carCode === carModel.carCode) + 1,
         engineId: engines.findIndex(engine => engine.engineCode === carModel.engineCode) + 1,

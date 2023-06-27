@@ -10,6 +10,7 @@ export type TrimInfosDto = Prisma.CarModelGetPayload<{
     }
     modelId: true
     modelCode: true
+    modelImagePath: true
     modelPrice: true
   }
 }>

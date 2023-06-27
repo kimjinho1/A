@@ -12,7 +12,7 @@ export class ModelController {
   ) {}
 
   /*
-   * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 최저가격)를 반환합니다.
+   * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다.
    */
   @Get()
   async getCarInfos(): Promise<CarInfosResponseDto[]> {
@@ -28,7 +28,7 @@ export class ModelController {
   }
 
   /*
-   * 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 가격)를 반홥합니다
+   * 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다
    */
   @Get('/trims')
   @UsePipes(ValidateModelFiltersPipe)

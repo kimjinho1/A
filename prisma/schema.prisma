@@ -18,10 +18,11 @@ model CarType {
 
 // 차종
 model Car {
-  carId     Int    @id @default(autoincrement()) @map("car_id")
-  carCode   String @unique @map("car_code") @db.VarChar(10)
-  carName   String @unique @map("car_name") @db.VarChar(10)
-  carTypeId Int    @map("car_type_id")
+  carId        Int    @id @default(autoincrement()) @map("car_id")
+  carCode      String @unique @map("car_code") @db.VarChar(10)
+  carName      String @unique @map("car_name") @db.VarChar(10)
+  carImagePath String @unique @map("car_image_path") @db.VarChar(50)
+  carTypeId    Int    @map("car_type_id")
 
   carEngine  CarEngine[]
   carMission CarMission[]
@@ -117,10 +118,11 @@ model CarTrim {
 
 // 판매 차량 모델
 model CarModel {
-  modelId    Int    @id @default(autoincrement()) @map("model_id")
-  modelCode  String @unique @map("model_code") @db.VarChar(10)
-  modelName  String @unique @map("model_name") @db.VarChar(50)
-  modelPrice Int    @map("model_price")
+  modelId        Int    @id @default(autoincrement()) @map("model_id")
+  modelCode      String @unique @map("model_code") @db.VarChar(10)
+  modelName      String @unique @map("model_name") @db.VarChar(50)
+  modelImagePath String @map("model_image_path") @db.VarChar(50)
+  modelPrice     Int    @map("model_price")
 
   carId     Int  @map("car_id")
   engineId  Int  @map("engine_id")
