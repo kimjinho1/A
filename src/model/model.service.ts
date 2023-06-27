@@ -1,7 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { Car } from '@prisma/client'
 import { ValidatedModelFiltersRequestDto } from './dto/request'
-import { CarInfosResponseDto, ModelFiltersResponseDto, TrimInfosResponseDto } from './dto/response'
+import {
+  CarInfosResponseDto,
+  ModelFiltersResponseDto,
+  ModelInfoResponseDto,
+  TrimInfosResponseDto
+} from './dto/response'
 import { ModelRepository } from './model.repository'
 
 @Injectable()
@@ -85,11 +90,31 @@ export class ModelService {
       return {
         modelId: trimInfo.modelId,
         modelCode: trimInfo.modelCode,
-        ...trimInfo.trim,
         modelImagePath: trimInfo.modelImagePath,
-        modelPrice: trimInfo.modelPrice
+        modelPrice: trimInfo.modelPrice,
+        ...trimInfo.trim
       }
     })
+    return result
+  }
+
+  /*
+   * 차량 모델 정보 반환
+   */
+  async getModelInfo(modelCode: string): Promise<ModelInfoResponseDto> {
+    const modelInfo = await this.modelRepository.getCarModel(modelCode)
+    if (modelInfo === null) {
+      throw new NotFoundException('존재하지 않는 차량 모델 코드입니다.')
+    }
+
+    const result = {
+      modelId: modelInfo.modelId,
+      modelName: modelInfo.modelName,
+      modelPrice: modelInfo.modelPrice,
+      ...modelInfo.car,
+      ...modelInfo.trim
+    }
+
     return result
   }
 }

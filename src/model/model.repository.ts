@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { Car, CarType, Drive, Engine, Mission } from '@prisma/client'
+import { Car, CarModel, CarType, Drive, Engine, Mission } from '@prisma/client'
 import { PrismaService } from 'src/prisma.service'
-import { CarLowPriceDto, ModelFiltersDto, TrimInfosDto } from './dto'
+import { CarLowPriceDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto'
 import { ValidatedModelFiltersRequestDto } from './dto/request'
 
 @Injectable()
@@ -102,16 +102,41 @@ export class ModelRepository {
         driveId
       },
       select: {
+        modelId: true,
+        modelCode: true,
+        modelImagePath: true,
+        modelPrice: true,
         trim: {
           select: {
             trimCode: true,
             trimName: true
           }
-        },
+        }
+      }
+    })
+  }
+
+  async getCarModel(modelCode: string): Promise<ModelInfoDto | null> {
+    return await this.prisma.carModel.findUnique({
+      where: {
+        modelCode
+      },
+      select: {
         modelId: true,
-        modelCode: true,
-        modelImagePath: true,
-        modelPrice: true
+        modelName: true,
+        modelPrice: true,
+        car: {
+          select: {
+            carCode: true,
+            carName: true
+          }
+        },
+        trim: {
+          select: {
+            trimCode: true,
+            trimName: true
+          }
+        }
       }
     })
   }

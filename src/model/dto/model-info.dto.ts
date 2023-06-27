@@ -1,11 +1,16 @@
 import { Prisma } from '@prisma/client'
 
-export type TrimInfosDto = Prisma.CarModelGetPayload<{
+export type ModelInfoDto = Prisma.CarModelGetPayload<{
   select: {
     modelId: true
-    modelCode: true
-    modelImagePath: true
+    modelName: true
     modelPrice: true
+    car: {
+      select: {
+        carCode: true
+        carName: true
+      }
+    }
     trim: {
       select: {
         trimCode: true
