@@ -1,3 +1,4 @@
+import { Car } from '@prisma/client'
 import { Controller, Get, Param, Query, UsePipes } from '@nestjs/common'
 import { ValidateModelFiltersPipe } from 'src/pipe/validate-model-filters.pipe'
 import { ValidatedModelFiltersRequestDto } from './dto/request'
@@ -6,15 +7,20 @@ import { ModelService } from './model.service'
 
 @Controller('model')
 export class ModelController {
-  constructor(
-    private readonly modelService: ModelService,
-    private readonly validateModelFiltersPipe: ValidateModelFiltersPipe
-  ) {}
+  constructor(private readonly modelService: ModelService) {}
 
   /*
    * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다.
    */
-  @Get()
+  @Get('carInfo/:carCode')
+  async getCarInfo(@Param('carCode') carCode: string): Promise<Car> {
+    return await this.modelService.getCarInfo(carCode)
+  }
+
+  /*
+   * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다.
+   */
+  @Get('carInfos')
   async getCarInfos(): Promise<CarInfosResponseDto[]> {
     return await this.modelService.getCarInfos()
   }

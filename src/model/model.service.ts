@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
+import { Car } from '@prisma/client'
 import { ValidatedModelFiltersRequestDto } from './dto/request'
 import { CarInfosResponseDto, ModelFiltersResponseDto, TrimInfosResponseDto } from './dto/response'
 import { ModelRepository } from './model.repository'
@@ -6,6 +7,18 @@ import { ModelRepository } from './model.repository'
 @Injectable()
 export class ModelService {
   constructor(private readonly modelRepository: ModelRepository) {}
+
+  /*
+   * 차량 정보 반환
+   */
+  async getCarInfo(carCode: string): Promise<Car> {
+    const car = await this.modelRepository.getCar(carCode)
+    if (car === null) {
+      throw new NotFoundException('존재하지 않는 차량 코드입니다.')
+    }
+
+    return car
+  }
 
   /*
    * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다.
