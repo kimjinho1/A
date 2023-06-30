@@ -8,6 +8,7 @@ import {
   TrimInfosResponseDto
 } from './dto/response'
 import { ModelRepository } from './model.repository'
+import { CarInfosDto } from './dto'
 
 @Injectable()
 export class ModelService {
@@ -29,29 +30,18 @@ export class ModelService {
    * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다.
    */
   async getCarInfos(): Promise<CarInfosResponseDto[]> {
-    const cars = await this.modelRepository.getCars()
-    if (cars.length === 0) {
+    const allCarInfo = await this.modelRepository.getCarInfos()
+    if (allCarInfo.length === 0) {
       throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
     }
 
     const result = await Promise.all(
-      cars.map(async car => {
-        const carType = await this.modelRepository.getCarType(car.carTypeId)
-        if (carType === null) {
-          throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
-        }
-
-        const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
-        if (carLowPrice === null) {
-          throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
-        }
-
+      allCarInfo.map(async carInfo => {
+        const carInfos = await Promise.all(this.extrectCarInfo(carInfo))
         return {
-          carCode: car.carCode,
-          carName: car.carName,
-          carTypeName: carType.carTypeName,
-          carImagePath: car.carImagePath,
-          carLowPrice: carLowPrice.modelPrice
+          carTypeCode: carInfo.carTypeCode,
+          carTypeName: carInfo.carTypeName,
+          carInfos
         }
       })
     )
@@ -117,5 +107,25 @@ export class ModelService {
     }
 
     return result
+  }
+
+  /*
+   ** Utils
+   */
+  private extrectCarInfo(carInfo: CarInfosDto) {
+    const carInfos = carInfo.car.map(async car => {
+      const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
+      if (carLowPrice === null) {
+        throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
+      }
+      return {
+        carCode: car.carCode,
+        carName: car.carName,
+        carImagePath: car.carImagePath,
+        carLowPrice: carLowPrice.modelPrice
+      }
+    })
+
+    return carInfos
   }
 }
