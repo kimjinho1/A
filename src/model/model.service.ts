@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { Car } from '@prisma/client'
-import { ValidatedModelFiltersRequestDto } from './dto/request'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { Car, Drive } from '@prisma/client'
+import { ModelFiltersRequestDto } from './dto/request'
 import {
   CarInfosResponseDto,
   ModelFiltersResponseDto,
@@ -8,7 +8,7 @@ import {
   TrimInfosResponseDto
 } from './dto/response'
 import { ModelRepository } from './model.repository'
-import { CarInfosDto } from './dto'
+import { CarInfosDto, ModelFilterDto } from './dto'
 
 @Injectable()
 export class ModelService {
@@ -70,8 +70,41 @@ export class ModelService {
   /*
    * 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다
    */
-  async getTrims(vaildatedModelFilters: ValidatedModelFiltersRequestDto): Promise<TrimInfosResponseDto[]> {
-    const trimInfos = await this.modelRepository.getTrims(vaildatedModelFilters)
+  async getTrims(modelFiltersDto: ModelFiltersRequestDto): Promise<TrimInfosResponseDto[]> {
+    const { carCode, engineCode, missionCode, driveCode } = modelFiltersDto
+
+    const car = await this.modelRepository.getCar(carCode)
+    if (car === null) {
+      throw new NotFoundException('존재하지 않는 차량 코드입니다.')
+    }
+
+    const engine = await this.modelRepository.getEngine(engineCode)
+    if (engine === null) {
+      throw new NotFoundException('존재하지 않는 엔진 코드입니다.')
+    }
+
+    const mission = await this.modelRepository.getMission(missionCode)
+    if (mission === null) {
+      throw new NotFoundException('존재하지 않는 변속기 코드입니다.')
+    }
+
+    const drive = await this.modelRepository.getDrive(driveCode)
+    const driveId = (driveCode === '' && carCode === 'CN12') || driveCode === '' ? null : drive?.driveId || null
+    if (driveCode !== '' && !driveId) {
+      throw new NotFoundException('존재하지 않는 구동방식 코드입니다.')
+    }
+    if (driveCode === '' && carCode !== 'CN12') {
+      throw new BadRequestException('잘못된 구동 방식 코드입니다.')
+    }
+
+    const modelFilter: ModelFilterDto = {
+      carId: car.carId,
+      engineId: engine.engineId,
+      missionId: mission.missionId,
+      driveId
+    }
+
+    const trimInfos = await this.modelRepository.getTrims(modelFilter)
     if (trimInfos.length === 0) {
       throw new NotFoundException('필터 정보와 부합하는 트림 정보가 없습니다.')
     }
@@ -82,6 +115,7 @@ export class ModelService {
         modelCode: trimInfo.modelCode,
         modelImagePath: trimInfo.modelImagePath,
         modelPrice: trimInfo.modelPrice,
+        filterSummary: `${engine.engineName}${drive ? ' ' + drive.driveName : ''} ${mission.missionName}`,
         ...trimInfo.trim
       }
     })
