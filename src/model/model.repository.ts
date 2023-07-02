@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { Car, CarType, Drive, Engine, Mission } from '@prisma/client'
 import { PrismaService } from 'src/prisma.service'
 import { CarInfosDto, CarLowPriceDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto'
-import { ValidatedModelFiltersRequestDto } from './dto/request'
+import { ModelFilterDto } from './dto/request'
 
 @Injectable()
 export class ModelRepository {
@@ -100,8 +100,8 @@ export class ModelRepository {
     })
   }
 
-  async getTrims(vaildatedModelFilters: ValidatedModelFiltersRequestDto): Promise<TrimInfosDto[]> {
-    const { carId, engineId, missionId, driveId } = vaildatedModelFilters
+  async getTrims(modelFilters: ModelFilterDto): Promise<TrimInfosDto[]> {
+    const { carId, engineId, missionId, driveId } = modelFilters
     return await this.prisma.carModel.findMany({
       where: {
         carId,

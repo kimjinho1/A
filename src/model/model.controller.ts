@@ -1,7 +1,6 @@
 import { Car } from '@prisma/client'
-import { Controller, Get, Param, Query, UsePipes } from '@nestjs/common'
-import { ValidateModelFiltersPipe } from 'src/pipe/validate-model-filters.pipe'
-import { ValidatedModelFiltersRequestDto } from './dto/request'
+import { Controller, Get, Param, Query } from '@nestjs/common'
+import { ModelFiltersRequestDto } from './dto/request'
 import {
   CarInfosResponseDto,
   ModelFiltersResponseDto,
@@ -42,9 +41,8 @@ export class ModelController {
    * 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다
    */
   @Get('/trims')
-  @UsePipes(ValidateModelFiltersPipe)
-  async getTrims(@Query() modelFilters: ValidatedModelFiltersRequestDto): Promise<TrimInfosResponseDto[]> {
-    return await this.modelService.getTrims(modelFilters)
+  async getTrims(@Query() modelFiltersDto: ModelFiltersRequestDto): Promise<TrimInfosResponseDto[]> {
+    return await this.modelService.getTrims(modelFiltersDto)
   }
 
   /*

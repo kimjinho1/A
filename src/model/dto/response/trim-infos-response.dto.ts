@@ -1,11 +1,8 @@
 export class TrimInfosResponseDto {
   modelId: number
-
   modelCode: string
-
-  trimCode: string
-
-  trimName: string
-
   modelPrice: number
+  filterSummary: string
+  trimCode: string
+  trimName: string
 }
