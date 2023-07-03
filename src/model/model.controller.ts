@@ -50,6 +50,6 @@ export class ModelController {
    */
   @Get('modelInfo/:modelCode')
   async getModelInfo(@Param('modelCode') modelCode: string): Promise<ModelInfoResponseDto> {
-    return await this.modelService.getModelInfo(modelCode)
+    return await this.modelService.getCarModelInfo(modelCode)
   }
 }

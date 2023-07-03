@@ -124,7 +124,7 @@ export class ModelRepository {
     })
   }
 
-  async getCarModel(modelCode: string): Promise<ModelInfoDto | null> {
+  async getCarModelInfo(modelCode: string): Promise<ModelInfoDto | null> {
     return await this.prisma.carModel.findUnique({
       where: {
         modelCode

@@ -125,8 +125,8 @@ export class ModelService {
   /*
    * 차량 모델 정보 반환
    */
-  async getModelInfo(modelCode: string): Promise<ModelInfoResponseDto> {
-    const modelInfo = await this.modelRepository.getCarModel(modelCode)
+  async getCarModelInfo(modelCode: string): Promise<ModelInfoResponseDto> {
+    const modelInfo = await this.modelRepository.getCarModelInfo(modelCode)
     if (modelInfo === null) {
       throw new NotFoundException('존재하지 않는 차량 모델 코드입니다.')
     }
