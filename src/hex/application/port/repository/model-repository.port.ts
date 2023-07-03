@@ -7,7 +7,7 @@ export interface ModelRepositoryPort {
 
   getCars(): Promise<Car[]>
 
-  getCarInfos(): Promise<CarInfosDto>
+  getCarInfos(): Promise<CarInfosDto[]>
 
   getEngine(engineCode: string): Promise<Engine | null>
 

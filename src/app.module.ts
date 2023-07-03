@@ -4,6 +4,7 @@ import { AppService } from './app.service'
 import { ModelModule } from './model/model.module'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
+import { HexModule } from './hex/hex.module'
 
 @Module({
   controllers: [AppController],
@@ -12,7 +13,8 @@ import { join } from 'path'
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'assets')
     }),
-    ModelModule
+    ModelModule,
+    HexModule
   ]
 })
 export class AppModule {}

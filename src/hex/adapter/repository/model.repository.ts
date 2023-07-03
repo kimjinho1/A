@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { Car, CarType, Drive, Engine, Mission } from '@prisma/client'
-import { ModelFilterDto } from 'src/hex/application/port/repository/model/dto/input'
+import { ModelRepositoryPort } from 'src/hex/application/port/repository/model-repository.port'
+import { PrismaService } from 'src/prisma.service'
+import { ModelFilterDto } from 'src/hex/application/port/repository/dto/input'
 import {
   CarInfosDto,
   CarLowPriceDto,
   ModelFiltersDto,
   ModelInfoDto,
   TrimInfosDto
-} from 'src/hex/application/port/repository/model/dto/output'
-import { ModelRepositoryPort } from 'src/hex/application/port/repository/model/model-repository.port'
-import { PrismaService } from 'src/prisma.service'
+} from 'src/hex/application/port/repository/dto/output'
 
 @Injectable()
 export class ModelRepository implements ModelRepositoryPort {
@@ -27,7 +27,7 @@ export class ModelRepository implements ModelRepositoryPort {
     return await this.prisma.car.findMany()
   }
 
-  async getCarInfos(): Promise<CarInfosDto> {
+  async getCarInfos(): Promise<CarInfosDto[]> {
     return await this.prisma.carType.findMany({
       include: {
         car: true

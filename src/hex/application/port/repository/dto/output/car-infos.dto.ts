@@ -4,4 +4,4 @@ export type CarInfosDto = Prisma.CarTypeGetPayload<{
   include: {
     car: true
   }
-}>[]
+}>

@@ -1,4 +1,4 @@
-export class ModelFilterDto {
+export type ModelFilterDto = {
   carId: number
   engineId: number
   missionId: number
