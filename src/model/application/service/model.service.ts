@@ -1,22 +1,19 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
-import { Car, Drive } from '@prisma/client'
-import { ModelFiltersRequestDto } from './dto/request'
-import {
-  CarInfosResponseDto,
-  ModelFiltersResponseDto,
-  ModelInfoResponseDto,
-  TrimInfosResponseDto
-} from './dto/response'
-import { ModelRepository } from './model.repository'
-import { CarInfosDto, ModelFilterDto } from './dto'
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { Car } from '@prisma/client'
+import { CarInfosDto } from '../port/repository/dto/output'
+import { ModelRepositoryPort } from '../port/repository/model-repository.port'
+import { ModelFilterCodesDto } from '../port/web/dto/in'
+import { CarInfo, CarTypeWithCarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from '../port/web/dto/out'
+import { ModelServicePort } from '../port/web/model-service.port'
 
 @Injectable()
-export class ModelService {
-  constructor(private readonly modelRepository: ModelRepository) {}
+export class ModelService implements ModelServicePort {
+  constructor(
+    @Inject(ModelRepositoryPort)
+    private readonly modelRepository: ModelRepositoryPort
+  ) {}
 
-  /*
-   * 차량 정보 반환
-   */
+  /** 차량 정보 반환 */
   async getCarInfo(carCode: string): Promise<Car> {
     const car = await this.modelRepository.getCar(carCode)
     if (car === null) {
@@ -26,10 +23,8 @@ export class ModelService {
     return car
   }
 
-  /*
-   * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다.
-   */
-  async getCarInfos(): Promise<CarInfosResponseDto[]> {
+  /** 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다. */
+  async getCarInfos(): Promise<CarTypeWithCarInfosDto> {
     const allCarInfo = await this.modelRepository.getCarInfos()
     if (allCarInfo.length === 0) {
       throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
@@ -37,7 +32,7 @@ export class ModelService {
 
     const result = await Promise.all(
       allCarInfo.map(async carInfo => {
-        const carInfos = await Promise.all(this.extrectCarInfo(carInfo))
+        const carInfos = await this.extrectCarInfo(carInfo)
         return {
           carTypeCode: carInfo.carTypeCode,
           carTypeName: carInfo.carTypeName,
@@ -49,10 +44,8 @@ export class ModelService {
     return result
   }
 
-  /*
-   * 선택된 차량의 엔진, 변속기, 구동방식 정보(코드, 이름)를 반환합니다.
-   */
-  async getModelFilters(carCode: string): Promise<ModelFiltersResponseDto> {
+  /** 선택된 차량의 엔진, 변속기, 구동방식 정보(코드, 이름)를 반환합니다. */
+  async getModelFilters(carCode: string): Promise<ModelFiltersDto> {
     const modelFilters = await this.modelRepository.getModelFilters(carCode)
     if (!modelFilters) {
       throw new NotFoundException('존재하지 않는 차량 코드입니다.')
@@ -67,10 +60,8 @@ export class ModelService {
     return result
   }
 
-  /*
-   * 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다
-   */
-  async getTrims(modelFiltersDto: ModelFiltersRequestDto): Promise<TrimInfosResponseDto[]> {
+  /** 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다 */
+  async getTrims(modelFiltersDto: ModelFilterCodesDto): Promise<TrimInfosDto> {
     const { carCode, engineCode, missionCode, driveCode } = modelFiltersDto
 
     const car = await this.modelRepository.getCar(carCode)
@@ -97,7 +88,7 @@ export class ModelService {
       throw new BadRequestException('잘못된 구동 방식 코드입니다.')
     }
 
-    const modelFilter: ModelFilterDto = {
+    const modelFilter = {
       carId: car.carId,
       engineId: engine.engineId,
       missionId: mission.missionId,
@@ -122,11 +113,9 @@ export class ModelService {
     return result
   }
 
-  /*
-   * 차량 모델 정보 반환
-   */
-  async getModelInfo(modelCode: string): Promise<ModelInfoResponseDto> {
-    const modelInfo = await this.modelRepository.getCarModel(modelCode)
+  /** 차량 모델 정보 반환 */
+  async getCarModelInfo(modelCode: string): Promise<ModelInfoDto> {
+    const modelInfo = await this.modelRepository.getCarModelInfo(modelCode)
     if (modelInfo === null) {
       throw new NotFoundException('존재하지 않는 차량 모델 코드입니다.')
     }
@@ -143,22 +132,22 @@ export class ModelService {
     return result
   }
 
-  /*
-   ** Utils
-   */
-  private extrectCarInfo(carInfo: CarInfosDto) {
-    const carInfos = carInfo.car.map(async car => {
-      const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
-      if (carLowPrice === null) {
-        throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
-      }
-      return {
-        carCode: car.carCode,
-        carName: car.carName,
-        carImagePath: car.carImagePath,
-        carLowPrice: carLowPrice.modelPrice
-      }
-    })
+  /** Utils */
+  extrectCarInfo(carInfo: CarInfosDto): Promise<CarInfo[]> {
+    const carInfos = Promise.all(
+      carInfo.car.map(async car => {
+        const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
+        if (carLowPrice === null) {
+          throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
+        }
+        return {
+          carCode: car.carCode,
+          carName: car.carName,
+          carImagePath: car.carImagePath,
+          carLowPrice: carLowPrice.modelPrice
+        }
+      })
+    )
 
     return carInfos
   }

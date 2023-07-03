@@ -1,12 +1,19 @@
 import { Injectable } from '@nestjs/common'
 import { Car, CarType, Drive, Engine, Mission } from '@prisma/client'
+import { ModelRepositoryPort } from 'src/model/application/port/repository/model-repository.port'
 import { PrismaService } from 'src/prisma.service'
-import { CarInfosDto, CarLowPriceDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto'
-import { ModelFilterDto } from './dto/request'
+import { ModelFilterDto } from 'src/model/application/port/repository/dto/input'
+import {
+  CarInfosDto,
+  CarLowPriceDto,
+  ModelFiltersDto,
+  ModelInfoDto,
+  TrimInfosDto
+} from 'src/model/application/port/repository/dto/output'
 
 @Injectable()
-export class ModelRepository {
-  constructor(private prisma: PrismaService) {}
+export class ModelRepository implements ModelRepositoryPort {
+  constructor(private readonly prisma: PrismaService) {}
 
   async getCar(carCode: string): Promise<Car | null> {
     return await this.prisma.car.findUnique({
@@ -100,7 +107,7 @@ export class ModelRepository {
     })
   }
 
-  async getTrims(modelFilters: ModelFilterDto): Promise<TrimInfosDto[]> {
+  async getTrims(modelFilters: ModelFilterDto): Promise<TrimInfosDto> {
     const { carId, engineId, missionId, driveId } = modelFilters
     return await this.prisma.carModel.findMany({
       where: {
@@ -124,7 +131,7 @@ export class ModelRepository {
     })
   }
 
-  async getCarModel(modelCode: string): Promise<ModelInfoDto | null> {
+  async getCarModelInfo(modelCode: string): Promise<ModelInfoDto | null> {
     return await this.prisma.carModel.findUnique({
       where: {
         modelCode
