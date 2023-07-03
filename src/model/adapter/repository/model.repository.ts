@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { Car, CarType, Drive, Engine, Mission } from '@prisma/client'
-import { ModelRepositoryPort } from 'src/hex/application/port/repository/model-repository.port'
+import { ModelRepositoryPort } from 'src/model/application/port/repository/model-repository.port'
 import { PrismaService } from 'src/prisma.service'
-import { ModelFilterDto } from 'src/hex/application/port/repository/dto/input'
+import { ModelFilterDto } from 'src/model/application/port/repository/dto/input'
 import {
   CarInfosDto,
   CarLowPriceDto,
   ModelFiltersDto,
   ModelInfoDto,
   TrimInfosDto
-} from 'src/hex/application/port/repository/dto/output'
+} from 'src/model/application/port/repository/dto/output'
 
 @Injectable()
 export class ModelRepository implements ModelRepositoryPort {
