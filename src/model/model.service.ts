@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
-import { Car, Drive } from '@prisma/client'
+import { Car } from '@prisma/client'
 import { ModelFiltersRequestDto } from './dto/request'
 import {
-  CarInfosResponseDto,
+  CarInfo,
+  CarTypeWithCarInfosResponseDto,
   ModelFiltersResponseDto,
   ModelInfoResponseDto,
   TrimInfosResponseDto
@@ -29,7 +30,7 @@ export class ModelService {
   /*
    * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다.
    */
-  async getCarInfos(): Promise<CarInfosResponseDto[]> {
+  async getCarInfos(): Promise<CarTypeWithCarInfosResponseDto[]> {
     const allCarInfo = await this.modelRepository.getCarInfos()
     if (allCarInfo.length === 0) {
       throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
@@ -37,7 +38,7 @@ export class ModelService {
 
     const result = await Promise.all(
       allCarInfo.map(async carInfo => {
-        const carInfos = await Promise.all(this.extrectCarInfo(carInfo))
+        const carInfos = await this.extrectCarInfo(carInfo)
         return {
           carTypeCode: carInfo.carTypeCode,
           carTypeName: carInfo.carTypeName,
@@ -146,19 +147,21 @@ export class ModelService {
   /*
    ** Utils
    */
-  private extrectCarInfo(carInfo: CarInfosDto) {
-    const carInfos = carInfo.car.map(async car => {
-      const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
-      if (carLowPrice === null) {
-        throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
-      }
-      return {
-        carCode: car.carCode,
-        carName: car.carName,
-        carImagePath: car.carImagePath,
-        carLowPrice: carLowPrice.modelPrice
-      }
-    })
+  private extrectCarInfo(carInfo: CarInfosDto): Promise<CarInfo[]> {
+    const carInfos = Promise.all(
+      carInfo.car.map(async car => {
+        const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
+        if (carLowPrice === null) {
+          throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
+        }
+        return {
+          carCode: car.carCode,
+          carName: car.carName,
+          carImagePath: car.carImagePath,
+          carLowPrice: carLowPrice.modelPrice
+        }
+      })
+    )
 
     return carInfos
   }

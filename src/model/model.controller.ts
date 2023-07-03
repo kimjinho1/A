@@ -2,7 +2,7 @@ import { Car } from '@prisma/client'
 import { Controller, Get, Param, Query } from '@nestjs/common'
 import { ModelFiltersRequestDto } from './dto/request'
 import {
-  CarInfosResponseDto,
+  CarTypeWithCarInfosResponseDto,
   ModelFiltersResponseDto,
   ModelInfoResponseDto,
   TrimInfosResponseDto
@@ -25,7 +25,7 @@ export class ModelController {
    * 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다.
    */
   @Get('carInfos')
-  async getCarInfos(): Promise<CarInfosResponseDto[]> {
+  async getCarInfos(): Promise<CarTypeWithCarInfosResponseDto[]> {
     return await this.modelService.getCarInfos()
   }
 
