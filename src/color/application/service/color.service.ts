@@ -13,8 +13,14 @@ export class ColorService implements ColorServicePort {
     }
 
     const allIntColors = await this.colorRepository.getAllIntColors(carModel.carId)
+    if (allIntColors.length === 0) {
+      throw new NotFoundException('모델의 차량 코드와 매칭되는 내장색상이 없습니다.')
+    }
 
     const selectableIntColors = await this.colorRepository.getSelectableIntColors(carModel.carId, carModel.trimId)
+    if (selectableIntColors.length === 0) {
+      throw new NotFoundException('모델의 차량 코드와 트림 코드에 매칭되는 내장색상이 없습니다.')
+    }
     const selectableIntColorIds = selectableIntColors.map(intColor => intColor.intColorId)
 
     const result = allIntColors.map(intColor => {
