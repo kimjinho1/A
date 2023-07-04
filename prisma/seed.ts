@@ -7,7 +7,7 @@ import {
   carEngines,
   carMissions,
   carTrims,
-  CarTrimIntColors,
+  TrimIntColors,
   IntExtColors,
   autoChoiceOptions,
   requiredOptions,
@@ -165,25 +165,27 @@ async function main() {
   await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const intExtColor of IntExtColors) {
+    const carId = intExtColor.carId
     const intColorCode = intExtColor.intColorCode
     const extColorCodes = intExtColor.extColorCodes
     for (const extColorCode of extColorCodes) {
       await prisma.intExtColor.createMany({
         data: {
-          intColorId: IntColors.findIndex(intColor => intColor.intColorCode === intColorCode) + 1,
-          extColorId: ExtColors.findIndex(extColor => extColor.extColorCode === extColorCode) + 1
+          intColorId:
+            IntColors.findIndex(intColor => intColor.intColorCode === intColorCode && intColor.carId === carId) + 1,
+          extColorId:
+            ExtColors.findIndex(extColor => extColor.extColorCode === extColorCode && extColor.carId === carId) + 1
         }
       })
     }
   }
   await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
-  for (const CarTrimIntColor of CarTrimIntColors) {
-    await prisma.carTrimIntColor.createMany({
+  for (const trimIntColor of TrimIntColors) {
+    await prisma.trimIntColor.createMany({
       data: {
-        carId: cars.findIndex(car => car.carCode === CarTrimIntColor.carCode) + 1,
-        trimId: trims.findIndex(trim => trim.trimCode === CarTrimIntColor.trimCode) + 1,
-        intColorId: IntColors.findIndex(intColor => intColor.intColorCode === CarTrimIntColor.intColorCode) + 1
+        trimId: trims.findIndex(trim => trim.trimCode === trimIntColor.trimCode) + 1,
+        intColorId: IntColors.findIndex(intColor => intColor.intColorCode === trimIntColor.intColorCode) + 1
       }
     })
   }
