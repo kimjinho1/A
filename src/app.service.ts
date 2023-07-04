@@ -1,54 +1,35 @@
 import { Injectable } from '@nestjs/common'
-import { CarModel, CarType, Drive, Engine, Mission, Prisma, Trim } from '@prisma/client'
+import { CarModel, CarType, Drive, Engine, ExtColor, IntColor, Mission, Prisma, Trim } from '@prisma/client'
 import { PrismaService } from './prisma.service'
 
 @Injectable()
 export class AppService {
+  constructor(private readonly prisma: PrismaService) {}
+
   getHello(): string {
     return '내차만들기!!'
   }
-  // async getIntColorsByModelCode(modelCode: string) {
-  //   // const modelCode = 'NXJJ5DCT2'
-  //   // const extColorCode = 'B6S'
-  //   const carModel = await this.prisma.carModel.findUnique({
-  //     where: { modelCode },
-  //     select: {
-  //       carId: true,
-  //       trimId: true
-  //     }
-  //   })
-  //   if (!carModel) {
-  //     throw new Error('CarModel not found')
-  //   }
-  //   const { carId, trimId } = carModel
-  //   const intColors = await this.prisma.carTrimIntColor.findMany({
-  //     where: {
-  //       carId,
-  //       trimId
-  //     },
-  //     select: {
-  //       intColor: true
-  //     }
-  //   })
-  //   return intColors
-  // }
-  // async getExtColorsByIntColorCode(intColorCode: string) {
-  //   const intColor = await this.prisma.intColor.findUnique({
-  //     where: {
-  //       intColorCode
-  //     }
-  //   })
-  //   if (!intColor) {
-  //     throw new Error('intColor not found')
-  //   }
-  //   const extColors = await this.prisma.intExtColor.findMany({
-  //     where: { intColorId: intColor.intColorId },
-  //     select: {
-  //       extColor: true
-  //     }
-  //   })
-  //   return extColors.map(extColor => extColor.extColor)
-  // }
+
+  async getExtColorsByIntColorCode(intColorCode: string): Promise<ExtColor[]> {
+    const intColor = await this.prisma.intColor.findUnique({
+      where: {
+        intColorCode
+      }
+    })
+    if (!intColor) {
+      throw new Error('intColor not found')
+    }
+    const extColors = await this.prisma.intExtColor.findMany({
+      where: { intColorId: intColor.intColorId },
+      select: {
+        extColor: true
+      }
+    })
+
+    const result = extColors.map(extColor => extColor.extColor)
+    return result
+  }
+
   // async getOptionsByModelCode(modelCode: string) {
   //   const carModel = await this.prisma.carModel.findUnique({
   //     where: {
