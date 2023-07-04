@@ -125,6 +125,7 @@ export class ModelService implements ModelServicePort {
       modelCode: modelInfo.modelCode,
       modelName: modelInfo.modelName,
       modelPrice: modelInfo.modelPrice,
+      modelImagePath: modelInfo.modelImagePath,
       ...modelInfo.car,
       ...modelInfo.trim
     }

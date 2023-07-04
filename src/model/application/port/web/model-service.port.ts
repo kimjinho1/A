@@ -17,4 +17,5 @@ export interface ModelServicePort {
   /** Utils */
   extrectCarInfo(carInfo: CarInfosDto): Promise<CarInfo[]>
 }
+
 export const ModelServicePort = Symbol('ModelServicePort')

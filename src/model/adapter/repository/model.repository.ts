@@ -141,6 +141,7 @@ export class ModelRepository implements ModelRepositoryPort {
         modelCode: true,
         modelName: true,
         modelPrice: true,
+        modelImagePath: true,
         car: {
           select: {
             carCode: true,

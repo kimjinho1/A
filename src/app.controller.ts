@@ -10,15 +10,10 @@ export class AppController {
     return this.appService.getHello()
   }
 
-  // @Get('/intColor')
-  // async getIntColorsByModelCode(@Query('modelCode') modelCode: string): Promise<any> {
-  //   return await this.appService.getIntColorsByModelCode(modelCode)
-  // }
-
-  // @Get('/extColor')
-  // async getExtColorsByIntColorCode(@Query('intColorCode') intColorCode: string): Promise<any> {
-  //   return await this.appService.getExtColorsByIntColorCode(intColorCode)
-  // }
+  @Get('/extColor')
+  async getExtColorsByIntColorCode(@Query('intColorCode') intColorCode: string): Promise<any> {
+    return await this.appService.getExtColorsByIntColorCode(intColorCode)
+  }
 
   // @Get('/option')
   // async getOptionsByModelCode(@Query('modelCode') modelCode: string): Promise<any> {
