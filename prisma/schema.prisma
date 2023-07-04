@@ -121,8 +121,8 @@ model CarModel {
   modelId        Int    @id @default(autoincrement()) @map("model_id")
   modelCode      String @unique @map("model_code") @db.VarChar(10)
   modelName      String @unique @map("model_name") @db.VarChar(50)
-  modelImagePath String @map("model_image_path") @db.VarChar(50)
   modelPrice     Int    @map("model_price")
+  modelImagePath String @map("model_image_path") @db.VarChar(50)
 
   carId     Int  @map("car_id")
   engineId  Int  @map("engine_id")

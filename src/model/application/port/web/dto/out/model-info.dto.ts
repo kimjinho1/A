@@ -3,6 +3,7 @@ export type ModelInfoDto = {
   modelCode: string
   modelName: string
   modelPrice: number
+  modelImagePath: string
 
   carCode: string
   carName: string
