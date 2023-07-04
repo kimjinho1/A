@@ -1,1 +1,1 @@
-export * from './select-int-colors.dto'
+export * from './selectable-int-color-ids.dto'

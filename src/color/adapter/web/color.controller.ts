@@ -1,6 +1,6 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common'
-import { IntColor } from '@prisma/client'
 import { ColorServicePort } from 'src/color/application/port/web/color-serivce.port'
+import { IntColorInfos } from 'src/color/application/port/web/dto/out'
 
 @Controller('color')
 export class ColorController {
@@ -13,7 +13,7 @@ export class ColorController {
 
   /** 차량 정보 반환 */
   @Get('/int-color')
-  async getIntColorsByModelCode(@Query('modelCode') modelCode: string): Promise<IntColor[]> {
-    return await this.colorService.getIntColorsByModelCode(modelCode)
+  async getIntColorInfos(@Query('modelCode') modelCode: string): Promise<IntColorInfos> {
+    return await this.colorService.getIntColorInfos(modelCode)
   }
 }

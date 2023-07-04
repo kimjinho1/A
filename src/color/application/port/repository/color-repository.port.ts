@@ -1,10 +1,12 @@
 import { CarModel, IntColor } from '@prisma/client'
-import { SelectIntColorsDto } from './dto/out'
+import { SelectableIntColorIdsDto } from './dto/out'
 
 export interface ColorRepositoryPort {
   getCarModel(modelCode: string): Promise<CarModel | null>
 
-  getIntColorsByCarAndTrim(carId: number, trimId: number): Promise<SelectIntColorsDto>
+  getAllIntColors(carId: number): Promise<IntColor[]>
+
+  getSelectableIntColors(carId: number, trimId: number): Promise<SelectableIntColorIdsDto>
 }
 
 export const ColorRepositoryPort = Symbol('ColorRepositoryPort')

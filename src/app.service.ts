@@ -11,7 +11,7 @@ export class AppService {
   }
 
   async getExtColorsByIntColorCode(intColorCode: string): Promise<ExtColor[]> {
-    const intColor = await this.prisma.intColor.findUnique({
+    const intColor = await this.prisma.intColor.findFirst({
       where: {
         intColorCode
       }

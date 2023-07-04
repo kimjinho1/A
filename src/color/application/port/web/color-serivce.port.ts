@@ -1,7 +1,7 @@
-import { ExtColor, IntColor } from '@prisma/client'
+import { IntColorInfos } from './dto/out'
 
 export interface ColorServicePort {
-  getIntColorsByModelCode(modelCode: string): Promise<IntColor[]>
+  getIntColorInfos(modelCode: string): Promise<IntColorInfos>
 
   // getExtColorsByIntColorCode(intColorCode: string): Promise<ExtColor[]>
 }
