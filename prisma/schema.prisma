@@ -142,9 +142,10 @@ model CarModel {
 
 // 내장색상
 model IntColor {
-  intColorId   Int    @id @default(autoincrement()) @map("int_color_id")
-  intColorCode String @unique @map("int_color_code") @db.VarChar(10)
-  intColorName String @map("int_color_name") @db.VarChar(50)
+  intColorId        Int    @id @default(autoincrement()) @map("int_color_id")
+  intColorCode      String @unique @map("int_color_code") @db.VarChar(10)
+  intColorName      String @map("int_color_name") @db.VarChar(50)
+  intColorImagePath String @map("int_color_image_path") @db.VarChar(50)
 
   intExtColor      IntExtColor[]
   carTrimIntColor  CarTrimIntColor[]
@@ -153,9 +154,10 @@ model IntColor {
 
 // 외장색상
 model ExtColor {
-  extColorId   Int    @id @default(autoincrement()) @map("ext_color_id")
-  extColorCode String @unique @map("ext_color_code") @db.VarChar(10)
-  extColorName String @map("ext_color_name") @db.VarChar(50)
+  extColorId        Int    @id @default(autoincrement()) @map("ext_color_id")
+  extColorCode      String @unique @map("ext_color_code") @db.VarChar(10)
+  extColorName      String @map("ext_color_name") @db.VarChar(50)
+  extColorImagePath String @map("ext_color_image_path") @db.VarChar(50)
 
   intExtColor IntExtColor[]
 }
