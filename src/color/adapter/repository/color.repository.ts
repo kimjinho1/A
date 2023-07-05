@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { CarModel, IntColor } from '@prisma/client'
+import { CarModel, ExtColor, IntColor, IntExtColor, TrimIntColor } from '@prisma/client'
 import { ColorRepositoryPort } from 'src/color/application/port/repository/color-repository.port'
-import { SelectableIntColorIdsDto } from 'src/color/application/port/repository/dto/out'
+import { ModelFilterIdsDto } from 'src/color/application/port/repository/dto/in'
+import { AnotherCarModelsWithTrimDto, SelectableIntColorIdsDto } from 'src/color/application/port/repository/dto/out'
 import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
@@ -22,7 +23,7 @@ export class ColorRepository implements ColorRepositoryPort {
     })
   }
 
-  async getSelectableIntColors(carId: number, trimId: number): Promise<SelectableIntColorIdsDto> {
+  async getSelectableIntColorIds(carId: number, trimId: number): Promise<SelectableIntColorIdsDto> {
     return await this.prisma.intColor.findMany({
       where: {
         carId: carId,
@@ -34,6 +35,64 @@ export class ColorRepository implements ColorRepositoryPort {
       },
       select: {
         intColorId: true
+      }
+    })
+  }
+
+  async getIntColor(intColorCode: string): Promise<IntColor | null> {
+    return await this.prisma.intColor.findFirst({
+      where: {
+        intColorCode
+      }
+    })
+  }
+
+  async getExtColor(extColorCode: string): Promise<ExtColor | null> {
+    return await this.prisma.extColor.findFirst({
+      where: {
+        extColorCode
+      }
+    })
+  }
+
+  async getIntExtColor(intColorId: number, extColorId: number): Promise<IntExtColor | null> {
+    return await this.prisma.intExtColor.findFirst({
+      where: {
+        intColorId,
+        extColorId
+      }
+    })
+  }
+
+  async getAnotherCarModelsWithTrim(modelFilterIdsDto: ModelFilterIdsDto): Promise<AnotherCarModelsWithTrimDto> {
+    const { carId, engineId, missionId, driveId, trimId } = modelFilterIdsDto
+    return await this.prisma.carModel.findMany({
+      where: {
+        carId,
+        engineId,
+        missionId,
+        driveId,
+        NOT: {
+          trimId
+        }
+      },
+      orderBy: {
+        modelPrice: 'asc'
+      },
+      select: {
+        modelCode: true,
+        modelPrice: true,
+        modelImagePath: true,
+        trim: true
+      }
+    })
+  }
+
+  async getTrimIntColor(trimId: number, intColorId: number): Promise<TrimIntColor | null> {
+    return await this.prisma.trimIntColor.findFirst({
+      where: {
+        trimId,
+        intColorId
       }
     })
   }

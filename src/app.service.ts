@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { CarModel, CarType, Drive, Engine, ExtColor, IntColor, Mission, Prisma, Trim } from '@prisma/client'
 import { PrismaService } from './prisma.service'
 
@@ -19,6 +19,7 @@ export class AppService {
     if (!intColor) {
       throw new Error('intColor not found')
     }
+
     const extColors = await this.prisma.intExtColor.findMany({
       where: { intColorId: intColor.intColorId },
       select: {
