@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common'
 import { CarModel, ExtColor, IntColor, IntExtColor, TrimIntColor } from '@prisma/client'
 import { ColorRepositoryPort } from 'src/color/application/port/repository/color-repository.port'
 import { ModelFilterIdsDto } from 'src/color/application/port/repository/dto/in'
-import { AnotherCarModelsWithTrimDto, SelectableIntColorIdsDto } from 'src/color/application/port/repository/dto/out'
+import {
+  AnotherCarModelsWithTrimDto,
+  SelectableExtColorIdsDto,
+  SelectableIntColorIdsDto
+} from 'src/color/application/port/repository/dto/out'
 import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
@@ -17,6 +21,14 @@ export class ColorRepository implements ColorRepositoryPort {
 
   async getAllIntColors(carId: number): Promise<IntColor[]> {
     return await this.prisma.intColor.findMany({
+      where: {
+        carId
+      }
+    })
+  }
+
+  async getAllExtColors(carId: number): Promise<ExtColor[]> {
+    return await this.prisma.extColor.findMany({
       where: {
         carId
       }
@@ -39,6 +51,22 @@ export class ColorRepository implements ColorRepositoryPort {
     })
   }
 
+  async getSelectableExtColorIds(carId: number, intColorId: number): Promise<SelectableExtColorIdsDto> {
+    return await this.prisma.extColor.findMany({
+      where: {
+        carId: carId,
+        intExtColor: {
+          some: {
+            intColorId
+          }
+        }
+      },
+      select: {
+        extColorId: true
+      }
+    })
+  }
+
   async getIntColor(intColorCode: string): Promise<IntColor | null> {
     return await this.prisma.intColor.findFirst({
       where: {
@@ -47,9 +75,10 @@ export class ColorRepository implements ColorRepositoryPort {
     })
   }
 
-  async getExtColor(extColorCode: string): Promise<ExtColor | null> {
+  async getExtColor(carId: number, extColorCode: string): Promise<ExtColor | null> {
     return await this.prisma.extColor.findFirst({
       where: {
+        carId,
         extColorCode
       }
     })

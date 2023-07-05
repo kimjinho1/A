@@ -1,7 +1,7 @@
 import { Inject, NotFoundException } from '@nestjs/common'
 import { ColorRepositoryPort } from '../port/repository/color-repository.port'
 import { ColorServicePort } from '../port/web/color-serivce.port'
-import { ChangeableCarModelsWithTrimDto, IntColorInfos } from '../port/web/dto/out'
+import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../port/web/dto/out'
 
 export class ColorService implements ColorServicePort {
   constructor(@Inject(ColorRepositoryPort) private readonly colorRepository: ColorRepositoryPort) {}
@@ -32,6 +32,37 @@ export class ColorService implements ColorServicePort {
     return result
   }
 
+  async getExtColorInfos(modelCode: string, intColorCode: string): Promise<ExtColorInfos> {
+    const carModel = await this.colorRepository.getCarModel(modelCode)
+    if (carModel === null) {
+      throw new NotFoundException('존재하지 않는 차량 모델 코드입니다.')
+    }
+
+    const intColor = await this.colorRepository.getIntColor(intColorCode)
+    if (intColor === null) {
+      throw new NotFoundException('존재하지 않는 내장색상 코드입니다.')
+    }
+
+    const allExtColors = await this.colorRepository.getAllExtColors(carModel.carId)
+    if (allExtColors.length === 0) {
+      throw new NotFoundException('모델의 차량 코드와 매칭되는 외장색상이 없습니다.')
+    }
+
+    const selectableExtColors = await this.colorRepository.getSelectableExtColorIds(carModel.carId, intColor.intColorId)
+    if (selectableExtColors.length === 0) {
+      throw new NotFoundException('모델의 차량 코드와 트림 코드에 매칭되는 외장색상이 없습니다.')
+    }
+    const selectableExtColorIds = selectableExtColors.map(extColor => extColor.extColorId)
+
+    const result = allExtColors.map(extColor => {
+      return {
+        ...extColor,
+        isSelectable: selectableExtColorIds.includes(extColor.extColorId)
+      }
+    })
+    return result
+  }
+
   async getChangeableCarModelsWithTrimByIntColor(
     modelCode: string,
     intColorCode: string,
@@ -47,14 +78,14 @@ export class ColorService implements ColorServicePort {
       throw new NotFoundException('존재하지 않는 내장색상 코드입니다.')
     }
 
-    const extColor = await this.colorRepository.getExtColor(extColorCode)
+    const extColor = await this.colorRepository.getExtColor(carModel.carId, extColorCode)
     if (extColor === null) {
       throw new NotFoundException('존재하지 않는 외장색상 코드입니다.')
     }
 
     const intExtColor = await this.colorRepository.getIntExtColor(intColor.intColorId, extColor.extColorId)
     if (intExtColor === null) {
-      throw new NotFoundException('선택하신 외장색과 함께 제공되지 않는 색상입니다.\n외장색상을 변경해주세요.')
+      throw new NotFoundException('선택하신 외장색상과 함께 제공되지 않는 색상입니다.\n외장색상을 변경해주세요.')
     }
 
     const modelFilterIdsDto = {
