@@ -16,4 +16,17 @@ export class ColorController {
   async getIntColorInfos(@Query('modelCode') modelCode: string): Promise<IntColorInfos> {
     return await this.colorService.getIntColorInfos(modelCode)
   }
+
+  /**
+   * 내장색상 선택시 변경가능한 트림, 모델 정보를 반환
+   * EX) 투싼 Inspiration 모델에서는 블랙모노톤 선택이 안되는데,
+   * 이 경우에 블랙모노튼을 선택할 시 블랙모노톤이 선택가능한 다른 차량 트림, 모델 정보를 반환함 */
+  @Get('/change-int-color')
+  async getChangeableTrimInfoWithIntColor(
+    @Query('modelCode') modelCode: string,
+    @Query('intColorCode') intColorCode: string,
+    @Query('extColorCode') extColorCode: string
+  ): Promise<any> {
+    return await this.colorService.getChangeableCarModelsWithTrimByIntColor(modelCode, intColorCode, extColorCode)
+  }
 }
