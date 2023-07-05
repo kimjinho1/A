@@ -56,10 +56,6 @@ export const TrimIntColors = [
   },
   {
     trimCode: 'P',
-    intColorCode: 'I37'
-  },
-  {
-    trimCode: 'P',
     intColorCode: 'PRF'
   }
 ]
