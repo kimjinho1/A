@@ -22,7 +22,7 @@ export class ColorController {
    * EX) 투싼 Inspiration 모델에서는 블랙모노톤 선택이 안되는데,
    * 이 경우에 블랙모노튼을 선택할 시 블랙모노톤이 선택가능한 다른 차량 트림, 모델 정보를 반환함 */
   @Get('/change-int-color')
-  async getChangeableTrimInfoWithIntColor(
+  async getChangeableCarModelsWithTrimByIntColor(
     @Query('modelCode') modelCode: string,
     @Query('intColorCode') intColorCode: string,
     @Query('extColorCode') extColorCode: string
