@@ -10,27 +10,6 @@ export class AppService {
     return '내차만들기!!'
   }
 
-  async getExtColorsByIntColorCode(intColorCode: string): Promise<ExtColor[]> {
-    const intColor = await this.prisma.intColor.findFirst({
-      where: {
-        intColorCode
-      }
-    })
-    if (!intColor) {
-      throw new Error('intColor not found')
-    }
-
-    const extColors = await this.prisma.intExtColor.findMany({
-      where: { intColorId: intColor.intColorId },
-      select: {
-        extColor: true
-      }
-    })
-
-    const result = extColors.map(extColor => extColor.extColor)
-    return result
-  }
-
   // async getOptionsByModelCode(modelCode: string) {
   //   const carModel = await this.prisma.carModel.findUnique({
   //     where: {

@@ -1,4 +1,4 @@
-import { ChangeableCarModelsWithTrimDto, IntColorInfos } from './dto/out'
+import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from './dto/out'
 
 export interface ColorServicePort {
   getIntColorInfos(modelCode: string): Promise<IntColorInfos>
@@ -8,6 +8,8 @@ export interface ColorServicePort {
     intColorCode: string,
     extColorCode: string
   ): Promise<ChangeableCarModelsWithTrimDto>
+
+  getExtColorInfos(modelCode: string, intColorCode: string): Promise<ExtColorInfos>
 }
 
 export const ColorServicePort = Symbol('ColorServicePort')

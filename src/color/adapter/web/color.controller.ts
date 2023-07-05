@@ -29,4 +29,12 @@ export class ColorController {
   ): Promise<any> {
     return await this.colorService.getChangeableCarModelsWithTrimByIntColor(modelCode, intColorCode, extColorCode)
   }
+
+  @Get('/ext-color')
+  async getExtColorsByIntColorCode(
+    @Query('modelCode') modelCode: string,
+    @Query('intColorCode') intColorCode: string
+  ): Promise<any> {
+    return await this.colorService.getExtColorInfos(modelCode, intColorCode)
+  }
 }
