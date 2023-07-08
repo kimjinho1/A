@@ -1,24 +1,28 @@
 import { PrismaClient } from '@prisma/client'
-import { ExtColors, IntColors } from './seeding/color'
-import { cars, carModels, carTypes, drives, engines, missions, trims } from './seeding/model'
-import { options, tuixs } from './seeding/option'
-import {
-  carDrives,
-  carEngines,
-  carMissions,
-  carTrims,
-  TrimIntColors,
-  IntExtColors,
-  autoChoiceOptions,
-  requiredOptions,
-  disabledOptions,
-  carModelOptions,
-  carModelTuixs,
-  disabledTuixs,
-  tuixRequiredOptions
-} from './seeding/relation'
 import * as fs from 'fs'
 import * as util from 'util'
+import { carTypes } from './seeding/model/carTypes'
+import { cars } from './seeding/model/cars'
+import { engines } from './seeding/model/engines'
+import { missions } from './seeding/model/missions'
+import { drives } from './seeding/model/drives'
+import { trims } from './seeding/model/trims'
+import { carEngines } from './seeding/relation/carEngines'
+import { carMissions } from './seeding/relation/carMissions'
+import { carDrives } from './seeding/relation/carDrives'
+import { carTrims } from './seeding/relation/carTrims'
+import { carModels } from './seeding/model/carModels'
+import { IntExtColors } from './seeding/relation/IntExtColors'
+import { intColors } from './seeding/color/intColors'
+import { extColors } from './seeding/color/extColors'
+import { TrimIntColors } from './seeding/relation/trimIntColors'
+import { options } from './seeding/option/options'
+import { carModelOptions } from './seeding/relation/carModelOptions'
+import { optionTypes } from './seeding/option/optionTypes'
+import { intColorOptions } from './seeding/relation/intColorOptions'
+import { activateOptions } from './seeding/relation/activateOptions'
+import { deactivateOptions } from './seeding/relation/deactivateOptions'
+import { deleteOptions } from './seeding/relation/deleteOptions'
 
 const prisma = new PrismaClient({
   log: [
@@ -150,14 +154,14 @@ async function main() {
   }
   await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
-  for (const IntColor of IntColors) {
+  for (const IntColor of intColors) {
     await prisma.intColor.createMany({
       data: IntColor
     })
   }
   await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
-  for (const ExtColor of ExtColors) {
+  for (const ExtColor of extColors) {
     await prisma.extColor.createMany({
       data: ExtColor
     })
@@ -172,9 +176,9 @@ async function main() {
       await prisma.intExtColor.createMany({
         data: {
           intColorId:
-            IntColors.findIndex(intColor => intColor.intColorCode === intColorCode && intColor.carId === carId) + 1,
+            intColors.findIndex(intColor => intColor.intColorCode === intColorCode && intColor.carId === carId) + 1,
           extColorId:
-            ExtColors.findIndex(extColor => extColor.extColorCode === extColorCode && extColor.carId === carId) + 1
+            extColors.findIndex(extColor => extColor.extColorCode === extColorCode && extColor.carId === carId) + 1
         }
       })
     }
@@ -185,8 +189,15 @@ async function main() {
     await prisma.trimIntColor.createMany({
       data: {
         trimId: trims.findIndex(trim => trim.trimCode === trimIntColor.trimCode) + 1,
-        intColorId: IntColors.findIndex(intColor => intColor.intColorCode === trimIntColor.intColorCode) + 1
+        intColorId: intColors.findIndex(intColor => intColor.intColorCode === trimIntColor.intColorCode) + 1
       }
+    })
+  }
+  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+
+  for (const optionType of optionTypes) {
+    await prisma.optionType.createMany({
+      data: optionType
     })
   }
   await appendFile('./prisma/seed-query-log.sql', `\n\n`)
@@ -212,72 +223,42 @@ async function main() {
   }
   await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
-  for (const autoChoiceOption of autoChoiceOptions) {
-    await prisma.autoChoiceOption.createMany({
+  for (const intColorOption of intColorOptions) {
+    await prisma.intColorOption.createMany({
       data: {
-        intColorId: IntColors.findIndex(intColor => intColor.intColorCode === autoChoiceOption.intColorCode) + 1,
-        optionId: options.findIndex(option => option.optionCode === autoChoiceOption.optionCode) + 1
+        intColorId: intColors.findIndex(intColor => intColor.intColorCode === intColorOption.intColorCode) + 1,
+        optionId: options.findIndex(option => option.optionCode === intColorOption.optionCode) + 1
       }
     })
   }
   await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
-  for (const requiredOption of requiredOptions) {
-    await prisma.requiredOption.createMany({
+  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  for (const activateOption of activateOptions) {
+    await prisma.activateOption.createMany({
       data: {
-        optionId: options.findIndex(option => option.optionCode === requiredOption.optionCode) + 1,
-        requiredOptionId: options.findIndex(option => option.optionCode === requiredOption.requiredOptionCode) + 1
+        optionId: options.findIndex(option => option.optionCode === activateOption.optionCode) + 1,
+        activateOptionId: options.findIndex(option => option.optionCode === activateOption.activateOptionCode) + 1
       }
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
-  for (const disabledOption of disabledOptions) {
-    await prisma.disabledOption.createMany({
+  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  for (const deactivateOption of deactivateOptions) {
+    await prisma.deactivateOption.createMany({
       data: {
-        optionId: options.findIndex(option => option.optionCode === disabledOption.optionCode) + 1,
-        disabledOptionId: options.findIndex(option => option.optionCode === disabledOption.disabledOptionCode) + 1
+        optionId: options.findIndex(option => option.optionCode === deactivateOption.optionCode) + 1,
+        deactivateOptionId: options.findIndex(option => option.optionCode === deactivateOption.deactivateOptionCode) + 1
       }
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
-  for (const tuix of tuixs) {
-    await prisma.tuix.createMany({
-      data: tuix
-    })
-  }
   await appendFile('./prisma/seed-query-log.sql', `\n\n`)
-
-  for (const carModelTuix of carModelTuixs) {
-    const modelCode = carModelTuix.modelCode
-    const tuixCodes = carModelTuix.tuixCodes
-    for (const tuixCode of tuixCodes) {
-      await prisma.carModelTuix.createMany({
-        data: {
-          modelId: carModels.findIndex(carModel => carModel.modelCode === modelCode) + 1,
-          tuixId: tuixs.findIndex(tuix => tuix.tuixCode === tuixCode) + 1
-        }
-      })
-    }
-  }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
-
-  for (const disabledTuix of disabledTuixs) {
-    await prisma.disabledTuix.createMany({
+  for (const deleteOption of deleteOptions) {
+    await prisma.deleteOption.createMany({
       data: {
-        tuixId: tuixs.findIndex(tuix => tuix.tuixCode === disabledTuix.tuixCode) + 1,
-        disabledTuixId: tuixs.findIndex(tuix => tuix.tuixCode === disabledTuix.disabledTuixCode) + 1
-      }
-    })
-  }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
-
-  for (const tuixRequiredOption of tuixRequiredOptions) {
-    await prisma.tuixRequiredOption.createMany({
-      data: {
-        tuixId: tuixs.findIndex(tuix => tuix.tuixCode === tuixRequiredOption.tuixCode) + 1,
-        optionId: options.findIndex(option => option.optionCode === tuixRequiredOption.optionCode) + 1
+        optionId: options.findIndex(option => option.optionCode === deleteOption.optionCode) + 1,
+        deleteOptionId: options.findIndex(option => option.optionCode === deleteOption.deleteOptionCode) + 1
       }
     })
   }
