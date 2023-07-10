@@ -184,7 +184,7 @@ export const options = [
     optionCode: 'ID2',
     optionName: '인테리어디자인 Ⅱ',
     optionPrice: 590000,
-    optionImagePath: '/images/option/.png',
+    optionImagePath: '/images/option/X.png',
     optionTypeId: 1
   },
 
