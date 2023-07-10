@@ -13,6 +13,9 @@ export class ColorService {
     private readonly colorRepository: ColorRepository
   ) {}
 
+  /**
+   * 모델 기준으로 내장색상 정보 반환
+   * */
   async getIntColorInfos(modelCode: string): Promise<IntColorInfos> {
     const carModel = await this.getCarModel(modelCode)
     const allIntColors = await this.getAllIntColors(carModel.carId)
@@ -33,6 +36,9 @@ export class ColorService {
     return result
   }
 
+  /**
+   * 모델과 외장색상 기준으로 내장색상 정보반환
+   * */
   async getIntColorInfosByExtColor(modelCode: string, extColorCode: string): Promise<IntColorInfos> {
     const carModel = await this.getCarModel(modelCode)
     const extColor = await this.getExtColor(carModel.carId, extColorCode)
@@ -58,6 +64,9 @@ export class ColorService {
     return result
   }
 
+  /**
+   * 외장색상 정보 반환
+   * */
   async getExtColorInfos(modelCode: string, intColorCode: string): Promise<ExtColorInfos> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
@@ -79,6 +88,9 @@ export class ColorService {
     return result
   }
 
+  /**
+   * 선택된 내장색상을 고를 수 있는 트림 정보를 반환
+   * */
   async getChangeableCarModelsWithTrimByIntColor(
     modelCode: string,
     intColorCode: string,
@@ -123,7 +135,7 @@ export class ColorService {
   }
 
   /**
-   * UTILS
+   * Utils
    * */
   async getCarModel(modelCode: string): Promise<CarModel> {
     const carModel = await this.colorRepository.getCarModel(modelCode)
