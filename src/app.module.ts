@@ -2,17 +2,15 @@ import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { ServeStaticModule } from '@nestjs/serve-static'
-import { ModelModule } from './model/model.module'
 import { join } from 'path'
 import { PrismaService } from './prisma.service'
-import { ColorModule } from './color/color.module'
+import { CoreModule } from './core/core.module'
 
 @Module({
   controllers: [AppController],
   providers: [AppService, PrismaService],
   imports: [
-    ModelModule,
-    ColorModule,
+    CoreModule,
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'assets')
     })

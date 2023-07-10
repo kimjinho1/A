@@ -132,7 +132,6 @@ model CarModel {
   trimId    Int  @map("trim_id")
 
   carModelOption CarModelOption[]
-  carModelTuix   CarModelTuix[]
 
   car     Car     @relation(fields: [carId], references: [carId], onDelete: Cascade)
   engine  Engine  @relation(fields: [engineId], references: [engineId], onDelete: Cascade)
@@ -147,12 +146,11 @@ model IntColor {
   intColorCode      String @map("int_color_code") @db.VarChar(10)
   intColorName      String @map("int_color_name") @db.VarChar(50)
   intColorImagePath String @map("int_color_image_path") @db.VarChar(50)
+  carId             Int    @map("car_id")
 
-  carId Int @map("car_id")
-
-  intExtColor      IntExtColor[]
-  trimIntColor     TrimIntColor[]
-  autoChoiceOption AutoChoiceOption[]
+  intExtColor    IntExtColor[]
+  trimIntColor   TrimIntColor[]
+  intColorOption IntColorOption[]
 
   car Car @relation(fields: [carId], references: [carId], onDelete: Cascade)
 }
@@ -192,20 +190,32 @@ model TrimIntColor {
   @@id([trimId, intColorId])
 }
 
+// 옵션 타입
+model OptionType {
+  optionTypeId   Int    @id @default(autoincrement()) @map("option_type_id")
+  optionTypeName String @map("option_type_name") @db.VarChar(20)
+
+  option Option[]
+}
+
 // 상세 품목
 model Option {
-  optionId    Int    @id @default(autoincrement()) @map("option_id")
-  optionCode  String @unique @map("option_code") @db.VarChar(10)
-  optionName  String @map("option_name") @db.VarChar(50)
-  optionPrice Int    @map("option_price")
+  optionId        Int    @id @default(autoincrement()) @map("option_id")
+  optionCode      String @unique @map("option_code") @db.VarChar(10)
+  optionName      String @map("option_name") @db.VarChar(50)
+  optionPrice     Int    @map("option_price")
+  optionImagePath String @map("option_image_path") @db.VarChar(50)
+  optionTypeId    Int    @map("option_type_id")
 
-  autoChoiceOption   AutoChoiceOption[]
-  carModelOption     CarModelOption[]
-  requiredOption1    RequiredOption[]     @relation(name: "requiredOption1")
-  requiredOption2    RequiredOption[]     @relation(name: "requiredOption2")
-  disabledOption1    DisabledOption[]     @relation(name: "disabledOption1")
-  disabledOption2    DisabledOption[]     @relation(name: "disabledOption2")
-  tuixRequiredOption TuixRequiredOption[]
+  optionType        OptionType         @relation(fields: [optionTypeId], references: [optionTypeId], onDelete: Cascade)
+  carModelOption    CarModelOption[]
+  intColorOption    IntColorOption[]
+  activateOption1   ActivateOption[]   @relation(name: "activateOption1")
+  activateOption2   ActivateOption[]   @relation(name: "activateOption2")
+  deactivateOption1 DeactivateOption[] @relation(name: "deactivateOption1")
+  deactivateOption2 DeactivateOption[] @relation(name: "deactivateOption2")
+  deleteOption1     DeleteOption[]     @relation(name: "deleteOption1")
+  deleteOption2     DeleteOption[]     @relation(name: "deleteOption2")
 }
 
 // 모델과 옵션의 호환 관계
@@ -220,7 +230,7 @@ model CarModelOption {
 }
 
 // 특정 내장색상이 선택되면 자동으로 선택되는 옵션
-model AutoChoiceOption {
+model IntColorOption {
   intColorId Int @map("int_color_id")
   optionId   Int @map("option_id")
 
@@ -231,69 +241,33 @@ model AutoChoiceOption {
 }
 
 // 특정 옵션이 선택되면 활성화되는 옵션
-model RequiredOption {
+model ActivateOption {
   optionId         Int @map("option_id")
-  requiredOptionId Int @map("required_option_id")
+  activateOptionId Int @map("activate_option_id")
 
-  option         Option @relation(name: "requiredOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
-  requiredOption Option @relation(name: "requiredOption2", fields: [requiredOptionId], references: [optionId], onDelete: Cascade)
+  option         Option @relation(name: "activateOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
+  activateOption Option @relation(name: "activateOption2", fields: [activateOptionId], references: [optionId], onDelete: Cascade)
 
-  @@id([optionId, requiredOptionId])
+  @@id([optionId, activateOptionId])
 }
 
 // 특정 옵션이 선택되면 비활성화되는 옵션
-model DisabledOption {
-  optionId         Int @map("option_id")
-  disabledOptionId Int @map("disabled_option_id")
+model DeactivateOption {
+  optionId           Int @map("option_id")
+  deactivateOptionId Int @map("deactivate_option_id")
 
-  option         Option @relation(name: "disabledOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
-  disabledOption Option @relation(name: "disabledOption2", fields: [disabledOptionId], references: [optionId], onDelete: Cascade)
+  option           Option @relation(name: "deactivateOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
+  deactivateOption Option @relation(name: "deactivateOption2", fields: [deactivateOptionId], references: [optionId], onDelete: Cascade)
 
-  @@id([optionId, disabledOptionId])
+  @@id([optionId, deactivateOptionId])
 }
 
-// TUIX
-model Tuix {
-  tuixId    Int    @id @default(autoincrement()) @map("tuix_id")
-  tuixCode  String @unique @map("tuix_code") @db.VarChar(10)
-  tuixName  String @map("tuix_name") @db.VarChar(50)
-  tuixPrice Int    @map("tuix_price")
+model DeleteOption {
+  optionId       Int @map("option_id")
+  deleteOptionId Int @map("delete_option_id")
 
-  carModelTuix       CarModelTuix[]
-  disabledTuix1      DisabledTuix[]       @relation(name: "disabledTuix1")
-  disabledTuix2      DisabledTuix[]       @relation(name: "disabledTuix2")
-  tuixRequiredOption TuixRequiredOption[]
-}
+  option       Option @relation(name: "deleteOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
+  deleteOption Option @relation(name: "deleteOption2", fields: [deleteOptionId], references: [optionId], onDelete: Cascade)
 
-// 모델과 tuix의 호환 관계
-model CarModelTuix {
-  modelId Int @map("model_id")
-  tuixId  Int @map("tuix_id")
-
-  carModel CarModel @relation(fields: [modelId], references: [modelId], onDelete: Cascade)
-  tuix     Tuix     @relation(fields: [tuixId], references: [tuixId], onDelete: Cascade)
-
-  @@id([modelId, tuixId])
-}
-
-// 특정 tuix가 선택되면 비활성화되는 tuix
-model DisabledTuix {
-  tuixId         Int @map("tuix_id")
-  disabledTuixId Int @map("disabled_tuix_id")
-
-  tuix         Tuix @relation(name: "disabledTuix1", fields: [tuixId], references: [tuixId], onDelete: Cascade)
-  disabledTuix Tuix @relation(name: "disabledTuix2", fields: [disabledTuixId], references: [tuixId], onDelete: Cascade)
-
-  @@id([tuixId, disabledTuixId])
-}
-
-// 특정 옵션이 선택되면 활성화되는 tuix
-model TuixRequiredOption {
-  tuixId   Int @map("tuix_id")
-  optionId Int @map("option_id")
-
-  tuix   Tuix   @relation(fields: [tuixId], references: [tuixId], onDelete: Cascade)
-  option Option @relation(fields: [optionId], references: [optionId], onDelete: Cascade)
-
-  @@id([tuixId, optionId])
+  @@id([optionId, deleteOptionId])
 }

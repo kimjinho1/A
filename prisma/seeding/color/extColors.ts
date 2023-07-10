@@ -1,4 +1,4 @@
-export const ExtColors = [
+export const extColors = [
   // 아반떼
   {
     extColorCode: 'A5G',

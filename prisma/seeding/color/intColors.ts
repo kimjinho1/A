@@ -1,4 +1,4 @@
-export const IntColors = [
+export const intColors = [
   // 아반떼
   {
     intColorCode: 'NNB',
