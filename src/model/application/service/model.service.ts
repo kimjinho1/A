@@ -1,5 +1,5 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
-import { Car } from '@prisma/client'
+import { Car, Drive, Engine, Mission, Trim } from '@prisma/client'
 import { GetTrimsCommand } from 'src/model/adapter/web/command/get-trims.command'
 import { CarInfosDto } from '../port/repository/dto/output'
 import { ModelRepositoryPort } from '../port/repository/model-repository.port'
@@ -15,12 +15,7 @@ export class ModelService implements ModelServicePort {
 
   /** 차량 정보 반환 */
   async getCarInfo(carCode: string): Promise<Car> {
-    const car = await this.modelRepository.getCar(carCode)
-    if (car === null) {
-      throw new NotFoundException('존재하지 않는 차량 코드입니다.')
-    }
-
-    return car
+    return await this.getCar(carCode)
   }
 
   /** 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다. */
@@ -63,37 +58,11 @@ export class ModelService implements ModelServicePort {
   /** 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다 */
   async getTrims(modelFiltersDto: GetTrimsCommand): Promise<TrimInfosDto> {
     const { carCode, engineCode, missionCode, driveCode } = modelFiltersDto
-
-    const car = await this.modelRepository.getCar(carCode)
-    if (car === null) {
-      throw new NotFoundException('존재하지 않는 차량 코드입니다.')
-    }
-
-    const engine = await this.modelRepository.getEngine(engineCode)
-    if (engine === null) {
-      throw new NotFoundException('존재하지 않는 엔진 코드입니다.')
-    }
-
-    const mission = await this.modelRepository.getMission(missionCode)
-    if (mission === null) {
-      throw new NotFoundException('존재하지 않는 변속기 코드입니다.')
-    }
-
+    const car = await this.getCar(carCode)
+    const engine = await this.getEngine(engineCode)
+    const mission = await this.getMission(missionCode)
     const drive = await this.modelRepository.getDrive(driveCode)
-    const driveId = (driveCode === '' && carCode === 'CN12') || driveCode === '' ? null : drive?.driveId || null
-    if (driveCode !== '' && !driveId) {
-      throw new NotFoundException('존재하지 않는 구동방식 코드입니다.')
-    }
-    if (driveCode === '' && carCode !== 'CN12') {
-      throw new BadRequestException('잘못된 구동 방식 코드입니다.')
-    }
-
-    const modelFilter = {
-      carId: car.carId,
-      engineId: engine.engineId,
-      missionId: mission.missionId,
-      driveId
-    }
+    const driveId = this.getAndCheckDriveId(drive, driveCode, carCode)
 
     const trimInfos = await this.modelRepository.getTrims(car.carId, engine.engineId, mission.missionId, driveId)
     if (trimInfos.length === 0) {
@@ -129,11 +98,12 @@ export class ModelService implements ModelServicePort {
       ...modelInfo.car,
       ...modelInfo.trim
     }
-
     return result
   }
 
-  /** Utils */
+  /**
+   * UTILS
+   * */
   extrectCarInfo(carInfo: CarInfosDto): Promise<CarInfo[]> {
     const carInfos = Promise.all(
       carInfo.car.map(async car => {
@@ -151,5 +121,40 @@ export class ModelService implements ModelServicePort {
     )
 
     return carInfos
+  }
+
+  async getCar(carCode: string): Promise<Car> {
+    const car = await this.modelRepository.getCar(carCode)
+    if (car === null) {
+      throw new NotFoundException('존재하지 않는 차량 코드입니다.')
+    }
+    return car
+  }
+
+  async getEngine(engineCode: string): Promise<Engine> {
+    const engine = await this.modelRepository.getEngine(engineCode)
+    if (engine === null) {
+      throw new NotFoundException('존재하지 않는 엔진 코드입니다.')
+    }
+    return engine
+  }
+
+  async getMission(missionCode: string): Promise<Mission> {
+    const mission = await this.modelRepository.getMission(missionCode)
+    if (mission === null) {
+      throw new NotFoundException('존재하지 않는 변속기 코드입니다.')
+    }
+    return mission
+  }
+
+  getAndCheckDriveId(drive: Drive | null, driveCode: string, carCode: string): number | null {
+    const driveId = (driveCode === '' && carCode === 'CN12') || driveCode === '' ? null : drive?.driveId || null
+    if (driveCode !== '' && !driveId) {
+      throw new NotFoundException('존재하지 않는 구동방식 코드입니다.')
+    }
+    if (driveCode === '' && carCode !== 'CN12') {
+      throw new BadRequestException('잘못된 구동 방식 코드입니다.')
+    }
+    return driveId
   }
 }
