@@ -71,9 +71,10 @@ model Trim {
   trimCode String @unique @map("trim_code") @db.VarChar(10)
   trimName String @unique @map("trim_name") @db.VarChar(20)
 
-  carTrim      CarTrim[]
-  carModel     CarModel[]
-  trimIntColor TrimIntColor[]
+  carTrim        CarTrim[]
+  carModel       CarModel[]
+  trimIntColor   TrimIntColor[]
+  activateOption ActivateOption[]
 }
 
 // 차종과 선택 가능 품목(엔진, 변속기, 구동방식, 트림)의 호환 관계들
@@ -207,15 +208,15 @@ model Option {
   optionImagePath String @map("option_image_path") @db.VarChar(50)
   optionTypeId    Int    @map("option_type_id")
 
-  optionType        OptionType         @relation(fields: [optionTypeId], references: [optionTypeId], onDelete: Cascade)
-  carModelOption    CarModelOption[]
-  intColorOption    IntColorOption[]
-  activateOption1   ActivateOption[]   @relation(name: "activateOption1")
-  activateOption2   ActivateOption[]   @relation(name: "activateOption2")
-  deactivateOption1 DeactivateOption[] @relation(name: "deactivateOption1")
-  deactivateOption2 DeactivateOption[] @relation(name: "deactivateOption2")
-  deleteOption1     DeleteOption[]     @relation(name: "deleteOption1")
-  deleteOption2     DeleteOption[]     @relation(name: "deleteOption2")
+  optionType                    OptionType         @relation(fields: [optionTypeId], references: [optionTypeId], onDelete: Cascade)
+  carModelOption                CarModelOption[]
+  intColorOption                IntColorOption[]
+  selectedOptionForActivation   ActivateOption[]   @relation(name: "selectedOptionForActivation")
+  optionToActivate              ActivateOption[]   @relation(name: "optionToActivate")
+  selectedOptionForDeactivation DeactivateOption[] @relation(name: "selectedOptionForDeactivation")
+  optionToDeactivate            DeactivateOption[] @relation(name: "optionToDeactivate")
+  selectedOptionForDeletion     DeleteOption[]     @relation(name: "selectedOptionForDeletion")
+  optionToDelete                DeleteOption[]     @relation(name: "optionToDelete")
 }
 
 // 모델과 옵션의 호환 관계
@@ -242,13 +243,15 @@ model IntColorOption {
 
 // 특정 옵션이 선택되면 활성화되는 옵션
 model ActivateOption {
+  trimId           Int @map("trim_id")
   optionId         Int @map("option_id")
   activateOptionId Int @map("activate_option_id")
 
-  option         Option @relation(name: "activateOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
-  activateOption Option @relation(name: "activateOption2", fields: [activateOptionId], references: [optionId], onDelete: Cascade)
+  trim                        Trim   @relation(fields: [trimId], references: [trimId], onDelete: Cascade)
+  selectedOptionForActivation Option @relation(name: "selectedOptionForActivation", fields: [optionId], references: [optionId], onDelete: Cascade)
+  optionToActivate            Option @relation(name: "optionToActivate", fields: [activateOptionId], references: [optionId], onDelete: Cascade)
 
-  @@id([optionId, activateOptionId])
+  @@id([trimId, optionId, activateOptionId])
 }
 
 // 특정 옵션이 선택되면 비활성화되는 옵션
@@ -256,18 +259,19 @@ model DeactivateOption {
   optionId           Int @map("option_id")
   deactivateOptionId Int @map("deactivate_option_id")
 
-  option           Option @relation(name: "deactivateOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
-  deactivateOption Option @relation(name: "deactivateOption2", fields: [deactivateOptionId], references: [optionId], onDelete: Cascade)
+  selectedOptionForDeactivation Option @relation(name: "selectedOptionForDeactivation", fields: [optionId], references: [optionId], onDelete: Cascade)
+  optionToDeactivate            Option @relation(name: "optionToDeactivate", fields: [deactivateOptionId], references: [optionId], onDelete: Cascade)
 
   @@id([optionId, deactivateOptionId])
 }
 
+// 특정 옵션이 선택되면 사라져야되는 옵션
 model DeleteOption {
   optionId       Int @map("option_id")
   deleteOptionId Int @map("delete_option_id")
 
-  option       Option @relation(name: "deleteOption1", fields: [optionId], references: [optionId], onDelete: Cascade)
-  deleteOption Option @relation(name: "deleteOption2", fields: [deleteOptionId], references: [optionId], onDelete: Cascade)
+  selectedOptionForDeletion Option @relation(name: "selectedOptionForDeletion", fields: [optionId], references: [optionId], onDelete: Cascade)
+  optionToDelete            Option @relation(name: "optionToDelete", fields: [deleteOptionId], references: [optionId], onDelete: Cascade)
 
   @@id([optionId, deleteOptionId])
 }
