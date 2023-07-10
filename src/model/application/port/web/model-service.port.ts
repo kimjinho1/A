@@ -1,6 +1,6 @@
 import { Car } from '@prisma/client'
+import { GetTrimsCommand } from 'src/model/adapter/web/command/get-trims.command'
 import { CarInfosDto } from '../repository/dto/output'
-import { ModelFilterCodesDto } from './dto/in'
 import { CarInfo, CarTypeWithCarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto/out'
 
 export interface ModelServicePort {
@@ -10,7 +10,7 @@ export interface ModelServicePort {
 
   getModelFilters(carCode: string): Promise<ModelFiltersDto>
 
-  getTrims(modelFiltersDto: ModelFilterCodesDto): Promise<TrimInfosDto>
+  getTrims(modelFiltersDto: GetTrimsCommand): Promise<TrimInfosDto>
 
   getCarModelInfo(modelCode: string): Promise<ModelInfoDto>
 

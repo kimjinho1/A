@@ -1,8 +1,8 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { Car } from '@prisma/client'
+import { GetTrimsCommand } from 'src/model/adapter/web/command/get-trims.command'
 import { CarInfosDto } from '../port/repository/dto/output'
 import { ModelRepositoryPort } from '../port/repository/model-repository.port'
-import { ModelFilterCodesDto } from '../port/web/dto/in'
 import { CarInfo, CarTypeWithCarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from '../port/web/dto/out'
 import { ModelServicePort } from '../port/web/model-service.port'
 
@@ -61,7 +61,7 @@ export class ModelService implements ModelServicePort {
   }
 
   /** 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다 */
-  async getTrims(modelFiltersDto: ModelFilterCodesDto): Promise<TrimInfosDto> {
+  async getTrims(modelFiltersDto: GetTrimsCommand): Promise<TrimInfosDto> {
     const { carCode, engineCode, missionCode, driveCode } = modelFiltersDto
 
     const car = await this.modelRepository.getCar(carCode)
@@ -95,7 +95,7 @@ export class ModelService implements ModelServicePort {
       driveId
     }
 
-    const trimInfos = await this.modelRepository.getTrims(modelFilter)
+    const trimInfos = await this.modelRepository.getTrims(car.carId, engine.engineId, mission.missionId, driveId)
     if (trimInfos.length === 0) {
       throw new NotFoundException('필터 정보와 부합하는 트림 정보가 없습니다.')
     }

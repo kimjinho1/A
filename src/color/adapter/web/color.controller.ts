@@ -1,20 +1,32 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common'
 import { ColorServicePort } from 'src/color/application/port/web/color-serivce.port'
 import { IntColorInfos } from 'src/color/application/port/web/dto/out'
+import { ColorService } from 'src/color/application/service/color.service'
 
 @Controller('color')
 export class ColorController {
-  constructor(@Inject(ColorServicePort) private readonly colorService: ColorServicePort) {}
+  constructor(
+    // @Inject(ColorServicePort) private readonly colorService: ColorServicePort
+    private readonly colorService: ColorService
+  ) {}
 
   @Get()
   getHello(): string {
     return 'hello'
   }
 
-  /** 차량 정보 반환 */
+  /** 내장색상 정보 반환 */
   @Get('/int-color')
-  async getIntColorInfos(@Query('modelCode') modelCode: string): Promise<IntColorInfos> {
-    return await this.colorService.getIntColorInfos(modelCode)
+  async getIntColorInfos(
+    @Query('modelCode') modelCode: string,
+    @Query('extColorCode') extColorCode: string
+  ): Promise<IntColorInfos> {
+    /** 모델 기준으로 내장색상 정보 반환 */
+    if (extColorCode === '') {
+      return await this.colorService.getIntColorInfos(modelCode)
+    }
+    /** 모델과 외장색상 기준으로 내장색상 정보반환 */
+    return await this.colorService.getIntColorInfosByExtColor(modelCode, extColorCode)
   }
 
   /**
@@ -30,6 +42,7 @@ export class ColorController {
     return await this.colorService.getChangeableCarModelsWithTrimByIntColor(modelCode, intColorCode, extColorCode)
   }
 
+  /** 외장색상 정보 반환 */
   @Get('/ext-color')
   async getExtColorsByIntColorCode(
     @Query('modelCode') modelCode: string,
@@ -37,4 +50,6 @@ export class ColorController {
   ): Promise<any> {
     return await this.colorService.getExtColorInfos(modelCode, intColorCode)
   }
+
+  /** 외장색상 기준으로 내장색상 정보 반환 */
 }

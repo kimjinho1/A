@@ -1,12 +1,15 @@
 import { Controller, Get, Inject, Param, Query } from '@nestjs/common'
 import { Car } from '@prisma/client'
-import { ModelFilterCodesDto } from 'src/model/application/port/web/dto/in'
 import { ModelServicePort } from 'src/model/application/port/web/model-service.port'
 import { CarTypeWithCarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from '../../application/port/web/dto/out'
+import { GetTrimsCommand } from './command/get-trims.command'
 
 @Controller('model')
 export class ModelController {
-  constructor(@Inject(ModelServicePort) private readonly modelService: ModelServicePort) {}
+  constructor(
+    @Inject(ModelServicePort)
+    private readonly modelService: ModelServicePort
+  ) {}
 
   /** 차량 정보 반환 */
   @Get('carInfo/:carCode')
@@ -28,7 +31,7 @@ export class ModelController {
 
   /** 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다 */
   @Get('/trims')
-  async getTrims(@Query() modelFiltersDto: ModelFilterCodesDto): Promise<TrimInfosDto> {
+  async getTrims(@Query() modelFiltersDto: GetTrimsCommand): Promise<TrimInfosDto> {
     return await this.modelService.getTrims(modelFiltersDto)
   }
 

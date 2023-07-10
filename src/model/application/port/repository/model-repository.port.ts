@@ -1,6 +1,5 @@
-import { Car, CarType, Drive, Engine, Mission } from '@prisma/client'
-import { ModelFilterDto } from './dto/input'
-import { CarInfosDto, CarLowPriceDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto/output'
+import { Car, CarModel, CarType, Drive, Engine, Mission } from '@prisma/client'
+import { CarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto/output'
 
 export interface ModelRepositoryPort {
   getCar(carCode: string): Promise<Car | null>
@@ -17,11 +16,11 @@ export interface ModelRepositoryPort {
 
   getCarType(carTypeId: number): Promise<CarType | null>
 
-  getCarLowPrice(carId: number): Promise<CarLowPriceDto | null>
+  getCarLowPrice(carId: number): Promise<Pick<CarModel, 'modelPrice'> | null>
 
   getModelFilters(carCode: string): Promise<ModelFiltersDto | null>
 
-  getTrims(modelFilters: ModelFilterDto): Promise<TrimInfosDto>
+  getTrims(carId: number, engineId: number, missionId: number, driveId: number | null): Promise<TrimInfosDto>
 
   getCarModelInfo(modelCode: string): Promise<ModelInfoDto | null>
 }

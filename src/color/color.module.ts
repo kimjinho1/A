@@ -9,15 +9,17 @@ import { ColorController } from './adapter/web/color.controller'
 @Module({
   controllers: [ColorController],
   providers: [
-    {
-      provide: ColorRepositoryPort,
-      useClass: ColorRepository
-    },
-    {
-      provide: ColorServicePort,
-      useClass: ColorService
-    },
-    PrismaService
+    // {
+    //   provide: ColorRepositoryPort,
+    //   useClass: ColorRepository
+    // },
+    // {
+    //   provide: ColorServicePort,
+    //   useClass: ColorService
+    // },
+    PrismaService,
+    ColorRepository,
+    ColorService
   ]
 })
 export class ColorModule {}
