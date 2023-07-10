@@ -1,7 +1,7 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common'
-import { ColorServicePort } from 'src/color/application/port/web/color-serivce.port'
-import { IntColorInfos } from 'src/color/application/port/web/dto/out'
-import { ColorService } from 'src/color/application/service/color.service'
+import { ColorServicePort } from 'src/core/application/port/web/color-serivce.port'
+import { IntColorInfos } from 'src/core/application/port/web/dto/color/out'
+import { ColorService } from 'src/core/application/service/color.service'
 
 @Controller('color')
 export class ColorController {

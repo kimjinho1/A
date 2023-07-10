@@ -1,8 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common'
-import { ColorRepository } from 'src/color/adapter/repository/color.repository'
+import { ColorRepository } from 'src/core/adapter/repository/color.repository'
 import { ColorRepositoryPort } from '../port/repository/color-repository.port'
 import { ColorServicePort } from '../port/web/color-serivce.port'
-import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../port/web/dto/out'
+import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../port/web/dto/color/out'
 import { CarModel, ExtColor, IntColor, IntExtColor } from '@prisma/client'
 
 // export class ColorService implements ColorServicePort {

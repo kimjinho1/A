@@ -1,5 +1,5 @@
 import { Car, CarModel, CarType, Drive, Engine, Mission } from '@prisma/client'
-import { CarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto/output'
+import { CarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto/model/output'
 
 export interface ModelRepositoryPort {
   getCar(carCode: string): Promise<Car | null>

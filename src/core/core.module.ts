@@ -1,5 +1,10 @@
 import { Module } from '@nestjs/common'
 import { PrismaService } from 'src/prisma.service'
+import { ColorRepositoryPort } from './application/port/repository/color-repository.port'
+import { ColorRepository } from './adapter/repository/color.repository'
+import { ColorServicePort } from './application/port/web/color-serivce.port'
+import { ColorService } from './application/service/color.service'
+import { ColorController } from './adapter/web/color.controller'
 import { ModelRepositoryPort } from './application/port/repository/model-repository.port'
 import { ModelRepository } from './adapter/repository/model.repository'
 import { ModelServicePort } from './application/port/web/model-service.port'
@@ -7,7 +12,7 @@ import { ModelService } from './application/service/model.service'
 import { ModelController } from './adapter/web/model.controller'
 
 @Module({
-  controllers: [ModelController],
+  controllers: [ModelController, ColorController],
   providers: [
     {
       /*  provide에서 ModelRepositoryPort 인식을 못하는 문제가 있었다.
@@ -25,7 +30,17 @@ import { ModelController } from './adapter/web/model.controller'
       provide: ModelServicePort,
       useClass: ModelService
     },
-    PrismaService
+    // {
+    //   provide: ColorRepositoryPort,
+    //   useClass: ColorRepository
+    // },
+    // {
+    //   provide: ColorServicePort,
+    //   useClass: ColorService
+    // },
+    PrismaService,
+    ColorRepository,
+    ColorService
   ]
 })
-export class ModelModule {}
+export class CoreModule {}

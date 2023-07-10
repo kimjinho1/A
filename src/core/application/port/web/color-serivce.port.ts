@@ -1,4 +1,4 @@
-import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from './dto/out'
+import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from './dto/color/out'
 
 export interface ColorServicePort {
   getIntColorInfos(modelCode: string): Promise<IntColorInfos>

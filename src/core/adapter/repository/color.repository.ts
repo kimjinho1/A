@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { CarModel, ExtColor, IntColor, IntExtColor, TrimIntColor } from '@prisma/client'
-import { ColorRepositoryPort } from 'src/color/application/port/repository/color-repository.port'
-import { ModelFilterIdsDto } from 'src/color/application/port/repository/dto/in'
-import { AnotherCarModelsWithTrimDto } from 'src/color/application/port/repository/dto/out'
+import { ColorRepositoryPort } from 'src/core/application/port/repository/color-repository.port'
+import { ModelFilterIdsDto } from 'src/core/application/port/repository/dto/color/in'
+import { AnotherCarModelsWithTrimDto } from 'src/core/application/port/repository/dto/color/out'
 import { PrismaService } from 'src/prisma.service'
 
 // export class ColorRepository implements ColorRepositoryPort {

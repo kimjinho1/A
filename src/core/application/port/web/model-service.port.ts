@@ -1,7 +1,7 @@
 import { Car } from '@prisma/client'
-import { GetTrimsCommand } from 'src/model/adapter/web/command/get-trims.command'
-import { CarInfosDto } from '../repository/dto/output'
-import { CarInfo, CarTypeWithCarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto/out'
+import { CarInfosDto } from '../repository/dto/model/output'
+import { CarInfo, CarTypeWithCarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto/model/out'
+import { GetTrimsCommand } from 'src/core/adapter/web/command/get-trims.command'
 
 export interface ModelServicePort {
   getCarInfo(carCode: string): Promise<Car>

@@ -1,6 +1,6 @@
 import { CarModel, ExtColor, IntColor, IntExtColor, TrimIntColor } from '@prisma/client'
-import { AnotherCarModelsWithTrimDto, SelectableExtColorIdsDto, SelectableIntColorIdsDto } from './dto/out'
-import { ModelFilterIdsDto } from './dto/in'
+import { AnotherCarModelsWithTrimDto, SelectableExtColorIdsDto, SelectableIntColorIdsDto } from './dto/color/out'
+import { ModelFilterIdsDto } from './dto/color/in'
 
 export interface ColorRepositoryPort {
   getCarModel(modelCode: string): Promise<CarModel | null>
