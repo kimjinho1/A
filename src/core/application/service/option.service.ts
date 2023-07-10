@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CarModel } from '@prisma/client'
 import { OptionRepository } from 'src/core/adapter/repository/option.repository'
-import { TrimInfosDto } from '../port/web/dto/option/out'
+import { OptionInfo, OptionInfosDto } from '../port/web/dto/option/out'
 
 // export class OptionService implements OptionServicePort {
 @Injectable()
@@ -14,7 +14,7 @@ export class OptionService {
   /**
    * 모델 기준으로 옵선들 정보 반환
    * */
-  async getOptions(modelCode: string): Promise<TrimInfosDto> {
+  async getOptions(modelCode: string): Promise<OptionInfosDto> {
     const carModel = await this.getCarModel(modelCode)
 
     const options = await this.optionRepository.getOptions(carModel.modelId)
@@ -22,6 +22,8 @@ export class OptionService {
       throw new NotFoundException('선택 가능한 옵션이 없습니다')
     }
 
+    const unselectableOptions = await this.optionRepository.getUnselectableOptionIds(carModel.trimId, carModel.modelId)
+    const unselectableOptionIds = new Set(unselectableOptions.map(unselectableOption => unselectableOption.optionId))
     const result = options.map(option => {
       return {
         optionId: option.optionId,
@@ -29,9 +31,21 @@ export class OptionService {
         optionName: option.optionName,
         optionPrice: option.optionPrice,
         optionImagePath: option.optionImagePath,
-        optionTypeName: option.optionType.optionTypeName
+        optionTypeName: option.optionType.optionTypeName,
+        isSelectable: !unselectableOptionIds.has(option.optionId)
       }
     })
+    result.sort((a, b) => (b.isSelectable ? 1 : 0) - (a.isSelectable ? 1 : 0))
+
+    // const groupedOptions = transformedAndSortedOptions.reduce<{ [key: string]: OptionInfo[] }>((acc, option) => {
+    //   const { optionTypeName } = option
+    //   if (!acc[optionTypeName]) {
+    //     acc[optionTypeName] = []
+    //   }
+    //   acc[optionTypeName].push(option)
+    //   return acc
+    // }, {})
+
     return result
   }
 

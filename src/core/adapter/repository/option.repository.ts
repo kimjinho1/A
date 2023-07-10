@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { CarModel } from '@prisma/client'
+import { CarModel, Option } from '@prisma/client'
 import { OptionInfosDto } from 'src/core/application/port/repository/dto/option/out'
 import { PrismaService } from 'src/prisma.service'
 
@@ -27,6 +27,26 @@ export class OptionRepository {
       },
       include: {
         optionType: true
+      }
+    })
+  }
+
+  async getUnselectableOptionIds(trimId: number, modelId: number): Promise<Pick<Option, 'optionId'>[]> {
+    return await this.prisma.option.findMany({
+      where: {
+        carModelOption: {
+          some: {
+            modelId
+          }
+        },
+        optionToActivate: {
+          some: {
+            trimId
+          }
+        }
+      },
+      select: {
+        optionId: true
       }
     })
   }

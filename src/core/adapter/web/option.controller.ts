@@ -1,5 +1,5 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common'
-import { TrimInfosDto } from 'src/core/application/port/web/dto/option/out'
+import { OptionInfosDto } from 'src/core/application/port/web/dto/option/out'
 import { OptionService } from 'src/core/application/service/option.service'
 
 @Controller('option')
@@ -13,7 +13,7 @@ export class OptionController {
    * 모델 기준으로 옵선들 정보 반환
    * */
   @Get()
-  async getOptions(@Query('modelCode') modelCode: string): Promise<TrimInfosDto> {
+  async getOptions(@Query('modelCode') modelCode: string): Promise<OptionInfosDto> {
     return this.optionService.getOptions(modelCode)
   }
 }
