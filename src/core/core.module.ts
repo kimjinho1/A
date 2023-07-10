@@ -10,9 +10,12 @@ import { ModelRepository } from './adapter/repository/model.repository'
 import { ModelServicePort } from './application/port/web/model-service.port'
 import { ModelService } from './application/service/model.service'
 import { ModelController } from './adapter/web/model.controller'
+import { OptionRepository } from './adapter/repository/option.repository'
+import { OptionService } from './application/service/option.service'
+import { OptionController } from './adapter/web/option.controller'
 
 @Module({
-  controllers: [ModelController, ColorController],
+  controllers: [ModelController, ColorController, OptionController],
   providers: [
     {
       /*  provide에서 ModelRepositoryPort 인식을 못하는 문제가 있었다.
@@ -39,8 +42,10 @@ import { ModelController } from './adapter/web/model.controller'
     //   useClass: ColorService
     // },
     PrismaService,
+    ColorService,
     ColorRepository,
-    ColorService
+    OptionService,
+    OptionRepository
   ]
 })
 export class CoreModule {}
