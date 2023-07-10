@@ -237,6 +237,7 @@ async function main() {
   for (const activateOption of activateOptions) {
     await prisma.activateOption.createMany({
       data: {
+        trimId: activateOption.trimId,
         optionId: options.findIndex(option => option.optionCode === activateOption.optionCode) + 1,
         activateOptionId: options.findIndex(option => option.optionCode === activateOption.activateOptionCode) + 1
       }
