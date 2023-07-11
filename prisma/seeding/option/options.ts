@@ -67,7 +67,7 @@ export const options = [
     optionCode: 'HS1',
     optionName: '현대 스마트센스 Ⅰ',
     optionPrice: 940000,
-    optionImagePath: '/images/optionHS1.png',
+    optionImagePath: '/images/option/HS1.png',
     optionTypeId: 1
   },
 
@@ -203,14 +203,6 @@ export const options = [
     optionImagePath: '/images/option/PL2.png',
     optionTypeId: 1
   },
-
-  {
-    optionCode: 'BIC2',
-    optionName: '빌트인 캠(보조배터리 포함)',
-    optionPrice: 640000,
-    optionImagePath: '/images/option/BIC2.png',
-    optionTypeId: 1
-  },
   {
     optionCode: 'COM',
     optionName: '컴포트',
@@ -218,6 +210,14 @@ export const options = [
     optionImagePath: '/images/option/COM.png',
     optionTypeId: 1
   },
+  {
+    optionCode: 'BIC2',
+    optionName: '빌트인 캠(보조배터리 포함)',
+    optionPrice: 640000,
+    optionImagePath: '/images/option/BIC2.png',
+    optionTypeId: 1
+  },
+
   {
     optionCode: 'EX2',
     optionName: '익스테리어 Ⅱ',
@@ -336,14 +336,14 @@ export const options = [
   /** 퍼포먼스 */
   {
     optionCode: 'NX3857',
-    optionName: '[N퍼포먼스파츠] 19인치 매트 블랙 경량휠',
+    optionName: '19인치 매트 블랙 경량휠',
     optionPrice: 1140000,
     optionImagePath: '/images/option/NX3857.png',
     optionTypeId: 3
   },
   {
     optionCode: 'NX3858',
-    optionName: '[N퍼포먼스파츠] 모노블록 브레이크+19인치 매트 블랙 경량휠 패키지',
+    optionName: '모노블록 브레이크+19인치 매트 블랙 경량휠 패키지',
     optionPrice: 2230000,
     optionImagePath: '/images/option/NX3858.png',
     optionTypeId: 3
