@@ -1,5 +1,5 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common'
-import { AddPossibleOptionsDto, OptionInfosDto } from 'src/core/application/port/web/dto/option/out'
+import { OptionsDto, OptionInfosDto } from 'src/core/application/port/web/dto/option/out'
 import { OptionService } from 'src/core/application/service/option.service'
 
 @Controller('option')
@@ -24,7 +24,18 @@ export class OptionController {
   async getAddPossibleOptions(
     @Query('modelCode') modelCode: string,
     @Query('optionCode') optionCode: string
-  ): Promise<AddPossibleOptionsDto> {
+  ): Promise<OptionsDto> {
     return await this.optionService.getAddPossibleOptions(modelCode, optionCode)
+  }
+
+  /**
+   * 비활성화되어야 하는 옵션들 반환
+   */
+  @Get('/disable')
+  async getDeactivatedOptions(
+    @Query('modelCode') modelCode: string,
+    @Query('optionCode') optionCode: string
+  ): Promise<OptionsDto> {
+    return await this.optionService.getDeactivatedOptions(modelCode, optionCode)
   }
 }

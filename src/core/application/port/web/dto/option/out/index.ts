@@ -1,2 +1,2 @@
 export * from './option-infos.dto'
-export * from './add-possible-options.dto'
+export * from './options.dto'

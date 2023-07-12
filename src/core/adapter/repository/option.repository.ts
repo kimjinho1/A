@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { CarModel, CarModelOption, Option } from '@prisma/client'
-import { AddPossibleOptionsDto, OptionInfosDto } from 'src/core/application/port/repository/dto/option/out'
+import {
+  AddPossibleOptionsDto,
+  DeactivatedOptionsDto,
+  DeletedOptionsDto,
+  OptionInfosDto
+} from 'src/core/application/port/repository/dto/option/out'
 import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
@@ -75,6 +80,40 @@ export class OptionRepository {
       },
       select: {
         optionToActivate: {
+          select: {
+            optionId: true,
+            optionCode: true,
+            optionName: true
+          }
+        }
+      }
+    })
+  }
+
+  async getDeactivatedOptions(optionId: number): Promise<DeactivatedOptionsDto> {
+    return await this.prisma.deactivateOption.findMany({
+      where: {
+        optionId
+      },
+      select: {
+        optionToDeactivate: {
+          select: {
+            optionId: true,
+            optionCode: true,
+            optionName: true
+          }
+        }
+      }
+    })
+  }
+
+  async getDeletedOptions(optionId: number): Promise<DeletedOptionsDto> {
+    return await this.prisma.deleteOption.findMany({
+      where: {
+        optionId
+      },
+      select: {
+        optionToDelete: {
           select: {
             optionId: true,
             optionCode: true,

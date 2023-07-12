@@ -1,7 +1,9 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
-import { CarModel, CarModelOption, Option } from '@prisma/client'
+import { CarModel, Option } from '@prisma/client'
 import { OptionRepository } from 'src/core/adapter/repository/option.repository'
-import { AddPossibleOptionsDto, OptionInfo, OptionInfosDto } from '../port/web/dto/option/out'
+import { OptionsDto, OptionInfosDto } from '../port/web/dto/option/out'
+import { deleteOptions } from 'prisma/seeding/relation/deleteOptions'
+import { resourceLimits } from 'worker_threads'
 
 // export class OptionService implements OptionServicePort {
 @Injectable()
@@ -36,23 +38,14 @@ export class OptionService {
       }
     })
     result.sort((a, b) => (b.isSelectable ? 1 : 0) - (a.isSelectable ? 1 : 0))
-
-    // const groupedOptions = transformedAndSortedOptions.reduce<{ [key: string]: OptionInfo[] }>((acc, option) => {
-    //   const { optionTypeName } = option
-    //   if (!acc[optionTypeName]) {
-    //     acc[optionTypeName] = []
-    //   }
-    //   acc[optionTypeName].push(option)
-    //   return acc
-    // }, {})
-
     return result
   }
 
-  async getAddPossibleOptions(modelCode: string, optionCode: string): Promise<AddPossibleOptionsDto> {
+  async getAddPossibleOptions(modelCode: string, optionCode: string): Promise<OptionsDto> {
     const carModel = await this.getCarModel(modelCode)
     const option = await this.getOption(optionCode)
-    const carModelOption = await this.getCarModelOption(carModel.modelId, option.optionId)
+    await this.checkCarModelOption(carModel.modelId, option.optionId)
+
     const addPossibleOptions = await this.optionRepository.getAddPossibleOptions(option.optionId)
 
     const result = addPossibleOptions.map(addPossibleOption => {
@@ -60,6 +53,30 @@ export class OptionService {
         ...addPossibleOption.optionToActivate
       }
     })
+    return result
+  }
+
+  async getDeactivatedOptions(modelCode: string, optionCode: string): Promise<OptionsDto> {
+    const carModel = await this.getCarModel(modelCode)
+    const option = await this.getOption(optionCode)
+    await this.checkCarModelOption(carModel.modelId, option.optionId)
+
+    const deactivatedOptions = await this.optionRepository.getDeactivatedOptions(option.optionId)
+    const deletedOptions = await this.optionRepository.getDeletedOptions(option.optionId)
+
+    const result = deactivatedOptions
+      .map(deactivatedOption => {
+        return {
+          ...deactivatedOption.optionToDeactivate
+        }
+      })
+      .concat(
+        deletedOptions.map(deleteOption => {
+          return {
+            ...deleteOption.optionToDelete
+          }
+        })
+      )
     return result
   }
 
@@ -82,11 +99,10 @@ export class OptionService {
     return option
   }
 
-  async getCarModelOption(modelId: number, optionId: number): Promise<CarModelOption> {
+  async checkCarModelOption(modelId: number, optionId: number): Promise<void> {
     const carModelOption = await this.optionRepository.getCarModelOption(modelId, optionId)
     if (carModelOption === null) {
       throw new BadRequestException('호환되지 않는 모델과 옵션 코드입니다')
     }
-    return carModelOption
   }
 }
