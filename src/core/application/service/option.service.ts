@@ -1,16 +1,17 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CarModel, Option } from '@prisma/client'
 import { OptionRepository } from 'src/core/adapter/repository/option.repository'
-import { OptionsDto, OptionInfosDto } from '../port/web/dto/option/out'
-import { deleteOptions } from 'prisma/seeding/relation/deleteOptions'
-import { resourceLimits } from 'worker_threads'
+import { OptionsDto, OptionInfosDto, ColorsDto } from '../port/web/dto/option/out'
+import { ColorRepository } from 'src/core/adapter/repository/color.repository'
+import { ColorService } from './color.service'
 
 // export class OptionService implements OptionServicePort {
 @Injectable()
 export class OptionService {
   constructor(
     // @Inject(OptionRepositoryPort) private readonly optionRepository: OptionRepositoryPort
-    private readonly optionRepository: OptionRepository
+    private readonly optionRepository: OptionRepository,
+    private readonly colorService: ColorService
   ) {}
 
   /**
@@ -83,6 +84,42 @@ export class OptionService {
           }
         })
       )
+    return result
+  }
+
+  /**
+   * 특정 내장색상(세이지그린)이 선택되면 자동으로 선택되어야 하는 옵션들 반환
+   */
+  async getAutoSelectedOptions(modelCode: string, intColorCode: string): Promise<OptionsDto> {
+    const carModel = await this.getCarModel(modelCode)
+    const intColor = await this.colorService.getIntColor(intColorCode)
+    await this.colorService.checkTrimIntColor(carModel.trimId, intColor.intColorId)
+
+    const autoSelectedOptions = await this.optionRepository.getAutoSelectedOptions(intColor.intColorId)
+
+    const result = autoSelectedOptions.map(autoSelectedOption => {
+      return {
+        ...autoSelectedOption.option
+      }
+    })
+    return result
+  }
+
+  /**
+   * 특정 옵션(세이지 그린 인테리어 컬러)이 선택되면 자동으로 선택되어야 하는 색상들 반환
+   */
+  async getAutoSelectedColors(modelCode: string, OptionCode: string): Promise<ColorsDto> {
+    const carModel = await this.getCarModel(modelCode)
+    const option = await this.getOption(OptionCode)
+    await this.checkCarModelOption(carModel.trimId, option.optionId)
+
+    const autoSelectedColors = await this.optionRepository.getAutoSelectedColors(option.optionId)
+
+    const result = autoSelectedColors.map(autoSelectedColor => {
+      return {
+        ...autoSelectedColor.intColor
+      }
+    })
     return result
   }
 
