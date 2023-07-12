@@ -41,6 +41,9 @@ export class OptionService {
     return result
   }
 
+  /**
+   * 활성화 가능한 옵션들 반환
+   */
   async getAddPossibleOptions(modelCode: string, optionCode: string): Promise<OptionsDto> {
     const carModel = await this.getCarModel(modelCode)
     const option = await this.getOption(optionCode)
@@ -56,6 +59,9 @@ export class OptionService {
     return result
   }
 
+  /**
+   * 비활성화되어야 하는 옵션들 반환
+   */
   async getDeactivatedOptions(modelCode: string, optionCode: string): Promise<OptionsDto> {
     const carModel = await this.getCarModel(modelCode)
     const option = await this.getOption(optionCode)
