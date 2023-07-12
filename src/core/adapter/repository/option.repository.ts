@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { CarModel, Option } from '@prisma/client'
-import { OptionInfosDto } from 'src/core/application/port/repository/dto/option/out'
+import { CarModel, CarModelOption, Option } from '@prisma/client'
+import {
+  AddPossibleOptionsDto,
+  DeactivatedOptionsDto,
+  DeletedOptionsDto,
+  OptionInfosDto
+} from 'src/core/application/port/repository/dto/option/out'
 import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
@@ -12,6 +17,14 @@ export class OptionRepository {
     return await this.prisma.carModel.findUnique({
       where: {
         modelCode
+      }
+    })
+  }
+
+  async getOption(optionCode: string): Promise<Option | null> {
+    return await this.prisma.option.findUnique({
+      where: {
+        optionCode
       }
     })
   }
@@ -47,6 +60,66 @@ export class OptionRepository {
       },
       select: {
         optionId: true
+      }
+    })
+  }
+
+  async getCarModelOption(modelId: number, optionId: number): Promise<CarModelOption | null> {
+    return await this.prisma.carModelOption.findFirst({
+      where: {
+        modelId,
+        optionId
+      }
+    })
+  }
+
+  async getAddPossibleOptions(optionId: number): Promise<AddPossibleOptionsDto> {
+    return await this.prisma.activateOption.findMany({
+      where: {
+        optionId
+      },
+      select: {
+        optionToActivate: {
+          select: {
+            optionId: true,
+            optionCode: true,
+            optionName: true
+          }
+        }
+      }
+    })
+  }
+
+  async getDeactivatedOptions(optionId: number): Promise<DeactivatedOptionsDto> {
+    return await this.prisma.deactivateOption.findMany({
+      where: {
+        optionId
+      },
+      select: {
+        optionToDeactivate: {
+          select: {
+            optionId: true,
+            optionCode: true,
+            optionName: true
+          }
+        }
+      }
+    })
+  }
+
+  async getDeletedOptions(optionId: number): Promise<DeletedOptionsDto> {
+    return await this.prisma.deleteOption.findMany({
+      where: {
+        optionId
+      },
+      select: {
+        optionToDelete: {
+          select: {
+            optionId: true,
+            optionCode: true,
+            optionName: true
+          }
+        }
       }
     })
   }
