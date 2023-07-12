@@ -183,4 +183,11 @@ export class ColorService {
       throw new NotFoundException('선택하신 외장색상과 함께 제공되지 않는 색상입니다.\n외장색상을 변경해주세요.')
     }
   }
+
+  async checkTrimIntColor(trimId: number, intColorId: number): Promise<void> {
+    const trimIntColor = await this.colorRepository.getTrimIntColor(trimId, intColorId)
+    if (trimIntColor === null) {
+      throw new NotFoundException('선택하신 모델과 호환되지 않는 내장색상입니다.')
+    }
+  }
 }

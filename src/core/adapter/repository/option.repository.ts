@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { CarModel, CarModelOption, Option } from '@prisma/client'
 import {
   AddPossibleOptionsDto,
+  AutoSelectedColorsDto,
+  AutoSelectedOptionsDto,
   DeactivatedOptionsDto,
   DeletedOptionsDto,
   OptionInfosDto
@@ -118,6 +120,40 @@ export class OptionRepository {
             optionId: true,
             optionCode: true,
             optionName: true
+          }
+        }
+      }
+    })
+  }
+
+  async getAutoSelectedOptions(intColorId: number): Promise<AutoSelectedOptionsDto> {
+    return await this.prisma.intColorOption.findMany({
+      where: {
+        intColorId
+      },
+      select: {
+        option: {
+          select: {
+            optionId: true,
+            optionCode: true,
+            optionName: true
+          }
+        }
+      }
+    })
+  }
+
+  async getAutoSelectedColors(optionId: number): Promise<AutoSelectedColorsDto> {
+    return await this.prisma.intColorOption.findMany({
+      where: {
+        optionId
+      },
+      select: {
+        intColor: {
+          select: {
+            intColorId: true,
+            intColorCode: true,
+            intColorName: true
           }
         }
       }
