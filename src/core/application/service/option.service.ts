@@ -1,7 +1,7 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
-import { CarModel } from '@prisma/client'
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { CarModel, CarModelOption, Option } from '@prisma/client'
 import { OptionRepository } from 'src/core/adapter/repository/option.repository'
-import { OptionInfo, OptionInfosDto } from '../port/web/dto/option/out'
+import { AddPossibleOptionsDto, OptionInfo, OptionInfosDto } from '../port/web/dto/option/out'
 
 // export class OptionService implements OptionServicePort {
 @Injectable()
@@ -13,7 +13,7 @@ export class OptionService {
 
   /**
    * 모델 기준으로 옵선들 정보 반환
-   * */
+   */
   async getOptions(modelCode: string): Promise<OptionInfosDto> {
     const carModel = await this.getCarModel(modelCode)
 
@@ -49,6 +49,20 @@ export class OptionService {
     return result
   }
 
+  async getAddPossibleOptions(modelCode: string, optionCode: string): Promise<AddPossibleOptionsDto> {
+    const carModel = await this.getCarModel(modelCode)
+    const option = await this.getOption(optionCode)
+    const carModelOption = await this.getCarModelOption(carModel.modelId, option.optionId)
+    const addPossibleOptions = await this.optionRepository.getAddPossibleOptions(option.optionId)
+
+    const result = addPossibleOptions.map(addPossibleOption => {
+      return {
+        ...addPossibleOption.optionToActivate
+      }
+    })
+    return result
+  }
+
   /**
    * Utils
    */
@@ -58,5 +72,21 @@ export class OptionService {
       throw new NotFoundException('존재하지 않는 차량 모델 코드입니다')
     }
     return carModel
+  }
+
+  async getOption(optionCode: string): Promise<Option> {
+    const option = await this.optionRepository.getOption(optionCode)
+    if (option === null) {
+      throw new NotFoundException('존재하지 않는 옵션 코드입니다')
+    }
+    return option
+  }
+
+  async getCarModelOption(modelId: number, optionId: number): Promise<CarModelOption> {
+    const carModelOption = await this.optionRepository.getCarModelOption(modelId, optionId)
+    if (carModelOption === null) {
+      throw new BadRequestException('호환되지 않는 모델과 옵션 코드입니다')
+    }
+    return carModelOption
   }
 }
