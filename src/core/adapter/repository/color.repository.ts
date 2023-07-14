@@ -10,8 +10,8 @@ import { PrismaService } from 'src/prisma.service'
 export class ColorRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getCarModel(modelCode: string): Promise<CarModel | null> {
-    return await this.prisma.carModel.findUnique({
+  async getCarModel(modelCode: string): Promise<CarModel> {
+    return await this.prisma.carModel.findUniqueOrThrow({
       where: { modelCode }
     })
   }
@@ -89,16 +89,16 @@ export class ColorRepository {
     })
   }
 
-  async getIntColor(intColorCode: string): Promise<IntColor | null> {
-    return await this.prisma.intColor.findFirst({
+  async getIntColor(intColorCode: string): Promise<IntColor> {
+    return await this.prisma.intColor.findFirstOrThrow({
       where: {
         intColorCode
       }
     })
   }
 
-  async getExtColor(carId: number, extColorCode: string): Promise<ExtColor | null> {
-    return await this.prisma.extColor.findFirst({
+  async getExtColor(carId: number, extColorCode: string): Promise<ExtColor> {
+    return await this.prisma.extColor.findFirstOrThrow({
       where: {
         carId,
         extColorCode
@@ -106,8 +106,8 @@ export class ColorRepository {
     })
   }
 
-  async getIntExtColor(intColorId: number, extColorId: number): Promise<IntExtColor | null> {
-    return await this.prisma.intExtColor.findFirst({
+  async getIntExtColor(intColorId: number, extColorId: number): Promise<IntExtColor> {
+    return await this.prisma.intExtColor.findFirstOrThrow({
       where: {
         intColorId,
         extColorId
@@ -139,8 +139,8 @@ export class ColorRepository {
     })
   }
 
-  async getTrimIntColor(trimId: number, intColorId: number): Promise<TrimIntColor | null> {
-    return await this.prisma.trimIntColor.findFirst({
+  async getTrimIntColor(trimId: number, intColorId: number): Promise<TrimIntColor> {
+    return await this.prisma.trimIntColor.findFirstOrThrow({
       where: {
         trimId,
         intColorId

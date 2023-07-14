@@ -3,7 +3,7 @@ import { ColorRepository } from 'src/core/adapter/repository/color.repository'
 import { ColorRepositoryPort } from '../port/repository/color-repository.port'
 import { ColorServicePort } from '../port/web/color-serivce.port'
 import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../port/web/dto/color/out'
-import { CarModel, ExtColor, IntColor, IntExtColor } from '@prisma/client'
+import { CarModel, ExtColor, IntColor } from '@prisma/client'
 import { ErrorMessages } from 'src/common/exception/errors'
 
 // export class ColorService implements ColorServicePort {
@@ -16,7 +16,7 @@ export class ColorService {
 
   /**
    * 모델 기준으로 내장색상 정보 반환
-   * */
+   */
   async getIntColorInfos(modelCode: string): Promise<IntColorInfos> {
     const carModel = await this.getCarModel(modelCode)
     const allIntColors = await this.getAllIntColors(carModel.carId)
@@ -33,13 +33,12 @@ export class ColorService {
         isSelectable: selectableIntColorIds.has(intColor.intColorId)
       }
     })
-    result.sort((a, b) => (b.isSelectable ? 1 : 0) - (a.isSelectable ? 1 : 0))
-    return result
+    return this.sortSelectableFirst(result)
   }
 
   /**
    * 모델과 외장색상 기준으로 내장색상 정보반환
-   * */
+   */
   async getIntColorInfosByExtColor(modelCode: string, extColorCode: string): Promise<IntColorInfos> {
     const carModel = await this.getCarModel(modelCode)
     const extColor = await this.getExtColor(carModel.carId, extColorCode)
@@ -61,9 +60,7 @@ export class ColorService {
         isSelectable: selectableIntColorIds.has(intColor.intColorId)
       }
     })
-    // 알아보기 힘든 정렬
-    result.sort((a, b) => (b.isSelectable ? 1 : 0) - (a.isSelectable ? 1 : 0))
-    return result
+    return this.sortSelectableFirst(result)
   }
 
   /**
@@ -86,13 +83,12 @@ export class ColorService {
         isSelectable: selectableExtColorIds.has(extColor.extColorId)
       }
     })
-    result.sort((a, b) => (b.isSelectable ? 1 : 0) - (a.isSelectable ? 1 : 0))
-    return result
+    return this.sortSelectableFirst(result)
   }
 
   /**
    * 선택된 내장색상을 고를 수 있는 트림 정보를 반환
-   * */
+   */
   async getChangeableCarModelsWithTrimByIntColor(
     modelCode: string,
     intColorCode: string,
@@ -138,29 +134,33 @@ export class ColorService {
 
   /**
    * Utils
-   * */
+   */
+  sortSelectableFirst<T extends { isSelectable: boolean }>(result: T[]): T[] {
+    return result.sort((a, b) => (b.isSelectable ? 1 : 0) - (a.isSelectable ? 1 : 0))
+  }
+
   async getCarModel(modelCode: string): Promise<CarModel> {
-    const carModel = await this.colorRepository.getCarModel(modelCode)
-    if (carModel === null) {
+    try {
+      return await this.colorRepository.getCarModel(modelCode)
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.MODEL_NOT_FOUND)
     }
-    return carModel
   }
 
   async getIntColor(intColorCode: string): Promise<IntColor> {
-    const intColor = await this.colorRepository.getIntColor(intColorCode)
-    if (intColor === null) {
+    try {
+      return await this.colorRepository.getIntColor(intColorCode)
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.INVALID_INTERIOR_COLOR)
     }
-    return intColor
   }
 
   async getExtColor(carId: number, extColorCode: string): Promise<ExtColor> {
-    const extColor = await this.colorRepository.getExtColor(carId, extColorCode)
-    if (extColor === null) {
+    try {
+      return await this.colorRepository.getExtColor(carId, extColorCode)
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.INVALID_EXTERIOR_COLOR)
     }
-    return extColor
   }
 
   async getAllIntColors(carId: number): Promise<IntColor[]> {
@@ -180,15 +180,17 @@ export class ColorService {
   }
 
   async checkIntExtColor(intColorId: number, extColorId: number): Promise<void> {
-    const intExtColor = await this.colorRepository.getIntExtColor(intColorId, extColorId)
-    if (intExtColor === null) {
+    try {
+      await this.colorRepository.getIntExtColor(intColorId, extColorId)
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.NON_PROVIDED_COLOR_WITH_EXTERIOR)
     }
   }
 
   async checkTrimIntColor(trimId: number, intColorId: number): Promise<void> {
-    const trimIntColor = await this.colorRepository.getTrimIntColor(trimId, intColorId)
-    if (trimIntColor === null) {
+    try {
+      await this.colorRepository.getTrimIntColor(trimId, intColorId)
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.NON_COMPATIBLE_INTERIOR_COLOR)
     }
   }

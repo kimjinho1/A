@@ -15,16 +15,8 @@ import { PrismaService } from 'src/prisma.service'
 export class OptionRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getCarModel(modelCode: string): Promise<CarModel | null> {
-    return await this.prisma.carModel.findUnique({
-      where: {
-        modelCode
-      }
-    })
-  }
-
-  async getOption(optionCode: string): Promise<Option | null> {
-    return await this.prisma.option.findUnique({
+  async getOption(optionCode: string): Promise<Option> {
+    return await this.prisma.option.findUniqueOrThrow({
       where: {
         optionCode
       }
@@ -66,8 +58,8 @@ export class OptionRepository {
     })
   }
 
-  async getCarModelOption(modelId: number, optionId: number): Promise<CarModelOption | null> {
-    return await this.prisma.carModelOption.findFirst({
+  async getCarModelOption(modelId: number, optionId: number): Promise<CarModelOption> {
+    return await this.prisma.carModelOption.findFirstOrThrow({
       where: {
         modelId,
         optionId

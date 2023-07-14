@@ -19,7 +19,7 @@ export class OptionService {
    * 모델 기준으로 옵선들 정보 반환
    */
   async getOptions(modelCode: string): Promise<OptionInfosDto> {
-    const carModel = await this.getCarModel(modelCode)
+    const carModel = await this.colorService.getCarModel(modelCode)
 
     const options = await this.optionRepository.getOptions(carModel.modelId)
     if (options.length === 0) {
@@ -46,7 +46,7 @@ export class OptionService {
    * 활성화 가능한 옵션들 반환
    */
   async getAddPossibleOptions(modelCode: string, optionCode: string): Promise<OptionsDto> {
-    const carModel = await this.getCarModel(modelCode)
+    const carModel = await this.colorService.getCarModel(modelCode)
     const option = await this.getOption(optionCode)
     await this.checkCarModelOption(carModel.modelId, option.optionId)
 
@@ -64,7 +64,7 @@ export class OptionService {
    * 비활성화되어야 하는 옵션들 반환
    */
   async getDeactivatedOptions(modelCode: string, optionCode: string): Promise<OptionsDto> {
-    const carModel = await this.getCarModel(modelCode)
+    const carModel = await this.colorService.getCarModel(modelCode)
     const option = await this.getOption(optionCode)
     await this.checkCarModelOption(carModel.modelId, option.optionId)
 
@@ -91,7 +91,7 @@ export class OptionService {
    * 특정 내장색상(세이지그린)이 선택되면 자동으로 선택되어야 하는 옵션들 반환
    */
   async getAutoSelectedOptions(modelCode: string, intColorCode: string): Promise<OptionsDto> {
-    const carModel = await this.getCarModel(modelCode)
+    const carModel = await this.colorService.getCarModel(modelCode)
     const intColor = await this.colorService.getIntColor(intColorCode)
     await this.colorService.checkTrimIntColor(carModel.trimId, intColor.intColorId)
 
@@ -109,7 +109,7 @@ export class OptionService {
    * 특정 옵션(세이지 그린 인테리어 컬러)이 선택되면 자동으로 선택되어야 하는 색상들 반환
    */
   async getAutoSelectedColors(modelCode: string, OptionCode: string): Promise<ColorsDto> {
-    const carModel = await this.getCarModel(modelCode)
+    const carModel = await this.colorService.getCarModel(modelCode)
     const option = await this.getOption(OptionCode)
     await this.checkCarModelOption(carModel.trimId, option.optionId)
 
@@ -126,25 +126,18 @@ export class OptionService {
   /**
    * Utils
    */
-  async getCarModel(modelCode: string): Promise<CarModel> {
-    const carModel = await this.optionRepository.getCarModel(modelCode)
-    if (carModel === null) {
-      throw new NotFoundException(ErrorMessages.CAR_NOT_FOUND)
-    }
-    return carModel
-  }
-
   async getOption(optionCode: string): Promise<Option> {
-    const option = await this.optionRepository.getOption(optionCode)
-    if (option === null) {
+    try {
+      return await this.optionRepository.getOption(optionCode)
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.INVALID_OPTION_CODE)
     }
-    return option
   }
 
   async checkCarModelOption(modelId: number, optionId: number): Promise<void> {
-    const carModelOption = await this.optionRepository.getCarModelOption(modelId, optionId)
-    if (carModelOption === null) {
+    try {
+      await this.optionRepository.getCarModelOption(modelId, optionId)
+    } catch (error) {
       throw new BadRequestException(ErrorMessages.INCOMPATIBLE_MODEL_OPTION)
     }
   }

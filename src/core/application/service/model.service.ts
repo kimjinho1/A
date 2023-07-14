@@ -106,46 +106,46 @@ export class ModelService implements ModelServicePort {
    * UTILS
    */
   extrectCarInfo(carInfo: CarInfosDto): Promise<CarInfo[]> {
-    const carInfos = Promise.all(
-      carInfo.car.map(async car => {
-        const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
-        if (carLowPrice === null) {
-          throw new NotFoundException(ErrorMessages.DATA_SEEDING_NOT_DONE)
-        }
-        return {
-          carCode: car.carCode,
-          carName: car.carName,
-          carImagePath: car.carImagePath,
-          carLowPrice: carLowPrice.modelPrice
-        }
-      })
-    )
-
-    return carInfos
+    try {
+      const carInfos = Promise.all(
+        carInfo.car.map(async car => {
+          const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
+          return {
+            carCode: car.carCode,
+            carName: car.carName,
+            carImagePath: car.carImagePath,
+            carLowPrice: carLowPrice.modelPrice
+          }
+        })
+      )
+      return carInfos
+    } catch (error) {
+      throw new NotFoundException(ErrorMessages.DATA_SEEDING_NOT_DONE)
+    }
   }
 
   async getCar(carCode: string): Promise<Car> {
-    const car = await this.modelRepository.getCar(carCode)
-    if (car === null) {
+    try {
+      return await this.modelRepository.getCar(carCode)
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.CAR_NOT_FOUND)
     }
-    return car
   }
 
   async getEngine(engineCode: string): Promise<Engine> {
-    const engine = await this.modelRepository.getEngine(engineCode)
-    if (engine === null) {
+    try {
+      return await this.modelRepository.getEngine(engineCode)
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.ENGINE_NOT_FOUND)
     }
-    return engine
   }
 
   async getMission(missionCode: string): Promise<Mission> {
-    const mission = await this.modelRepository.getMission(missionCode)
-    if (mission === null) {
+    try {
+      return await this.modelRepository.getMission(missionCode)
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.MISSION_NOT_FOUND)
     }
-    return mission
   }
 
   getAndCheckDriveId(drive: Drive | null, driveCode: string, carCode: string): number | null {
