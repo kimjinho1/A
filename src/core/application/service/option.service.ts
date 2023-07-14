@@ -4,6 +4,7 @@ import { OptionRepository } from 'src/core/adapter/repository/option.repository'
 import { OptionsDto, OptionInfosDto, ColorsDto } from '../port/web/dto/option/out'
 import { ColorRepository } from 'src/core/adapter/repository/color.repository'
 import { ColorService } from './color.service'
+import { ErrorMessages } from 'src/common/exception/errors'
 
 // export class OptionService implements OptionServicePort {
 @Injectable()
@@ -22,7 +23,7 @@ export class OptionService {
 
     const options = await this.optionRepository.getOptions(carModel.modelId)
     if (options.length === 0) {
-      throw new NotFoundException('선택 가능한 옵션이 없습니다')
+      throw new NotFoundException(ErrorMessages.NO_AVAILABLE_OPTION)
     }
 
     const unselectableOptions = await this.optionRepository.getUnselectableOptionIds(carModel.trimId, carModel.modelId)
@@ -125,11 +126,10 @@ export class OptionService {
   /**
    * Utils
    */
-  // 에러 관련 쌩 문자열 추상화
   async getCarModel(modelCode: string): Promise<CarModel> {
     const carModel = await this.optionRepository.getCarModel(modelCode)
     if (carModel === null) {
-      throw new NotFoundException('존재하지 않는 차량 모델 코드입니다')
+      throw new NotFoundException(ErrorMessages.CAR_NOT_FOUND)
     }
     return carModel
   }
@@ -137,7 +137,7 @@ export class OptionService {
   async getOption(optionCode: string): Promise<Option> {
     const option = await this.optionRepository.getOption(optionCode)
     if (option === null) {
-      throw new NotFoundException('존재하지 않는 옵션 코드입니다')
+      throw new NotFoundException(ErrorMessages.INVALID_OPTION_CODE)
     }
     return option
   }
@@ -145,7 +145,7 @@ export class OptionService {
   async checkCarModelOption(modelId: number, optionId: number): Promise<void> {
     const carModelOption = await this.optionRepository.getCarModelOption(modelId, optionId)
     if (carModelOption === null) {
-      throw new BadRequestException('호환되지 않는 모델과 옵션 코드입니다')
+      throw new BadRequestException(ErrorMessages.INCOMPATIBLE_MODEL_OPTION)
     }
   }
 }
