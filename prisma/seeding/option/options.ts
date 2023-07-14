@@ -43,10 +43,17 @@ export const options = [
    * 더 뉴 아반떼, Modern
    */
   {
-    optionCode: 'SGI',
-    optionName: '세이지 그린 인테리어 컬러',
-    optionPrice: 150000,
-    optionImagePath: '/images/option/SGI.png',
+    optionCode: 'HS1',
+    optionName: '현대 스마트센스 Ⅰ',
+    optionPrice: 940000,
+    optionImagePath: '/images/option/HS1.png',
+    optionTypeId: 1
+  },
+  {
+    optionCode: 'EXD',
+    optionName: '익스테리어 디자인',
+    optionPrice: 450000,
+    optionImagePath: '/images/option/EXD.png',
     optionTypeId: 1
   },
   {
@@ -61,13 +68,6 @@ export const options = [
     optionName: '파킹 어시스트 플러스',
     optionPrice: 1290000,
     optionImagePath: '/images/option/PAP.png',
-    optionTypeId: 1
-  },
-  {
-    optionCode: 'HS1',
-    optionName: '현대 스마트센스 Ⅰ',
-    optionPrice: 940000,
-    optionImagePath: '/images/option/HS1.png',
     optionTypeId: 1
   },
 
@@ -89,13 +89,6 @@ export const options = [
   //
 
   {
-    optionCode: 'EXD',
-    optionName: '익스테리어 디자인',
-    optionPrice: 450000,
-    optionImagePath: '/images/option/EXD.png',
-    optionTypeId: 1
-  },
-  {
     optionCode: 'AT2',
     optionName: '17인치 알로이 휠 & 타이어 Ⅱ',
     optionPrice: 300000,
@@ -115,18 +108,23 @@ export const options = [
     optionTypeId: 1
   },
 
+  /**
+   * 더 뉴 아반떼, 구분
+   */
+  {
+    optionCode: 'SGI',
+    optionName: '세이지 그린 인테리어 컬러',
+    optionPrice: 150000,
+    optionImagePath: '/images/option/SGI.png',
+    optionTypeId: 1
+  },
+
   // 더 뉴 아반떼 옵션 14개
 
   /*
    * 투싼, Modern
    */
-  {
-    optionCode: 'ID1',
-    optionName: '인테리어디자인 Ⅰ',
-    optionPrice: 250000,
-    optionImagePath: '/images/option/X.png',
-    optionTypeId: 1
-  },
+
   {
     optionCode: 'MN1',
     optionName: '멀티미디어 내비 Ⅰ',
@@ -176,33 +174,17 @@ export const options = [
     optionImagePath: '/images/option/HEC.png',
     optionTypeId: 1
   },
-
-  /*
-   * 투싼, Premium
-   */
   {
-    optionCode: 'ID2',
-    optionName: '인테리어디자인 Ⅱ',
-    optionPrice: 590000,
+    optionCode: 'ID1',
+    optionName: '인테리어디자인 Ⅰ',
+    optionPrice: 250000,
     optionImagePath: '/images/option/X.png',
     optionTypeId: 1
   },
 
-  // 가솔린 터보 -> 플래티넘 Ⅰ, 디젤 -> 플래티넘 Ⅱ
-  {
-    optionCode: 'PL1',
-    optionName: '플래티넘 Ⅰ',
-    optionPrice: 2230000,
-    optionImagePath: '/images/option/PL1.png',
-    optionTypeId: 1
-  },
-  {
-    optionCode: 'PL2',
-    optionName: '플래티넘 Ⅱ',
-    optionPrice: 2520000,
-    optionImagePath: '/images/option/PL2.png',
-    optionTypeId: 1
-  },
+  /*
+   * 투싼, Premium
+   */
   {
     optionCode: 'COM',
     optionName: '컴포트',
@@ -232,17 +214,34 @@ export const options = [
     optionImagePath: '/images/option/PSL.png',
     optionTypeId: 1
   },
+  {
+    optionCode: 'ID2',
+    optionName: '인테리어디자인 Ⅱ',
+    optionPrice: 590000,
+    optionImagePath: '/images/option/X.png',
+    optionTypeId: 1
+  },
+
+  // 가솔린 터보 -> 플래티넘 Ⅰ, 디젤 -> 플래티넘 Ⅱ
+  {
+    optionCode: 'PL1',
+    optionName: '플래티넘 Ⅰ',
+    optionPrice: 2230000,
+    optionImagePath: '/images/option/PL1.png',
+    optionTypeId: 1
+  },
+  {
+    optionCode: 'PL2',
+    optionName: '플래티넘 Ⅱ',
+    optionPrice: 2520000,
+    optionImagePath: '/images/option/PL2.png',
+    optionTypeId: 1
+  },
 
   /*
    * 투싼, Inspiration
    */
-  {
-    optionCode: 'AVP',
-    optionName: '어드벤처패키지',
-    optionPrice: 790000,
-    optionImagePath: '/images/option/X.png',
-    optionTypeId: 1
-  },
+
   {
     optionCode: 'PSF',
     optionName: '파노라마 선루프',
@@ -250,7 +249,13 @@ export const options = [
     optionImagePath: '/images/option/PSF.png',
     optionTypeId: 1
   },
-
+  {
+    optionCode: 'AVP',
+    optionName: '어드벤처패키지',
+    optionPrice: 790000,
+    optionImagePath: '/images/option/X.png',
+    optionTypeId: 1
+  },
   // 가솔린 터보 -> 플래티넘 Ⅲ, 디젤 -> 플래티넘 Ⅳ
   {
     optionCode: 'PL3',
@@ -288,6 +293,18 @@ export const options = [
     optionImagePath: '/images/option/NX0004.png',
     optionTypeId: 2
   },
+
+  /*
+   * 페이지에서 보여지는 순서 때문에 여기 위치함 Modern 아님
+   * 투싼, Premium
+   */
+  {
+    optionCode: 'NX0003',
+    optionName: '빌트인 공기 청정기',
+    optionPrice: 400000,
+    optionImagePath: '/images/option/NX0003.png',
+    optionTypeId: 2
+  },
   {
     optionCode: 'NX0008',
     optionName: '사이드스텝',
@@ -307,17 +324,6 @@ export const options = [
     optionName: '프로텍션 매트 패키지',
     optionPrice: 230000,
     optionImagePath: '/images/option/NX0005.png',
-    optionTypeId: 2
-  },
-
-  /*
-   * 투싼, Premium
-   */
-  {
-    optionCode: 'NX0003',
-    optionName: '빌트인 공기 청정기',
-    optionPrice: 400000,
-    optionImagePath: '/images/option/NX0003.png',
     optionTypeId: 2
   },
 

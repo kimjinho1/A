@@ -38,7 +38,6 @@ export class OptionService {
         isSelectable: !unselectableOptionIds.has(option.optionId)
       }
     })
-    result.sort((a, b) => (b.isSelectable ? 1 : 0) - (a.isSelectable ? 1 : 0))
     return result
   }
 
@@ -126,6 +125,7 @@ export class OptionService {
   /**
    * Utils
    */
+  // 에러 관련 쌩 문자열 추상화
   async getCarModel(modelCode: string): Promise<CarModel> {
     const carModel = await this.optionRepository.getCarModel(modelCode)
     if (carModel === null) {
