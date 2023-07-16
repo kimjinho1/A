@@ -91,13 +91,10 @@ export class ColorService {
    */
   async getChangeableCarModelsWithTrimByIntColor(
     modelCode: string,
-    intColorCode: string,
-    extColorCode: string
+    intColorCode: string
   ): Promise<ChangeableCarModelsWithTrimDto> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
-    const extColor = await this.getExtColor(carModel.carId, extColorCode)
-    await this.checkIntExtColor(intColor.intColorId, extColor.extColorId)
 
     const modelFilterIdsDto = {
       carId: carModel.carId,
@@ -177,14 +174,6 @@ export class ColorService {
       throw new NotFoundException(ErrorMessages.NO_MATCHING_EXTERIOR_COLOR)
     }
     return allExtColors
-  }
-
-  async checkIntExtColor(intColorId: number, extColorId: number): Promise<void> {
-    try {
-      await this.colorRepository.getIntExtColor(intColorId, extColorId)
-    } catch (error) {
-      throw new NotFoundException(ErrorMessages.NON_PROVIDED_COLOR_WITH_EXTERIOR)
-    }
   }
 
   async checkTrimIntColor(trimId: number, intColorId: number): Promise<void> {

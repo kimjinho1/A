@@ -106,15 +106,6 @@ export class ColorRepository {
     })
   }
 
-  async getIntExtColor(intColorId: number, extColorId: number): Promise<IntExtColor> {
-    return await this.prisma.intExtColor.findFirstOrThrow({
-      where: {
-        intColorId,
-        extColorId
-      }
-    })
-  }
-
   async getAnotherCarModelsWithTrim(modelFilterIdsDto: ModelFilterIdsDto): Promise<AnotherCarModelsWithTrimDto> {
     const { carId, engineId, missionId, driveId, trimId } = modelFilterIdsDto
     return await this.prisma.carModel.findMany({
@@ -139,8 +130,8 @@ export class ColorRepository {
     })
   }
 
-  async getTrimIntColor(trimId: number, intColorId: number): Promise<TrimIntColor> {
-    return await this.prisma.trimIntColor.findFirstOrThrow({
+  async getTrimIntColor(trimId: number, intColorId: number): Promise<TrimIntColor | null> {
+    return await this.prisma.trimIntColor.findFirst({
       where: {
         trimId,
         intColorId

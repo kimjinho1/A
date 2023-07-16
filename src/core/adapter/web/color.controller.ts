@@ -43,6 +43,6 @@ export class ColorController {
     @Query('intColorCode') intColorCode: string,
     @Query('extColorCode') extColorCode: string
   ): Promise<any> {
-    return await this.colorService.getChangeableCarModelsWithTrimByIntColor(modelCode, intColorCode, extColorCode)
+    return await this.colorService.getChangeableCarModelsWithTrimByIntColor(modelCode, intColorCode)
   }
 }
