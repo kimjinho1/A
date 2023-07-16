@@ -83,6 +83,31 @@ export class OptionService {
   }
 
   /**
+   * 같이 선택(EX -> 컨비니언스1 & 인포테이먼트 내비)되어야 하는 옵션들 반환
+   */
+  async getAddTogetherOptions(modelCode: string, optionCode: string): Promise<OptionInfosDto> {
+    const carModel = await this.colorService.getCarModel(modelCode)
+    const option = await this.getOption(optionCode)
+    await this.checkCarModelOption(carModel.modelId, option.optionId)
+
+    const addTogetherOptions = await this.optionRepository.getAddTogetherOptions(option.optionId)
+
+    const result = addTogetherOptions.map(addTogetherOption => {
+      const option = addTogetherOption.selectedOptionForActivation
+      return {
+        optionId: option.optionId,
+        optionCode: option.optionCode,
+        optionName: option.optionName,
+        optionPrice: option.optionPrice,
+        optionImagePath: option.optionImagePath,
+        optionTypeName: option.optionType.optionTypeName,
+        isSelectable: true
+      }
+    })
+    return result
+  }
+
+  /**
    * 비활성화되어야 하는 옵션들 반환
    */
   async getDeactivatedOptions(modelCode: string, optionCode: string): Promise<OptionInfosDto> {

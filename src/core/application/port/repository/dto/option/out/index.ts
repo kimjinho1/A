@@ -1,5 +1,6 @@
 export * from './option-infos.dto'
 export * from './add-possible-options.dto'
+export * from './add-together-options.dto'
 export * from './deactivated-options.dto'
 export * from './deleted-options.dto'
 export * from './auto-selected-colors.dto'

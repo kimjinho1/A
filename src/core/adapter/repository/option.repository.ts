@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { CarModelOption, IntColorOption, Option, OptionType } from '@prisma/client'
 import {
   AddPossibleOptionsDto,
+  AddTogetherOptionsDto,
   AutoSelectedColorsDto,
   DeactivatedOptionsDto,
   DeletedOptionsDto,
@@ -73,6 +74,21 @@ export class OptionRepository {
       },
       include: {
         optionToActivate: {
+          include: {
+            optionType: true
+          }
+        }
+      }
+    })
+  }
+
+  async getAddTogetherOptions(optionId: number): Promise<AddTogetherOptionsDto> {
+    return await this.prisma.activateOption.findMany({
+      where: {
+        activateOptionId: optionId
+      },
+      include: {
+        selectedOptionForActivation: {
           include: {
             optionType: true
           }
