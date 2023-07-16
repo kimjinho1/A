@@ -40,8 +40,7 @@ export class ColorController {
   @Get('/change-int-color')
   async getChangeableCarModelsWithTrimByIntColor(
     @Query('modelCode') modelCode: string,
-    @Query('intColorCode') intColorCode: string,
-    @Query('extColorCode') extColorCode: string
+    @Query('intColorCode') intColorCode: string
   ): Promise<any> {
     return await this.colorService.getChangeableCarModelsWithTrimByIntColor(modelCode, intColorCode)
   }
