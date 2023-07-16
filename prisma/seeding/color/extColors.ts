@@ -37,6 +37,12 @@ export const extColors = [
     carId: 1
   },
   {
+    extColorCode: 'R2P',
+    extColorName: '얼티메이트 레드 메탈릭',
+    extColorImagePath: '/images/exterior-color/R2P.png',
+    carId: 1
+  },
+  {
     extColorCode: 'A2B',
     extColorName: '어비스블랙펄',
     extColorImagePath: '/images/exterior-color/A2B.png',
@@ -48,12 +54,7 @@ export const extColors = [
     extColorImagePath: '/images/exterior-color/C5G.png',
     carId: 1
   },
-  {
-    extColorCode: 'R2P',
-    extColorName: '얼티메이트 레드 메탈릭',
-    extColorImagePath: '/images/exterior-color/R2P.png',
-    carId: 1
-  },
+
   // 투싼
   {
     extColorCode: 'B6S',
