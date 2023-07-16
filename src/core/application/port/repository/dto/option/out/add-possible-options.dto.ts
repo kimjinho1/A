@@ -1,12 +1,10 @@
 import { Prisma } from '@prisma/client'
 
 export type AddPossibleOptionsDto = Prisma.ActivateOptionGetPayload<{
-  select: {
+  include: {
     optionToActivate: {
-      select: {
-        optionId: true
-        optionCode: true
-        optionName: true
+      include: {
+        optionType: true
       }
     }
   }
