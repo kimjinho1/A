@@ -18,7 +18,7 @@ export const deactivateOptions = [
   },
   {
     optionCode: 'E1P',
-    deactivateOptionCode: 'E1P'
+    deactivateOptionCode: 'EX1'
   },
 
   // 퍼포먼스

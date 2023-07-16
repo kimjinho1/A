@@ -5,6 +5,7 @@ import { ModelRepositoryPort } from '../port/repository/model-repository.port'
 import { CarInfo, CarTypeWithCarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from '../port/web/dto/model/out'
 import { ModelServicePort } from '../port/web/model-service.port'
 import { GetTrimsCommand } from 'src/core/adapter/web/command/get-trims.command'
+import { ErrorMessages } from 'src/common/exception/errors'
 
 @Injectable()
 export class ModelService implements ModelServicePort {
@@ -22,7 +23,7 @@ export class ModelService implements ModelServicePort {
   async getCarInfos(): Promise<CarTypeWithCarInfosDto> {
     const allCarInfo = await this.modelRepository.getCarInfos()
     if (allCarInfo.length === 0) {
-      throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
+      throw new NotFoundException(ErrorMessages.DATA_SEEDING_NOT_DONE)
     }
 
     const result = await Promise.all(
@@ -43,7 +44,7 @@ export class ModelService implements ModelServicePort {
   async getModelFilters(carCode: string): Promise<ModelFiltersDto> {
     const modelFilters = await this.modelRepository.getModelFilters(carCode)
     if (!modelFilters) {
-      throw new NotFoundException('존재하지 않는 차량 코드입니다.')
+      throw new NotFoundException(ErrorMessages.CAR_NOT_FOUND)
     }
 
     const result = {
@@ -66,7 +67,7 @@ export class ModelService implements ModelServicePort {
 
     const trimInfos = await this.modelRepository.getTrims(car.carId, engine.engineId, mission.missionId, driveId)
     if (trimInfos.length === 0) {
-      throw new NotFoundException('필터 정보와 부합하는 트림 정보가 없습니다.')
+      throw new NotFoundException(ErrorMessages.NO_MATCHING_TRIM)
     }
 
     const result = trimInfos.map(trimInfo => {
@@ -86,7 +87,7 @@ export class ModelService implements ModelServicePort {
   async getCarModelInfo(modelCode: string): Promise<ModelInfoDto> {
     const modelInfo = await this.modelRepository.getCarModelInfo(modelCode)
     if (modelInfo === null) {
-      throw new NotFoundException('존재하지 않는 차량 모델 코드입니다.')
+      throw new NotFoundException(ErrorMessages.MODEL_NOT_FOUND)
     }
 
     const result = {
@@ -103,57 +104,57 @@ export class ModelService implements ModelServicePort {
 
   /**
    * UTILS
-   * */
+   */
   extrectCarInfo(carInfo: CarInfosDto): Promise<CarInfo[]> {
-    const carInfos = Promise.all(
-      carInfo.car.map(async car => {
-        const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
-        if (carLowPrice === null) {
-          throw new NotFoundException('데이터 시딩이 안된 상태입니다.')
-        }
-        return {
-          carCode: car.carCode,
-          carName: car.carName,
-          carImagePath: car.carImagePath,
-          carLowPrice: carLowPrice.modelPrice
-        }
-      })
-    )
-
-    return carInfos
+    try {
+      const carInfos = Promise.all(
+        carInfo.car.map(async car => {
+          const carLowPrice = await this.modelRepository.getCarLowPrice(car.carId)
+          return {
+            carCode: car.carCode,
+            carName: car.carName,
+            carImagePath: car.carImagePath,
+            carLowPrice: carLowPrice.modelPrice
+          }
+        })
+      )
+      return carInfos
+    } catch (error) {
+      throw new NotFoundException(ErrorMessages.DATA_SEEDING_NOT_DONE)
+    }
   }
 
   async getCar(carCode: string): Promise<Car> {
-    const car = await this.modelRepository.getCar(carCode)
-    if (car === null) {
-      throw new NotFoundException('존재하지 않는 차량 코드입니다.')
+    try {
+      return await this.modelRepository.getCar(carCode)
+    } catch (error) {
+      throw new NotFoundException(ErrorMessages.CAR_NOT_FOUND)
     }
-    return car
   }
 
   async getEngine(engineCode: string): Promise<Engine> {
-    const engine = await this.modelRepository.getEngine(engineCode)
-    if (engine === null) {
-      throw new NotFoundException('존재하지 않는 엔진 코드입니다.')
+    try {
+      return await this.modelRepository.getEngine(engineCode)
+    } catch (error) {
+      throw new NotFoundException(ErrorMessages.ENGINE_NOT_FOUND)
     }
-    return engine
   }
 
   async getMission(missionCode: string): Promise<Mission> {
-    const mission = await this.modelRepository.getMission(missionCode)
-    if (mission === null) {
-      throw new NotFoundException('존재하지 않는 변속기 코드입니다.')
+    try {
+      return await this.modelRepository.getMission(missionCode)
+    } catch (error) {
+      throw new NotFoundException(ErrorMessages.MISSION_NOT_FOUND)
     }
-    return mission
   }
 
   getAndCheckDriveId(drive: Drive | null, driveCode: string, carCode: string): number | null {
     const driveId = (driveCode === '' && carCode === 'CN12') || driveCode === '' ? null : drive?.driveId || null
     if (driveCode !== '' && !driveId) {
-      throw new NotFoundException('존재하지 않는 구동방식 코드입니다.')
+      throw new NotFoundException(ErrorMessages.DRIVE_NOT_FOUND)
     }
     if (driveCode === '' && carCode !== 'CN12') {
-      throw new BadRequestException('잘못된 구동 방식 코드입니다.')
+      throw new BadRequestException(ErrorMessages.INVALID_DRIVE_CODE)
     }
     return driveId
   }

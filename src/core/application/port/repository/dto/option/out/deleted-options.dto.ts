@@ -1,12 +1,10 @@
 import { Prisma } from '@prisma/client'
 
 export type DeletedOptionsDto = Prisma.DeleteOptionGetPayload<{
-  select: {
+  include: {
     optionToDelete: {
-      select: {
-        optionId: true
-        optionCode: true
-        optionName: true
+      include: {
+        optionType: true
       }
     }
   }

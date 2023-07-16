@@ -40,9 +40,20 @@ export class OptionController {
   }
 
   /**
+   * 지워져야 하는 옵션들 반환
+   */
+  @Get('/delete')
+  async getDeletedOptions(
+    @Query('modelCode') modelCode: string,
+    @Query('optionCode') optionCode: string
+  ): Promise<OptionsDto> {
+    return await this.optionService.getDeletedOptions(modelCode, optionCode)
+  }
+
+  /**
    * 특정 내장색상(세이지그린)이 선택되면 자동으로 선택되어야 하는 옵션들 반환
    */
-  @Get('/auto-choice-option')
+  @Get('/auto-choice')
   async getAutoSelectedOptions(
     @Query('modelCode') modelCode: string,
     @Query('intColorCode') intColorCode: string
@@ -53,11 +64,11 @@ export class OptionController {
   /**
    * 특정 옵션(세이지 그린 인테리어 컬러)이 선택되면 자동으로 선택되어야 하는 색상들 반환
    */
-  @Get('/auto-choice-color')
-  async getAutoSelectedColors(
-    @Query('modelCode') modelCode: string,
-    @Query('optionCode') optionCode: string
-  ): Promise<ColorsDto> {
-    return await this.optionService.getAutoSelectedColors(modelCode, optionCode)
-  }
+  // @Get('/auto-choice-color')
+  // async getAutoSelectedColors(
+  //   @Query('modelCode') modelCode: string,
+  //   @Query('optionCode') optionCode: string
+  // ): Promise<ColorsDto> {
+  //   return await this.optionService.getAutoSelectedColors(modelCode, optionCode)
+  // }
 }

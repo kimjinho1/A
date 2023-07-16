@@ -13,8 +13,8 @@ import { ModelRepositoryPort } from 'src/core/application/port/repository/model-
 export class ModelRepository implements ModelRepositoryPort {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getCar(carCode: string): Promise<Car | null> {
-    return await this.prisma.car.findUnique({
+  async getCar(carCode: string): Promise<Car> {
+    return await this.prisma.car.findUniqueOrThrow({
       where: {
         carCode
       }
@@ -33,16 +33,16 @@ export class ModelRepository implements ModelRepositoryPort {
     })
   }
 
-  async getEngine(engineCode: string): Promise<Engine | null> {
-    return await this.prisma.engine.findUnique({
+  async getEngine(engineCode: string): Promise<Engine> {
+    return await this.prisma.engine.findUniqueOrThrow({
       where: {
         engineCode
       }
     })
   }
 
-  async getMission(missionCode: string): Promise<Mission | null> {
-    return await this.prisma.mission.findUnique({
+  async getMission(missionCode: string): Promise<Mission> {
+    return await this.prisma.mission.findUniqueOrThrow({
       where: {
         missionCode
       }
@@ -57,16 +57,16 @@ export class ModelRepository implements ModelRepositoryPort {
     })
   }
 
-  async getCarType(carTypeId: number): Promise<CarType | null> {
-    return await this.prisma.carType.findUnique({
+  async getCarType(carTypeId: number): Promise<CarType> {
+    return await this.prisma.carType.findUniqueOrThrow({
       where: {
         carTypeId
       }
     })
   }
 
-  async getCarLowPrice(carId: number): Promise<Pick<CarModel, 'modelPrice'> | null> {
-    return await this.prisma.carModel.findFirst({
+  async getCarLowPrice(carId: number): Promise<Pick<CarModel, 'modelPrice'>> {
+    return await this.prisma.carModel.findFirstOrThrow({
       where: {
         carId
       },
@@ -80,8 +80,8 @@ export class ModelRepository implements ModelRepositoryPort {
     })
   }
 
-  async getModelFilters(carCode: string): Promise<ModelFiltersDto | null> {
-    return await this.prisma.car.findUnique({
+  async getModelFilters(carCode: string): Promise<ModelFiltersDto> {
+    return await this.prisma.car.findUniqueOrThrow({
       where: {
         carCode
       },
@@ -128,8 +128,8 @@ export class ModelRepository implements ModelRepositoryPort {
     })
   }
 
-  async getCarModelInfo(modelCode: string): Promise<ModelInfoDto | null> {
-    return await this.prisma.carModel.findUnique({
+  async getCarModelInfo(modelCode: string): Promise<ModelInfoDto> {
+    return await this.prisma.carModel.findUniqueOrThrow({
       where: {
         modelCode
       },

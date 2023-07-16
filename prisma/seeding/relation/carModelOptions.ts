@@ -23,7 +23,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'CNJS4RDT3',
-    optionCodes: ['SGI', 'SRF', 'HER', 'PAP', 'HS1', 'CM1', 'EXD', 'AT2']
+    optionCodes: ['HER', 'HS1', 'EXD', 'SRF', 'PAP', 'CM1', 'AT2', 'SGI']
   },
 
   /*
@@ -31,7 +31,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'CNJS4LDT3',
-    optionCodes: ['SGI', 'SRF', 'HER', 'PAP', 'HS1', 'CM2', 'EXD', 'AT2']
+    optionCodes: ['HER', 'HS1', 'EXD', 'SRF', 'PAP', 'CM2', 'AT2', 'SGI']
   },
 
   /*
@@ -39,7 +39,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'CNJS4RGT3',
-    optionCodes: ['SGI', 'SRF', 'AT2', 'BIC']
+    optionCodes: ['AT2', 'SRF', 'BIC', 'SGI']
   },
 
   /*
@@ -47,7 +47,7 @@ export const carModelOptions = [
    */
   {
     modelCode: 'CNJS4LGT3',
-    optionCodes: ['SGI', 'SRF', 'AT2']
+    optionCodes: ['AT2', 'SRF', 'SGI']
   },
 
   /*

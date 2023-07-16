@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { CarModel, CarModelOption, Option } from '@prisma/client'
+import { CarModelOption, IntColorOption, Option, OptionType } from '@prisma/client'
 import {
   AddPossibleOptionsDto,
   AutoSelectedColorsDto,
-  AutoSelectedOptionsDto,
   DeactivatedOptionsDto,
   DeletedOptionsDto,
   OptionInfosDto
@@ -15,16 +14,8 @@ import { PrismaService } from 'src/prisma.service'
 export class OptionRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getCarModel(modelCode: string): Promise<CarModel | null> {
-    return await this.prisma.carModel.findUnique({
-      where: {
-        modelCode
-      }
-    })
-  }
-
-  async getOption(optionCode: string): Promise<Option | null> {
-    return await this.prisma.option.findUnique({
+  async getOption(optionCode: string): Promise<Option> {
+    return await this.prisma.option.findUniqueOrThrow({
       where: {
         optionCode
       }
@@ -66,8 +57,8 @@ export class OptionRepository {
     })
   }
 
-  async getCarModelOption(modelId: number, optionId: number): Promise<CarModelOption | null> {
-    return await this.prisma.carModelOption.findFirst({
+  async getCarModelOption(modelId: number, optionId: number): Promise<CarModelOption> {
+    return await this.prisma.carModelOption.findFirstOrThrow({
       where: {
         modelId,
         optionId
@@ -80,12 +71,10 @@ export class OptionRepository {
       where: {
         optionId
       },
-      select: {
+      include: {
         optionToActivate: {
-          select: {
-            optionId: true,
-            optionCode: true,
-            optionName: true
+          include: {
+            optionType: true
           }
         }
       }
@@ -97,12 +86,10 @@ export class OptionRepository {
       where: {
         optionId
       },
-      select: {
+      include: {
         optionToDeactivate: {
-          select: {
-            optionId: true,
-            optionCode: true,
-            optionName: true
+          include: {
+            optionType: true
           }
         }
       }
@@ -114,31 +101,32 @@ export class OptionRepository {
       where: {
         optionId
       },
-      select: {
+      include: {
         optionToDelete: {
-          select: {
-            optionId: true,
-            optionCode: true,
-            optionName: true
+          include: {
+            optionType: true
           }
         }
       }
     })
   }
 
-  async getAutoSelectedOptions(intColorId: number): Promise<AutoSelectedOptionsDto> {
-    return await this.prisma.intColorOption.findMany({
+  async getAutoSelectedOptions(modelId: number, intColorId: number): Promise<(Option & { optionType: OptionType })[]> {
+    return await this.prisma.option.findMany({
       where: {
-        intColorId
-      },
-      select: {
-        option: {
-          select: {
-            optionId: true,
-            optionCode: true,
-            optionName: true
+        intColorOption: {
+          some: {
+            intColorId
+          }
+        },
+        carModelOption: {
+          some: {
+            modelId
           }
         }
+      },
+      include: {
+        optionType: true
       }
     })
   }
@@ -156,6 +144,30 @@ export class OptionRepository {
             intColorName: true
           }
         }
+      }
+    })
+  }
+
+  async getIntColorOption(modelId: number): Promise<(Option & { intColorOption: IntColorOption[] })[]> {
+    return await this.prisma.option.findMany({
+      where: {
+        AND: [
+          {
+            carModelOption: {
+              some: {
+                modelId: modelId
+              }
+            }
+          },
+          {
+            intColorOption: {
+              some: {}
+            }
+          }
+        ]
+      },
+      include: {
+        intColorOption: true
       }
     })
   }
