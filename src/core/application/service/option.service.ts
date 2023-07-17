@@ -1,16 +1,12 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CarModel, Option } from '@prisma/client'
 import { OptionRepository } from 'src/core/adapter/repository/option.repository'
-import { OptionsDto, OptionInfosDto, ColorsDto } from '../port/web/dto/option/out'
+import { OptionsDto, OptionInfosDto, ColorsDto, ChangedOptions } from '../port/web/dto/option/out'
 import { ColorRepository } from 'src/core/adapter/repository/color.repository'
 import { ColorService } from './color.service'
 import { ErrorMessages } from 'src/common/exception/errors'
+import { OPTION_TYPE } from 'src/common/OptionType'
 
-export enum OPTION_TYPE {
-  DETAIL = 'detail',
-  HGA = 'hga',
-  PERFORMANCE = 'performance'
-}
 // export class OptionService implements OptionServicePort {
 @Injectable()
 export class OptionService {
@@ -156,6 +152,110 @@ export class OptionService {
         isSelectable: true
       }
     })
+    return result
+  }
+
+  /**
+   * 같이 선택(EX -> 컨비니언스1 & 인포테이먼트 내비)되어야 하는 옵션들 반환
+   */
+  async getChangedOptions(modelCode: string, optionCode: string, beforeOptionCode: string): Promise<ChangedOptions> {
+    const carModel = await this.colorService.getCarModel(modelCode)
+    const option = await this.getOption(optionCode)
+    await this.checkCarModelOption(carModel.modelId, option.optionId)
+    const beforeOptionCodes = beforeOptionCode ? beforeOptionCode.split(',') : []
+    const optionCodes = new Set(beforeOptionCodes)
+    await Promise.all(
+      beforeOptionCodes.map(async beforeOptionCode => {
+        const option = await this.getOption(beforeOptionCode)
+        await this.checkCarModelOption(carModel.modelId, option.optionId)
+        return option
+      })
+    )
+
+    const addTogetherOptions = await this.optionRepository.getAddTogetherOptions(carModel.modelId, option.optionId)
+    const deleteReplacementOptions = await this.optionRepository.getDeleteReplacementOptions(
+      carModel.modelId,
+      option.optionId
+    )
+
+    const result = {
+      add: addTogetherOptions
+        .filter(addTogetherOption => !optionCodes.has(addTogetherOption.selectedOptionForActivation.optionCode))
+        .map(addTogetherOption => {
+          const option = addTogetherOption.selectedOptionForActivation
+          return {
+            optionId: option.optionId,
+            optionCode: option.optionCode,
+            optionName: option.optionName,
+            optionPrice: option.optionPrice,
+            optionImagePath: option.optionImagePath,
+            optionTypeName: option.optionType.optionTypeName,
+            isSelectable: true
+          }
+        }),
+      remove: deleteReplacementOptions
+        .filter(deleteReplacementOption =>
+          optionCodes.has(deleteReplacementOption.selectedOptionForDeactivation.optionCode)
+        )
+        .map(deleteReplacementOption => {
+          const option = deleteReplacementOption.selectedOptionForDeactivation
+          return {
+            optionId: option.optionId,
+            optionCode: option.optionCode,
+            optionName: option.optionName,
+            optionPrice: option.optionPrice,
+            optionImagePath: option.optionImagePath,
+            optionTypeName: option.optionType.optionTypeName,
+            isSelectable: true
+          }
+        })
+    }
+    return result
+  }
+
+  /**
+   * 모델과 선택된 옵션들 기준으로 Tuix 옵선들 정보 반환
+   */
+  async getTuixs(modelCode: string, beforeOptionCode: string): Promise<any> {
+    const carModel = await this.colorService.getCarModel(modelCode)
+    const optionCodes = beforeOptionCode.split(',')
+    const addOptionCodes = new Set()
+    await Promise.all(
+      optionCodes.map(async optionCode => {
+        const option = await this.getOption(optionCode)
+        await this.checkCarModelOption(carModel.modelId, option.optionId)
+        const addPossibleOptions = await this.optionRepository.getAddPossibleOptions(option.optionId)
+        addPossibleOptions.map(addPossibleOption => {
+          addOptionCodes.add(addPossibleOption.optionToActivate.optionCode)
+        })
+      })
+    )
+
+    const tuixs = await this.optionRepository.getTuixs(carModel.modelId)
+    if (tuixs.length === 0) {
+      return []
+      throw new NotFoundException(ErrorMessages.NO_AVAILABLE_OPTION)
+    }
+
+    const unselectableOptions = await this.optionRepository.getUnselectableOptionIds(carModel.trimId, carModel.modelId)
+    const unselectableOptionIds = new Set(unselectableOptions.map(unselectableOption => unselectableOption.optionId))
+    const result = tuixs
+      .filter(tuix => {
+        const isSelectable = !unselectableOptionIds.has(tuix.optionId)
+        const isAddPossible = addOptionCodes.has(tuix.optionCode)
+        return isSelectable || isAddPossible
+      })
+      .map(option => {
+        return {
+          optionId: option.optionId,
+          optionCode: option.optionCode,
+          optionName: option.optionName,
+          optionPrice: option.optionPrice,
+          optionImagePath: option.optionImagePath,
+          optionTypeName: option.optionType.optionTypeName,
+          isSelectable: true
+        }
+      })
     return result
   }
 
