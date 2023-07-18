@@ -6,6 +6,8 @@
 typescript, nestjs, prisma, mysql  
 
 ## ERD 설계  
+<img width="1440" alt="erd" src="https://github.com/kimjinho1/MyCar-Backend-NestJS/assets/29765855/5a911984-88cd-410c-8159-ce45302060e2">
+
 
 ## 실행 방법  
 1. mysql 접속 후 아래 쿼리 실행  
