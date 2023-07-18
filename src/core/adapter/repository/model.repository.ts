@@ -128,8 +128,8 @@ export class ModelRepository implements ModelRepositoryPort {
     })
   }
 
-  async getCarModelInfo(modelCode: string): Promise<ModelInfoDto | null> {
-    return await this.prisma.carModel.findUnique({
+  async getCarModelInfo(modelCode: string): Promise<ModelInfoDto> {
+    return await this.prisma.carModel.findUniqueOrThrow({
       where: {
         modelCode
       },

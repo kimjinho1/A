@@ -22,7 +22,7 @@ export interface ModelRepositoryPort {
 
   getTrims(carId: number, engineId: number, missionId: number, driveId: number | null): Promise<TrimInfosDto>
 
-  getCarModelInfo(modelCode: string): Promise<ModelInfoDto | null>
+  getCarModelInfo(modelCode: string): Promise<ModelInfoDto>
 }
 
 export const ModelRepositoryPort = Symbol('ModelRepositoryPort')

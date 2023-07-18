@@ -269,7 +269,6 @@ export class OptionService {
           isSelectable: deactivateCodes.has(option.optionCode) ? false : true
         }
       })
-    console.log(optionCodes)
     return result
   }
 
