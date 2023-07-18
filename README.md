@@ -12,7 +12,7 @@ typescript, nestjs, prisma, mysql
 - CREATE DATABASE MYCAR; 
 - use MYCAR;  
 
-2. .env 파일에 DATABASE_URL 수정  
+2. git clone 후 .env 파일에 DATABASE_URL 수정  
 DATABASE_URL="mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@localhost:3306/${MYSQL_DATABASE}"  
 EX)  
 DATABASE_URL="mysql://root:password@localhost:3306/mycar"  
