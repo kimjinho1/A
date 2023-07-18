@@ -215,7 +215,7 @@ model Option {
   optionToActivate              ActivateOption[]   @relation(name: "optionToActivate")
   selectedOptionForDeactivation DeactivateOption[] @relation(name: "selectedOptionForDeactivation")
   optionToDeactivate            DeactivateOption[] @relation(name: "optionToDeactivate")
-  selectedOptionForDelete     DeleteOption[]     @relation(name: "selectedOptionForDelete")
+  selectedOptionForDelete       DeleteOption[]     @relation(name: "selectedOptionForDelete")
   optionToDelete                DeleteOption[]     @relation(name: "optionToDelete")
 }
 
@@ -271,7 +271,7 @@ model DeleteOption {
   deleteOptionId Int @map("delete_option_id")
 
   selectedOptionForDelete Option @relation(name: "selectedOptionForDelete", fields: [optionId], references: [optionId], onDelete: Cascade)
-  optionToDelete            Option @relation(name: "optionToDelete", fields: [deleteOptionId], references: [optionId], onDelete: Cascade)
+  optionToDelete          Option @relation(name: "optionToDelete", fields: [deleteOptionId], references: [optionId], onDelete: Cascade)
 
   @@id([optionId, deleteOptionId])
 }

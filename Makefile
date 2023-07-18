@@ -1,19 +1,20 @@
 all:
-	docker-compose up --build
+	npm i
+	npx prisma migrate dev --name init
+	npm run seed
+	npm run start
 
 nest:
-	npm run start:dev
+	npm run start
+
+docker:
+	docker-compose up --build
 
 migrate:
 	npx prisma migrate dev --name init
 
 seed: migrate
 	npm run seed
-
-m:
-	npx prisma migrate dev --name init
-	npm run seed
-	npm run start:dev
 
 studio:
 	npx prisma studio
