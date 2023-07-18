@@ -216,10 +216,13 @@ export class OptionService {
   /**
    * 모델과 선택된 옵션들 기준으로 Tuix 옵선들 정보 반환
    */
-  async getTuixs(modelCode: string, beforeOptionCode: string): Promise<any> {
+  async getTuixs(modelCode: string, beforeOptionCode: string, beforeTuixCode: string): Promise<any> {
     const carModel = await this.colorService.getCarModel(modelCode)
-    const optionCodes = beforeOptionCode.split(',')
+    const optionCodes = beforeOptionCode.length > 0 ? beforeOptionCode.split(',') : []
+    const tuixCodes = beforeTuixCode.length > 0 ? beforeTuixCode.split(',') : []
     const addOptionCodes = new Set()
+    const deactivateCodes = new Set()
+
     await Promise.all(
       optionCodes.map(async optionCode => {
         const option = await this.getOption(optionCode)
@@ -231,10 +234,20 @@ export class OptionService {
       })
     )
 
+    await Promise.all(
+      tuixCodes.map(async tuixCode => {
+        const option = await this.getOption(tuixCode)
+        await this.checkCarModelOption(carModel.modelId, option.optionId)
+        const deactivatedOptions = await this.optionRepository.getDeactivatedOptions(option.optionId)
+        deactivatedOptions.map(deactivatedOption => {
+          deactivateCodes.add(deactivatedOption.optionToDeactivate.optionCode)
+        })
+      })
+    )
+
     const tuixs = await this.optionRepository.getTuixs(carModel.modelId)
     if (tuixs.length === 0) {
       return []
-      throw new NotFoundException(ErrorMessages.NO_AVAILABLE_OPTION)
     }
 
     const unselectableOptions = await this.optionRepository.getUnselectableOptionIds(carModel.trimId, carModel.modelId)
@@ -253,9 +266,10 @@ export class OptionService {
           optionPrice: option.optionPrice,
           optionImagePath: option.optionImagePath,
           optionTypeName: option.optionType.optionTypeName,
-          isSelectable: true
+          isSelectable: deactivateCodes.has(option.optionCode) ? false : true
         }
       })
+    console.log(optionCodes)
     return result
   }
 

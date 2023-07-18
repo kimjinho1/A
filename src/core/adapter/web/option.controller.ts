@@ -81,9 +81,10 @@ export class OptionController {
   @Get('/tuix')
   async getTuixs(
     @Query('modelCode') modelCode: string,
-    @Query('beforeOptionCode') beforeOptionCode: string
+    @Query('beforeOptionCode') beforeOptionCode: string,
+    @Query('beforeTuixCode') beforeTuixCode: string
   ): Promise<any> {
-    return await this.optionService.getTuixs(modelCode, beforeOptionCode)
+    return await this.optionService.getTuixs(modelCode, beforeOptionCode, beforeTuixCode)
   }
 
   /**
