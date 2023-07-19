@@ -135,7 +135,6 @@ export class ColorService {
       changeableCarModelWithTrim.modelCode,
       intColorCode
     )
-    console.log(addOptions)
     const removeOptionCodes = beforeOptions
       .filter(option => !newOptionCodes.has(option.optionCode))
       .map(option => option.optionCode)
