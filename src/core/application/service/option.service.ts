@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common'
 import { Option } from '@prisma/client'
 import { OptionRepository } from 'src/core/adapter/repository/option.repository'
 import { OptionInfosDto, ChangedOptions } from '../../adapter/web/dto/option/out'
@@ -10,7 +10,11 @@ import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class OptionService {
-  constructor(private readonly optionRepository: OptionRepository, private readonly colorService: ColorService) {}
+  constructor(
+    private readonly optionRepository: OptionRepository,
+    @Inject(forwardRef(() => ColorService))
+    private readonly colorService: ColorService
+  ) {}
 
   private estimationMap = new Map<string, EstimationInfoCommand>()
 

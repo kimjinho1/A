@@ -20,6 +20,7 @@ import { OptionController } from './adapter/web/option.controller'
     ColorRepository,
     OptionService,
     OptionRepository
-  ]
+  ],
+  exports: [ColorService, OptionService]
 })
 export class CoreModule {}
