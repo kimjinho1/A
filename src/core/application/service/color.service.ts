@@ -1,18 +1,13 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { ColorRepository } from 'src/core/adapter/repository/color.repository'
-import { ColorRepositoryPort } from '../port/repository/color-repository.port'
-import { ColorServicePort } from '../port/web/color-serivce.port'
-import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../port/web/dto/color/out'
+import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../../adapter/web/dto/color/out'
 import { CarModel, ExtColor, IntColor } from '@prisma/client'
 import { ErrorMessages } from 'src/common/exception/errors'
 
 // export class ColorService implements ColorServicePort {
 @Injectable()
 export class ColorService {
-  constructor(
-    // @Inject(ColorRepositoryPort) private readonly colorRepository: ColorRepositoryPort
-    private readonly colorRepository: ColorRepository
-  ) {}
+  constructor(private readonly colorRepository: ColorRepository) {}
 
   /**
    * 모델 기준으로 내장색상 정보 반환

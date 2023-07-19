@@ -1,18 +1,20 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { Car, Drive, Engine, Mission } from '@prisma/client'
-import { CarInfosDto } from '../port/repository/dto/model/output'
-import { ModelRepositoryPort } from '../port/repository/model-repository.port'
-import { CarInfo, CarTypeWithCarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from '../port/web/dto/model/out'
-import { ModelServicePort } from '../port/web/model-service.port'
+import { CarInfosDto } from '../../adapter/repository/dto/model/output'
+import {
+  CarInfo,
+  CarTypeWithCarInfosDto,
+  ModelFiltersDto,
+  ModelInfoDto,
+  TrimInfosDto
+} from '../../adapter/web/dto/model/out'
 import { GetTrimsCommand } from 'src/core/adapter/web/command/get-trims.command'
 import { ErrorMessages } from 'src/common/exception/errors'
+import { ModelRepository } from 'src/core/adapter/repository/model.repository'
 
 @Injectable()
-export class ModelService implements ModelServicePort {
-  constructor(
-    @Inject(ModelRepositoryPort)
-    private readonly modelRepository: ModelRepositoryPort
-  ) {}
+export class ModelService {
+  constructor(private readonly modelRepository: ModelRepository) {}
 
   /** 차량 정보 반환 */
   async getCarInfo(carCode: string): Promise<Car> {

@@ -1,14 +1,11 @@
-import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common'
-import { ChangedOptions, OptionInfosDto } from 'src/core/application/port/web/dto/option/out'
+import { Body, Controller, Get, Post, Query } from '@nestjs/common'
+import { ChangedOptions, OptionInfosDto } from 'src/core/adapter/web/dto/option/out'
 import { OptionService } from 'src/core/application/service/option.service'
 import { EstimationInfoCommand } from './command/estimation-info.command'
 
 @Controller('option')
 export class OptionController {
-  constructor(
-    // @Inject(OptionServicePort) private readonly optionService: OptionServicePort
-    private readonly optionService: OptionService
-  ) {}
+  constructor(private readonly optionService: OptionService) {}
 
   /**
    * 모델 기준으로 옵선들 정보 반환

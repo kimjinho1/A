@@ -1,20 +1,12 @@
-import { Controller, Get, Inject, Param, Query } from '@nestjs/common'
+import { Controller, Get, Param, Query } from '@nestjs/common'
 import { Car } from '@prisma/client'
-import {
-  CarTypeWithCarInfosDto,
-  ModelFiltersDto,
-  ModelInfoDto,
-  TrimInfosDto
-} from '../../application/port/web/dto/model/out'
+import { CarTypeWithCarInfosDto, ModelFiltersDto, ModelInfoDto, TrimInfosDto } from './dto/model/out'
 import { GetTrimsCommand } from './command/get-trims.command'
-import { ModelServicePort } from 'src/core/application/port/web/model-service.port'
+import { ModelService } from 'src/core/application/service/model.service'
 
 @Controller('model')
 export class ModelController {
-  constructor(
-    @Inject(ModelServicePort)
-    private readonly modelService: ModelServicePort
-  ) {}
+  constructor(private readonly modelService: ModelService) {}
 
   /** 차량 정보 반환 */
   @Get('carInfo/:carCode')

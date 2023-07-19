@@ -1,14 +1,10 @@
-import { BadRequestException, Controller, Get, Inject, Query } from '@nestjs/common'
-import { ColorServicePort } from 'src/core/application/port/web/color-serivce.port'
-import { IntColorInfos } from 'src/core/application/port/web/dto/color/out'
+import { Controller, Get, Query } from '@nestjs/common'
+import { IntColorInfos } from 'src/core/adapter/web/dto/color/out'
 import { ColorService } from 'src/core/application/service/color.service'
 
 @Controller('color')
 export class ColorController {
-  constructor(
-    // @Inject(ColorServicePort) private readonly colorService: ColorServicePort
-    private readonly colorService: ColorService
-  ) {}
+  constructor(private readonly colorService: ColorService) {}
 
   /** 내장색상 정보 반환 */
   @Get('/int-color')
