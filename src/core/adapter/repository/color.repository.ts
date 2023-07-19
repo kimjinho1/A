@@ -138,4 +138,13 @@ export class ColorRepository {
       }
     })
   }
+
+  async getIntExtColor(intColorId: number, extColorId: number): Promise<IntExtColor | null> {
+    return await this.prisma.intExtColor.findFirst({
+      where: {
+        intColorId,
+        extColorId
+      }
+    })
+  }
 }

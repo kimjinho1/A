@@ -42,18 +42,18 @@ export class ModelService implements ModelServicePort {
 
   /** 선택된 차량의 엔진, 변속기, 구동방식 정보(코드, 이름)를 반환합니다. */
   async getModelFilters(carCode: string): Promise<ModelFiltersDto> {
-    const modelFilters = await this.modelRepository.getModelFilters(carCode)
-    if (!modelFilters) {
+    try {
+      const modelFilters = await this.modelRepository.getModelFilters(carCode)
+      const result = {
+        engines: modelFilters.carEngine.map(x => x.engine),
+        missions: modelFilters.carMission.map(x => x.mission),
+        drives: modelFilters.carDrive.map(x => x.drive)
+      }
+
+      return result
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.CAR_NOT_FOUND)
     }
-
-    const result = {
-      engines: modelFilters.carEngine.map(x => x.engine),
-      missions: modelFilters.carMission.map(x => x.mission),
-      drives: modelFilters.carDrive.map(x => x.drive)
-    }
-
-    return result
   }
 
   /** 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다 */
@@ -85,21 +85,21 @@ export class ModelService implements ModelServicePort {
 
   /** 차량 모델 정보 반환 */
   async getCarModelInfo(modelCode: string): Promise<ModelInfoDto> {
-    const modelInfo = await this.modelRepository.getCarModelInfo(modelCode)
-    if (modelInfo === null) {
+    try {
+      const modelInfo = await this.modelRepository.getCarModelInfo(modelCode)
+      const result = {
+        modelId: modelInfo.modelId,
+        modelCode: modelInfo.modelCode,
+        modelName: modelInfo.modelName,
+        modelPrice: modelInfo.modelPrice,
+        modelImagePath: modelInfo.modelImagePath,
+        ...modelInfo.car,
+        ...modelInfo.trim
+      }
+      return result
+    } catch (error) {
       throw new NotFoundException(ErrorMessages.MODEL_NOT_FOUND)
     }
-
-    const result = {
-      modelId: modelInfo.modelId,
-      modelCode: modelInfo.modelCode,
-      modelName: modelInfo.modelName,
-      modelPrice: modelInfo.modelPrice,
-      modelImagePath: modelInfo.modelImagePath,
-      ...modelInfo.car,
-      ...modelInfo.trim
-    }
-    return result
   }
 
   /**

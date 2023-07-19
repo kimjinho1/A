@@ -1,6 +1,7 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common'
+import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common'
 import { ChangedOptions, OptionInfosDto } from 'src/core/application/port/web/dto/option/out'
 import { OptionService } from 'src/core/application/service/option.service'
+import { EstimationInfoCommand } from './command/estimation-info.command'
 
 @Controller('option')
 export class OptionController {
@@ -83,18 +84,23 @@ export class OptionController {
     @Query('modelCode') modelCode: string,
     @Query('beforeOptionCode') beforeOptionCode: string,
     @Query('beforeTuixCode') beforeTuixCode: string
-  ): Promise<any> {
+  ): Promise<OptionInfosDto> {
     return await this.optionService.getTuixs(modelCode, beforeOptionCode, beforeTuixCode)
   }
 
   /**
-   * 특정 옵션(세이지 그린 인테리어 컬러)이 선택되면 자동으로 선택되어야 하는 색상들 반환
+   * 모델과 선택된 옵션들 기준으로 tuix들 정보 반환
    */
-  // @Get('/auto-choice-color')
-  // async getAutoSelectedColors(
-  //   @Query('modelCode') modelCode: string,
-  //   @Query('optionCode') optionCode: string
-  // ): Promise<ColorsDto> {
-  //   return await this.optionService.getAutoSelectedColors(modelCode, optionCode)
-  // }
+  @Post('/estimation')
+  async saveEstimation(@Body() estimationInfo: EstimationInfoCommand): Promise<string> {
+    return await this.optionService.saveEstimation(estimationInfo)
+  }
+
+  /**
+   * 모델과 선택된 옵션들 기준으로 tuix들 정보 반환
+   */
+  @Get('/estimation')
+  async getEstimation(@Query('estimationUrl') estimationUrl: string): Promise<EstimationInfoCommand> {
+    return await this.optionService.getEstimation(estimationUrl)
+  }
 }
