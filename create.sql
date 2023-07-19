@@ -1,3 +1,5 @@
+use MYCAR;
+
 -- CreateTable
 CREATE TABLE `CarType` (
     `car_type_id` INTEGER NOT NULL AUTO_INCREMENT,
