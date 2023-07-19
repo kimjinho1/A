@@ -183,4 +183,12 @@ export class ColorService {
       throw new NotFoundException(ErrorMessages.NON_COMPATIBLE_INTERIOR_COLOR)
     }
   }
+
+  async getIntExtColor(intColorId: number, extColorId: number): Promise<void> {
+    try {
+      await this.colorRepository.getIntExtColor(intColorId, extColorId)
+    } catch (error) {
+      throw new NotFoundException(ErrorMessages.NON_PROVIDED_COLOR_WITH_EXTERIOR)
+    }
+  }
 }
