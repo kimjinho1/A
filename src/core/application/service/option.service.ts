@@ -1,11 +1,12 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
-import { CarModel, Option } from '@prisma/client'
+import { Option } from '@prisma/client'
 import { OptionRepository } from 'src/core/adapter/repository/option.repository'
-import { OptionsDto, OptionInfosDto, ColorsDto, ChangedOptions } from '../port/web/dto/option/out'
-import { ColorRepository } from 'src/core/adapter/repository/color.repository'
+import { OptionInfosDto, ChangedOptions } from '../port/web/dto/option/out'
 import { ColorService } from './color.service'
 import { ErrorMessages } from 'src/common/exception/errors'
 import { OPTION_TYPE } from 'src/common/OptionType'
+import { EstimationInfoCommand } from 'src/core/adapter/web/command/estimation-info.command'
+import { v4 as uuidv4 } from 'uuid'
 
 // export class OptionService implements OptionServicePort {
 @Injectable()
@@ -15,6 +16,8 @@ export class OptionService {
     private readonly optionRepository: OptionRepository,
     private readonly colorService: ColorService
   ) {}
+
+  private estimationMap = new Map<string, EstimationInfoCommand>()
 
   /**
    * 모델 기준으로 옵선들 정보 반환
@@ -216,7 +219,7 @@ export class OptionService {
   /**
    * 모델과 선택된 옵션들 기준으로 Tuix 옵선들 정보 반환
    */
-  async getTuixs(modelCode: string, beforeOptionCode: string, beforeTuixCode: string): Promise<any> {
+  async getTuixs(modelCode: string, beforeOptionCode: string, beforeTuixCode: string): Promise<OptionInfosDto> {
     const carModel = await this.colorService.getCarModel(modelCode)
     const optionCodes = beforeOptionCode.length > 0 ? beforeOptionCode.split(',') : []
     const tuixCodes = beforeTuixCode.length > 0 ? beforeTuixCode.split(',') : []
@@ -273,22 +276,36 @@ export class OptionService {
   }
 
   /**
-   * 특정 옵션(세이지 그린 인테리어 컬러)이 선택되면 자동으로 선택되어야 하는 색상들 반환
+   * 유저의 차량 견적을 인메모리 캐시에 저장
    */
-  // async getAutoSelectedColors(modelCode: string, OptionCode: string): Promise<ColorsDto> {
-  //   const carModel = await this.colorService.getCarModel(modelCode)
-  //   const option = await this.getOption(OptionCode)
-  //   await this.checkCarModelOption(carModel.trimId, option.optionId)
+  async saveEstimation(estimationInfo: EstimationInfoCommand): Promise<string> {
+    const { modelInfo, intColor, extColor, options } = estimationInfo
+    const checkModel = await this.colorService.getCarModel(modelInfo.code)
+    const checkIntColor = await this.colorService.getIntColor(intColor.code)
+    const checkExtColor = await this.colorService.getExtColor(checkModel.carId, extColor.code)
+    await this.colorService.checkTrimIntColor(checkModel.carId, checkIntColor.intColorId)
+    await this.colorService.getIntExtColor(checkIntColor.intColorId, checkExtColor.extColorId)
 
-  //   const autoSelectedColors = await this.optionRepository.getAutoSelectedColors(option.optionId)
+    await Promise.all(
+      options.map(async option => {
+        const checkOption = await this.getOption(option.code)
+        await this.checkCarModelOption(checkModel.modelId, checkOption.optionId)
+      })
+    )
 
-  //   const result = autoSelectedColors.map(autoSelectedColor => {
-  //     return {
-  //       ...autoSelectedColor.intColor
-  //     }
-  //   })
-  //   return result
-  // }
+    const hashKey = uuidv4()
+    this.estimationMap.set(hashKey, estimationInfo)
+    return hashKey
+  }
+
+  async getEstimation(estimationUrl: string): Promise<EstimationInfoCommand> {
+    const estimationInfo = this.estimationMap.get(estimationUrl)
+    if (estimationInfo === undefined) {
+      throw new NotFoundException(ErrorMessages.NOT_FOUND_ESTIMATION_URL)
+    }
+
+    return estimationInfo
+  }
 
   /**
    * Utils
