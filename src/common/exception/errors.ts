@@ -23,5 +23,8 @@ export const ErrorMessages = {
   /** Option */
   NO_AVAILABLE_OPTION: '선택 가능한 옵션이 없습니다',
   INVALID_OPTION_CODE: '존재하지 않는 옵션 코드입니다',
-  INCOMPATIBLE_MODEL_OPTION: '호환되지 않는 모델과 옵션 코드입니다'
+  INCOMPATIBLE_MODEL_OPTION: '호환되지 않는 모델과 옵션 코드입니다',
+
+  /** Estimation */
+  NOT_FOUND_ESTIMATION_URL: '존재하지 않는 견적 URL입니다'
 }

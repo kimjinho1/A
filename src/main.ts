@@ -15,5 +15,4 @@ async function bootstrap() {
 
   await app.listen(3000)
 }
-console.log('localhost:3000')
 bootstrap()
