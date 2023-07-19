@@ -9,10 +9,9 @@ import {
   DeleteReplacementOptionsDto,
   DeletedOptionsDto,
   OptionInfosDto
-} from 'src/core/application/port/repository/dto/option/out'
+} from 'src/core/adapter/repository/dto/option/out'
 import { PrismaService } from 'src/prisma.service'
 
-// export class ModelRepository implements ModelRepositoryPort {
 @Injectable()
 export class OptionRepository {
   constructor(private readonly prisma: PrismaService) {}

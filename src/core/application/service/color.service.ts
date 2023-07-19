@@ -1,17 +1,16 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common'
 import { ColorRepository } from 'src/core/adapter/repository/color.repository'
-import { ColorRepositoryPort } from '../port/repository/color-repository.port'
-import { ColorServicePort } from '../port/web/color-serivce.port'
-import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../port/web/dto/color/out'
+import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../../adapter/web/dto/color/out'
 import { CarModel, ExtColor, IntColor } from '@prisma/client'
 import { ErrorMessages } from 'src/common/exception/errors'
+import { OptionService } from './option.service'
 
-// export class ColorService implements ColorServicePort {
 @Injectable()
 export class ColorService {
   constructor(
-    // @Inject(ColorRepositoryPort) private readonly colorRepository: ColorRepositoryPort
-    private readonly colorRepository: ColorRepository
+    private readonly colorRepository: ColorRepository,
+    @Inject(forwardRef(() => OptionService))
+    private readonly optionService: OptionService
   ) {}
 
   /**
@@ -91,10 +90,20 @@ export class ColorService {
    */
   async getChangeableCarModelsWithTrimByIntColor(
     modelCode: string,
-    intColorCode: string
+    intColorCode: string,
+    beforeCode: string
   ): Promise<ChangeableCarModelsWithTrimDto> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
+    const optionCodes = beforeCode.length > 0 ? beforeCode.split(',') : []
+
+    const beforeOptions = await Promise.all(
+      optionCodes.map(async optionCode => {
+        const option = await this.optionService.getOption(optionCode)
+        await this.optionService.checkCarModelOption(carModel.modelId, option.optionId)
+        return option
+      })
+    )
 
     const modelFilterIdsDto = {
       carId: carModel.carId,
@@ -120,11 +129,23 @@ export class ColorService {
       throw new NotFoundException(ErrorMessages.NO_CHANGEABLE_TRIM)
     }
 
+    const newOptions = await this.optionService.getOptions(changeableCarModelWithTrim.modelCode)
+    const newOptionCodes = new Set(newOptions.map(option => option.optionCode))
+    const addOptions = await this.optionService.getAutoSelectedOptions(
+      changeableCarModelWithTrim.modelCode,
+      intColorCode
+    )
+    const removeOptionCodes = beforeOptions
+      .filter(option => !newOptionCodes.has(option.optionCode))
+      .map(option => option.optionCode)
+
     const result = {
       modelCode: changeableCarModelWithTrim.modelCode,
       modelPrice: changeableCarModelWithTrim.modelPrice,
       modelImagePath: changeableCarModelWithTrim.modelImagePath,
-      trimName: changeableCarModelWithTrim.trim.trimName
+      trimName: changeableCarModelWithTrim.trim.trimName,
+      addOptions,
+      removeOptionCodes
     }
     return result
   }

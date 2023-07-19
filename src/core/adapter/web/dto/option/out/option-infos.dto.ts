@@ -8,8 +8,4 @@ export type OptionInfo = {
   isSelectable: boolean
 }
 
-// export type OptionInfosDto = {
-//   [key: string]: OptionInfo[]
-// }
-
 export type OptionInfosDto = OptionInfo[]
