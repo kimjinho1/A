@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { Car, Drive, Engine, Mission } from '@prisma/client'
 import { CarInfosDto } from '../../adapter/repository/dto/model/output'
 import {
