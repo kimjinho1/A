@@ -1,6 +1,5 @@
-use MYCAR;
-
 -- CreateTable
+DROP TABLE IF EXISTS `CarType`;
 CREATE TABLE `CarType` (
     `car_type_id` INTEGER NOT NULL AUTO_INCREMENT,
     `car_type_code` VARCHAR(10) NOT NULL,
@@ -12,6 +11,7 @@ CREATE TABLE `CarType` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS `Car`;
 CREATE TABLE `Car` (
     `car_id` INTEGER NOT NULL AUTO_INCREMENT,
     `car_code` VARCHAR(10) NOT NULL,
@@ -26,6 +26,7 @@ CREATE TABLE `Car` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS `Engine`;
 CREATE TABLE `Engine` (
     `engine_id` INTEGER NOT NULL AUTO_INCREMENT,
     `engine_code` VARCHAR(10) NOT NULL,
@@ -37,6 +38,7 @@ CREATE TABLE `Engine` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS Mission;
 CREATE TABLE `Mission` (
     `mission_id` INTEGER NOT NULL AUTO_INCREMENT,
     `mission_code` VARCHAR(10) NOT NULL,
@@ -47,6 +49,7 @@ CREATE TABLE `Mission` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS Drive;
 CREATE TABLE `Drive` (
     `drive_id` INTEGER NOT NULL AUTO_INCREMENT,
     `drive_code` VARCHAR(10) NOT NULL,
@@ -58,6 +61,7 @@ CREATE TABLE `Drive` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS Trim;
 CREATE TABLE `Trim` (
     `trim_id` INTEGER NOT NULL AUTO_INCREMENT,
     `trim_code` VARCHAR(10) NOT NULL,
@@ -69,6 +73,7 @@ CREATE TABLE `Trim` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS CarEngine;
 CREATE TABLE `CarEngine` (
     `car_id` INTEGER NOT NULL,
     `engine_id` INTEGER NOT NULL,
@@ -77,6 +82,7 @@ CREATE TABLE `CarEngine` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS CarMission;
 CREATE TABLE `CarMission` (
     `car_id` INTEGER NOT NULL,
     `mission_id` INTEGER NOT NULL,
@@ -85,6 +91,7 @@ CREATE TABLE `CarMission` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS CarDrive;
 CREATE TABLE `CarDrive` (
     `car_id` INTEGER NOT NULL,
     `drive_id` INTEGER NOT NULL,
@@ -93,6 +100,7 @@ CREATE TABLE `CarDrive` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS CarTrim;
 CREATE TABLE `CarTrim` (
     `car_id` INTEGER NOT NULL,
     `trim_id` INTEGER NOT NULL,
@@ -101,6 +109,7 @@ CREATE TABLE `CarTrim` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS CarModel;
 CREATE TABLE `CarModel` (
     `model_id` INTEGER NOT NULL AUTO_INCREMENT,
     `model_code` VARCHAR(10) NOT NULL,
@@ -119,6 +128,7 @@ CREATE TABLE `CarModel` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS IntColor;
 CREATE TABLE `IntColor` (
     `int_color_id` INTEGER NOT NULL AUTO_INCREMENT,
     `int_color_code` VARCHAR(10) NOT NULL,
@@ -130,6 +140,7 @@ CREATE TABLE `IntColor` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS ExtColor;
 CREATE TABLE `ExtColor` (
     `ext_color_id` INTEGER NOT NULL AUTO_INCREMENT,
     `ext_color_code` VARCHAR(10) NOT NULL,
@@ -141,6 +152,7 @@ CREATE TABLE `ExtColor` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS IntExtColor;
 CREATE TABLE `IntExtColor` (
     `int_color_id` INTEGER NOT NULL,
     `ext_color_id` INTEGER NOT NULL,
@@ -149,6 +161,7 @@ CREATE TABLE `IntExtColor` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS TrimIntColor;
 CREATE TABLE `TrimIntColor` (
     `trim_id` INTEGER NOT NULL,
     `int_color_id` INTEGER NOT NULL,
@@ -157,6 +170,7 @@ CREATE TABLE `TrimIntColor` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS OptionType;
 CREATE TABLE `OptionType` (
     `option_type_id` INTEGER NOT NULL AUTO_INCREMENT,
     `option_type_name` VARCHAR(20) NOT NULL,
@@ -165,6 +179,7 @@ CREATE TABLE `OptionType` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS `Option`;
 CREATE TABLE `Option` (
     `option_id` INTEGER NOT NULL AUTO_INCREMENT,
     `option_code` VARCHAR(10) NOT NULL,
@@ -178,6 +193,7 @@ CREATE TABLE `Option` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS CarModelOption;
 CREATE TABLE `CarModelOption` (
     `model_id` INTEGER NOT NULL,
     `option_id` INTEGER NOT NULL,
@@ -186,6 +202,7 @@ CREATE TABLE `CarModelOption` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS IntColorOption;
 CREATE TABLE `IntColorOption` (
     `int_color_id` INTEGER NOT NULL,
     `option_id` INTEGER NOT NULL,
@@ -194,6 +211,7 @@ CREATE TABLE `IntColorOption` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS ActivateOption;
 CREATE TABLE `ActivateOption` (
     `trim_id` INTEGER NOT NULL,
     `option_id` INTEGER NOT NULL,
@@ -203,6 +221,7 @@ CREATE TABLE `ActivateOption` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS DeactivateOption;
 CREATE TABLE `DeactivateOption` (
     `option_id` INTEGER NOT NULL,
     `deactivate_option_id` INTEGER NOT NULL,
@@ -211,6 +230,7 @@ CREATE TABLE `DeactivateOption` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+DROP TABLE IF EXISTS DeleteOption;
 CREATE TABLE `DeleteOption` (
     `option_id` INTEGER NOT NULL,
     `delete_option_id` INTEGER NOT NULL,
