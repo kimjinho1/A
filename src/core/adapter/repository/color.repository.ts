@@ -128,11 +128,14 @@ export class ColorRepository {
     })
   }
 
-  async getTrimIntColor(trimId: number, intColorId: number): Promise<TrimIntColor | null> {
+  async getTrimIntColor(carId: number, trimId: number, intColorId: number): Promise<TrimIntColor | null> {
     return await this.prisma.trimIntColor.findFirst({
       where: {
         trimId,
-        intColorId
+        intColorId,
+        intColor: {
+          carId
+        }
       }
     })
   }

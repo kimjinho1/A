@@ -68,7 +68,7 @@ export class ColorService {
   async getExtColorInfos(modelCode: string, intColorCode: string): Promise<ExtColorInfos> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
-    await this.checkTrimIntColor(carModel.trimId, intColor.intColorId)
+    await this.checkTrimIntColor(carModel.carId, carModel.trimId, intColor.intColorId)
     const allExtColors = await this.getAllExtColors(carModel.carId)
 
     const selectableExtColors = await this.colorRepository.getSelectableExtColorIds(carModel.carId, intColor.intColorId)
@@ -96,7 +96,6 @@ export class ColorService {
   ): Promise<ChangeableCarModelsWithTrimDto> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
-    await this.checkTrimIntColor(carModel.trimId, intColor.intColorId)
     const optionCodes = beforeCode.length > 0 ? beforeCode.split(',') : []
 
     const beforeOptions = await Promise.all(
@@ -121,7 +120,11 @@ export class ColorService {
 
     let changeableCarModelWithTrim = null
     for (const carModelWithTrim of anotherCarModelsWithTrim) {
-      const trimIntColor = await this.colorRepository.getTrimIntColor(carModelWithTrim.trim.trimId, intColor.intColorId)
+      const trimIntColor = await this.colorRepository.getTrimIntColor(
+        carModel.carId,
+        carModelWithTrim.trim.trimId,
+        intColor.intColorId
+      )
       if (trimIntColor !== null) {
         changeableCarModelWithTrim = carModelWithTrim
         break
@@ -199,10 +202,9 @@ export class ColorService {
     return allExtColors
   }
 
-  async checkTrimIntColor(trimId: number, intColorId: number): Promise<void> {
-    try {
-      await this.colorRepository.getTrimIntColor(trimId, intColorId)
-    } catch (error) {
+  async checkTrimIntColor(carId: number, trimId: number, intColorId: number): Promise<void> {
+    const trimIntColor = await this.colorRepository.getTrimIntColor(carId, trimId, intColorId)
+    if (trimIntColor === null) {
       throw new NotFoundException(ErrorMessages.NON_COMPATIBLE_INTERIOR_COLOR)
     }
   }

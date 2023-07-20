@@ -132,7 +132,7 @@ export class OptionService {
   async getAutoSelectedOptions(modelCode: string, intColorCode: string): Promise<OptionInfosDto> {
     const carModel = await this.colorService.getCarModel(modelCode)
     const intColor = await this.colorService.getIntColor(intColorCode)
-    await this.colorService.checkTrimIntColor(carModel.trimId, intColor.intColorId)
+    await this.colorService.checkTrimIntColor(carModel.carId, carModel.trimId, intColor.intColorId)
 
     const autoSelectedOptions = await this.optionRepository.getAutoSelectedOptions(
       carModel.modelId,

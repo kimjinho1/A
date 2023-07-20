@@ -19,7 +19,7 @@ export class EstimationService {
     const checkModel = await this.colorService.getCarModel(modelInfo.code)
     const checkIntColor = await this.colorService.getIntColor(intColor.code)
     const checkExtColor = await this.colorService.getExtColor(checkModel.carId, extColor.code)
-    await this.colorService.checkTrimIntColor(checkModel.carId, checkIntColor.intColorId)
+    await this.colorService.checkTrimIntColor(checkModel.carId, checkModel.trimId, checkIntColor.intColorId)
     await this.colorService.getIntExtColor(checkIntColor.intColorId, checkExtColor.extColorId)
 
     await Promise.all(
