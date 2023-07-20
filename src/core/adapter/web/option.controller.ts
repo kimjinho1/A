@@ -84,20 +84,4 @@ export class OptionController {
   ): Promise<OptionInfosDto> {
     return await this.optionService.getTuixs(modelCode, beforeOptionCode, beforeTuixCode)
   }
-
-  /**
-   * 모델과 선택된 옵션들 기준으로 tuix들 정보 반환
-   */
-  @Post('/estimation')
-  async saveEstimation(@Body() estimationInfo: EstimationInfoCommand): Promise<string> {
-    return await this.optionService.saveEstimation(estimationInfo)
-  }
-
-  /**
-   * 모델과 선택된 옵션들 기준으로 tuix들 정보 반환
-   */
-  @Get('/estimation')
-  async getEstimation(@Query('estimationUrl') estimationUrl: string): Promise<EstimationInfoCommand> {
-    return await this.optionService.getEstimation(estimationUrl)
-  }
 }

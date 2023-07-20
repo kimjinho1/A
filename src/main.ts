@@ -1,6 +1,5 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { join } from 'path'
 import { AppModule } from './app.module'
 import { ResponseWrapperInterceptor } from './common/interceptor/response-wrapper.interceptor'
 

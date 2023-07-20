@@ -3,7 +3,7 @@
 [현대닷컴 견적내기 사이트](https://www.hyundai.com/kr/ko/e)https://www.hyundai.com/kr/ko/e를 모방한 내차만들기 웹사이트 개발  
 
 ## 백엔드 기술 스택  
-typescript, nestjs, prisma, mysql  
+TypeScript, NestJS, Prisma, MySQL  
 
 ## ERD 설계  
 <img width="1440" alt="erd" src="https://github.com/kimjinho1/MyCar-Backend-NestJS/assets/29765855/5a911984-88cd-410c-8159-ce45302060e2">

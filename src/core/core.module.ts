@@ -9,9 +9,11 @@ import { ModelController } from './adapter/web/model.controller'
 import { OptionRepository } from './adapter/repository/option.repository'
 import { OptionService } from './application/service/option.service'
 import { OptionController } from './adapter/web/option.controller'
+import { EstimationController } from './adapter/web/estimation.controller'
+import { EstimationService } from './application/service/estimation.service'
 
 @Module({
-  controllers: [ModelController, ColorController, OptionController],
+  controllers: [ModelController, ColorController, OptionController, EstimationController],
   providers: [
     PrismaService,
     ModelService,
@@ -19,7 +21,8 @@ import { OptionController } from './adapter/web/option.controller'
     ColorService,
     ColorRepository,
     OptionService,
-    OptionRepository
+    OptionRepository,
+    EstimationService
   ],
   exports: [ColorService, OptionService]
 })
