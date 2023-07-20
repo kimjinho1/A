@@ -21,7 +21,7 @@ model Car {
   carId        Int    @id @default(autoincrement()) @map("car_id")
   carCode      String @unique @map("car_code") @db.VarChar(10)
   carName      String @unique @map("car_name") @db.VarChar(10)
-  carImagePath String @unique @map("car_image_path") @db.VarChar(50)
+  carImagePath String @unique @map("car_image_path") @db.VarChar(255)
   carTypeId    Int    @map("car_type_id")
 
   carEngine  CarEngine[]
@@ -124,7 +124,7 @@ model CarModel {
   modelCode      String @unique @map("model_code") @db.VarChar(10)
   modelName      String @unique @map("model_name") @db.VarChar(50)
   modelPrice     Int    @map("model_price")
-  modelImagePath String @map("model_image_path") @db.VarChar(50)
+  modelImagePath String @map("model_image_path") @db.VarChar(255)
 
   carId     Int  @map("car_id")
   engineId  Int  @map("engine_id")
@@ -146,7 +146,7 @@ model IntColor {
   intColorId        Int    @id @default(autoincrement()) @map("int_color_id")
   intColorCode      String @map("int_color_code") @db.VarChar(10)
   intColorName      String @map("int_color_name") @db.VarChar(50)
-  intColorImagePath String @map("int_color_image_path") @db.VarChar(50)
+  intColorImagePath String @map("int_color_image_path") @db.VarChar(255)
   carId             Int    @map("car_id")
 
   intExtColor    IntExtColor[]
@@ -161,7 +161,7 @@ model ExtColor {
   extColorId        Int    @id @default(autoincrement()) @map("ext_color_id")
   extColorCode      String @map("ext_color_code") @db.VarChar(10)
   extColorName      String @map("ext_color_name") @db.VarChar(50)
-  extColorImagePath String @map("ext_color_image_path") @db.VarChar(50)
+  extColorImagePath String @map("ext_color_image_path") @db.VarChar(255)
   carId             Int    @map("car_id")
 
   intExtColor IntExtColor[]
@@ -205,7 +205,7 @@ model Option {
   optionCode      String @unique @map("option_code") @db.VarChar(10)
   optionName      String @map("option_name") @db.VarChar(50)
   optionPrice     Int    @map("option_price")
-  optionImagePath String @map("option_image_path") @db.VarChar(50)
+  optionImagePath String @map("option_image_path") @db.VarChar(255)
   optionTypeId    Int    @map("option_type_id")
 
   optionType                    OptionType         @relation(fields: [optionTypeId], references: [optionTypeId], onDelete: Cascade)

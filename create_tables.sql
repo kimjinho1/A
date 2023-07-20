@@ -16,7 +16,7 @@ CREATE TABLE `Car` (
     `car_id` INTEGER NOT NULL AUTO_INCREMENT,
     `car_code` VARCHAR(10) NOT NULL,
     `car_name` VARCHAR(10) NOT NULL,
-    `car_image_path` VARCHAR(50) NOT NULL,
+    `car_image_path` VARCHAR(255) NOT NULL,
     `car_type_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `Car_car_code_key`(`car_code`),
@@ -115,7 +115,7 @@ CREATE TABLE `CarModel` (
     `model_code` VARCHAR(10) NOT NULL,
     `model_name` VARCHAR(50) NOT NULL,
     `model_price` INTEGER NOT NULL,
-    `model_image_path` VARCHAR(50) NOT NULL,
+    `model_image_path` VARCHAR(255) NOT NULL,
     `car_id` INTEGER NOT NULL,
     `engine_id` INTEGER NOT NULL,
     `mission_id` INTEGER NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE `IntColor` (
     `int_color_id` INTEGER NOT NULL AUTO_INCREMENT,
     `int_color_code` VARCHAR(10) NOT NULL,
     `int_color_name` VARCHAR(50) NOT NULL,
-    `int_color_image_path` VARCHAR(50) NOT NULL,
+    `int_color_image_path` VARCHAR(255) NOT NULL,
     `car_id` INTEGER NOT NULL,
 
     PRIMARY KEY (`int_color_id`)
@@ -145,7 +145,7 @@ CREATE TABLE `ExtColor` (
     `ext_color_id` INTEGER NOT NULL AUTO_INCREMENT,
     `ext_color_code` VARCHAR(10) NOT NULL,
     `ext_color_name` VARCHAR(50) NOT NULL,
-    `ext_color_image_path` VARCHAR(50) NOT NULL,
+    `ext_color_image_path` VARCHAR(255) NOT NULL,
     `car_id` INTEGER NOT NULL,
 
     PRIMARY KEY (`ext_color_id`)
@@ -185,7 +185,7 @@ CREATE TABLE `Option` (
     `option_code` VARCHAR(10) NOT NULL,
     `option_name` VARCHAR(50) NOT NULL,
     `option_price` INTEGER NOT NULL,
-    `option_image_path` VARCHAR(50) NOT NULL,
+    `option_image_path` VARCHAR(255) NOT NULL,
     `option_type_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `Option_option_code_key`(`option_code`),

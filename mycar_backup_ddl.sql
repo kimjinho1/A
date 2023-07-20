@@ -56,7 +56,7 @@ CREATE TABLE `Car` (
   `car_id` int NOT NULL AUTO_INCREMENT,
   `car_code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `car_name` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `car_image_path` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `car_image_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `car_type_id` int NOT NULL,
   PRIMARY KEY (`car_id`),
   UNIQUE KEY `Car_car_code_key` (`car_code`),
@@ -170,7 +170,7 @@ CREATE TABLE `CarModel` (
   `model_code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `model_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `model_price` int NOT NULL,
-  `model_image_path` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_image_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `car_id` int NOT NULL,
   `engine_id` int NOT NULL,
   `mission_id` int NOT NULL,
@@ -402,7 +402,7 @@ CREATE TABLE `ExtColor` (
   `ext_color_id` int NOT NULL AUTO_INCREMENT,
   `ext_color_code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ext_color_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ext_color_image_path` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ext_color_image_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `car_id` int NOT NULL,
   PRIMARY KEY (`ext_color_id`),
   KEY `ExtColor_car_id_fkey` (`car_id`),
@@ -431,7 +431,7 @@ CREATE TABLE `IntColor` (
   `int_color_id` int NOT NULL AUTO_INCREMENT,
   `int_color_code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `int_color_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `int_color_image_path` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `int_color_image_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `car_id` int NOT NULL,
   PRIMARY KEY (`int_color_id`),
   KEY `IntColor_car_id_fkey` (`car_id`),
@@ -541,7 +541,7 @@ CREATE TABLE `Option` (
   `option_code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `option_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `option_price` int NOT NULL,
-  `option_image_path` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `option_image_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `option_type_id` int NOT NULL,
   PRIMARY KEY (`option_id`),
   UNIQUE KEY `Option_option_code_key` (`option_code`),
@@ -647,4 +647,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-20 10:59:00
+-- Dump completed on 2023-07-20 12:10:17
