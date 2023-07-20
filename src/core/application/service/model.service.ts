@@ -9,7 +9,7 @@ import {
   TrimInfosDto
 } from '../../adapter/web/dto/model/out'
 import { GetTrimsCommand } from 'src/core/adapter/web/command/get-trims.command'
-import { ErrorMessages } from 'src/common/exception/errors'
+import { ErrorMessages } from 'src/common/exception/error-messages'
 import { ModelRepository } from 'src/core/adapter/repository/model.repository'
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ModelService {
     return await this.getCar(carCode)
   }
 
-  /** 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환합니다. */
+  /** 투싼과 아반떼 차량의 정보(코드, 이름, 차종, 이미지 경로, 최저가격)를 반환 */
   async getCarInfos(): Promise<CarTypeWithCarInfosDto> {
     const allCarInfo = await this.modelRepository.getCarInfos()
     if (allCarInfo.length === 0) {
@@ -42,7 +42,7 @@ export class ModelService {
     return result
   }
 
-  /** 선택된 차량의 엔진, 변속기, 구동방식 정보(코드, 이름)를 반환합니다. */
+  /** 선택된 차량의 엔진, 변속기, 구동방식 정보(코드, 이름)를 반환 */
   async getModelFilters(carCode: string): Promise<ModelFiltersDto> {
     try {
       const modelFilters = await this.modelRepository.getModelFilters(carCode)
@@ -58,7 +58,7 @@ export class ModelService {
     }
   }
 
-  /** 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥합니다 */
+  /** 선택된 차량과 필터들 기반으로 선택할 수 있는 트림 정보(코드, 이름, 이미지 경로, 가격)를 반홥 */
   async getTrims(modelFiltersDto: GetTrimsCommand): Promise<TrimInfosDto> {
     const { carCode, engineCode, missionCode, driveCode } = modelFiltersDto
     const car = await this.getCar(carCode)

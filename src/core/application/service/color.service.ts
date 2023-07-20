@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/commo
 import { ColorRepository } from 'src/core/adapter/repository/color.repository'
 import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../../adapter/web/dto/color/out'
 import { CarModel, ExtColor, IntColor } from '@prisma/client'
-import { ErrorMessages } from 'src/common/exception/errors'
+import { ErrorMessages } from 'src/common/exception/error-messages'
 import { OptionService } from './option.service'
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common'
-import { ChangeableCarModelsWithTrimDto, IntColorInfos } from 'src/core/adapter/web/dto/color/out'
+import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from 'src/core/adapter/web/dto/color/out'
 import { ColorService } from 'src/core/application/service/color.service'
 
 @Controller('color')
@@ -25,7 +25,7 @@ export class ColorController {
   async getExtColorsByIntColorCode(
     @Query('modelCode') modelCode: string,
     @Query('intColorCode') intColorCode: string
-  ): Promise<any> {
+  ): Promise<ExtColorInfos> {
     return await this.colorService.getExtColorInfos(modelCode, intColorCode)
   }
 
