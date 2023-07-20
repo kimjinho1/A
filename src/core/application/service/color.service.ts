@@ -73,7 +73,7 @@ export class ColorService {
 
     const selectableExtColors = await this.colorRepository.getSelectableExtColorIds(carModel.carId, intColor.intColorId)
     if (selectableExtColors.length === 0) {
-      throw new NotFoundException(ErrorMessages.NO_MATCHING_EXTERIOR_COLOR)
+      throw new NotFoundException(ErrorMessages.NO_MATCHING_COLOR_WITH_INTERIOR)
     }
 
     const selectableExtColorIds = new Set(selectableExtColors.map(extColor => extColor.extColorId))
