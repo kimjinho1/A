@@ -10,13 +10,15 @@ typescript, nestjs, prisma, mysql
 
 
 ## 실행 방법  
-1. `git clone https://github.com/kimjinho1/MyCar-Backend-NestJS.git mycar_backend` 실행  
+1. npm 설치 -> https://nodejs.org/ko/download  
 
-2. `cd mycar_backend` 실행  
+2. `git clone https://github.com/kimjinho1/MyCar-Backend-NestJS.git mycar_backend` 실행  
+
+3. `cd mycar_backend` 실행  
 
 3. mysql 접속 후 아래 쿼리 실행   
 `CREATE DATABASE MYCAR;`  
-- `use MYCAR;`  
+`use MYCAR;`  
 
 4. 폴더에 존재하는 `mycar_backup_ddl.sql` 쿼리 파일 실행 -> 테이블, 데이터 주입  
 
@@ -25,8 +27,6 @@ DATABASE_URL="mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@localhost:3306/${MYSQL_DAT
 EX)  
 DATABASE_URL="mysql://root:password@localhost:3306/mycar"  
 
-6. npm 설치 -> https://nodejs.org/ko/download  
+6. `npm install` 실행  
 
-7. `npm install` 실행  
-
-8. `npm run start` 실행  
+7. `npm run start` 실행  
