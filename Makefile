@@ -1,7 +1,5 @@
 all:
-	npm i
-	npx prisma migrate dev --name init
-	npm run seed
+	npm install
 	npm run start
 
 nest:
@@ -13,7 +11,7 @@ docker:
 migrate:
 	npx prisma migrate dev --name init
 
-seed: migrate
+seed:
 	npm run seed
 
 studio:
