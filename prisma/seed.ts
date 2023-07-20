@@ -33,108 +33,108 @@ const prisma = new PrismaClient({
   ]
 })
 
-const writeFile = util.promisify(fs.writeFile)
-const appendFile = util.promisify(fs.appendFile)
+// const writeFile = util.promisify(fs.writeFile)
+// const appendFile = util.promisify(fs.appendFile)
 
-prisma.$on('query', async e => {
-  if (e.query === 'BEGIN' || e.query === 'COMMIT') return
+// prisma.$on('query', async e => {
+//   if (e.query === 'BEGIN' || e.query === 'COMMIT') return
 
-  const params = JSON.parse(e.params)
-  const completeQuery = replacePlaceholders(e.query, params)
-    .replace(/`database`\./g, '')
-    .replace(/, /g, ',\n  ')
+//   const params = JSON.parse(e.params)
+//   const completeQuery = replacePlaceholders(e.query, params)
+//     .replace(/`database`\./g, '')
+//     .replace(/, /g, ',\n  ')
 
-  await appendFile('./prisma/seed-query-log.sql', `${completeQuery}\n`)
-})
+// await appendFile('./prisma/seed-query-log.sql', `${completeQuery}\n`)
+// })
 
-function replacePlaceholders(query: string, params: string[]) {
-  let i = 0
-  return query.replace(/\?/g, () => {
-    if (i < params.length) {
-      let param = params[i]
-      if (typeof param === 'string') {
-        param = `'${param}'`
-      }
-      i++
-      return param
-    } else {
-      return '?'
-    }
-  })
-}
+// function replacePlaceholders(query: string, params: string[]) {
+//   let i = 0
+//   return query.replace(/\?/g, () => {
+//     if (i < params.length) {
+//       let param = params[i]
+//       if (typeof param === 'string') {
+//         param = `'${param}'`
+//       }
+//       i++
+//       return param
+//     } else {
+//       return '?'
+//     }
+//   })
+// }
 
 async function main() {
-  await writeFile('./prisma/seed-query-log.sql', '')
+  // await writeFile('./prisma/seed-query-log.sql', '')
 
   for (const carType of carTypes) {
     await prisma.carType.createMany({
       data: carType
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const car of cars) {
     await prisma.car.createMany({
       data: car
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const engine of engines) {
     await prisma.engine.createMany({
       data: engine
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const mission of missions) {
     await prisma.mission.createMany({
       data: mission
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const drive of drives) {
     await prisma.drive.createMany({
       data: drive
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const trim of trims) {
     await prisma.trim.createMany({
       data: trim
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const carEngine of carEngines) {
     await prisma.carEngine.createMany({
       data: carEngine
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const carMission of carMissions) {
     await prisma.carMission.createMany({
       data: carMission
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const carDrive of carDrives) {
     await prisma.carDrive.createMany({
       data: carDrive
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const carDrive of carTrims) {
     await prisma.carTrim.createMany({
       data: carDrive
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const carModel of carModels) {
     const checkDrive = drives.findIndex(drive => drive.driveCode === carModel.driveCode)
@@ -152,21 +152,21 @@ async function main() {
       }
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const IntColor of intColors) {
     await prisma.intColor.createMany({
       data: IntColor
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const ExtColor of extColors) {
     await prisma.extColor.createMany({
       data: ExtColor
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const intExtColor of IntExtColors) {
     const carId = intExtColor.carId
@@ -183,7 +183,7 @@ async function main() {
       })
     }
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const trimIntColor of TrimIntColors) {
     await prisma.trimIntColor.createMany({
@@ -193,21 +193,21 @@ async function main() {
       }
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const optionType of optionTypes) {
     await prisma.optionType.createMany({
       data: optionType
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const option of options) {
     await prisma.option.createMany({
       data: option
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const carModelOption of carModelOptions) {
     const modelCode = carModelOption.modelCode
@@ -221,7 +221,7 @@ async function main() {
       })
     }
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
   for (const intColorOption of intColorOptions) {
     await prisma.intColorOption.createMany({
@@ -231,9 +231,9 @@ async function main() {
       }
     })
   }
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
 
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
   for (const activateOption of activateOptions) {
     await prisma.activateOption.createMany({
       data: {
@@ -244,7 +244,7 @@ async function main() {
     })
   }
 
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
   for (const deactivateOption of deactivateOptions) {
     await prisma.deactivateOption.createMany({
       data: {
@@ -254,7 +254,7 @@ async function main() {
     })
   }
 
-  await appendFile('./prisma/seed-query-log.sql', `\n\n`)
+  //await appendFile('./prisma/seed-query-log.sql', `\n\n`)
   for (const deleteOption of deleteOptions) {
     await prisma.deleteOption.createMany({
       data: {
