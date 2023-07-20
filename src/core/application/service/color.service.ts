@@ -68,6 +68,7 @@ export class ColorService {
   async getExtColorInfos(modelCode: string, intColorCode: string): Promise<ExtColorInfos> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
+    await this.checkTrimIntColor(carModel.trimId, intColor.intColorId)
     const allExtColors = await this.getAllExtColors(carModel.carId)
 
     const selectableExtColors = await this.colorRepository.getSelectableExtColorIds(carModel.carId, intColor.intColorId)
@@ -95,6 +96,7 @@ export class ColorService {
   ): Promise<ChangeableCarModelsWithTrimDto> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
+    await this.checkTrimIntColor(carModel.trimId, intColor.intColorId)
     const optionCodes = beforeCode.length > 0 ? beforeCode.split(',') : []
 
     const beforeOptions = await Promise.all(
