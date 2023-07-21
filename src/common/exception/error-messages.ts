@@ -22,10 +22,12 @@ export const ErrorMessages = {
   NO_CHANGEABLE_TRIM: '변경할 수 있는 트림 정보가 존재하지 않습니다.',
 
   /** Option */
-  NO_AVAILABLE_OPTION: '선택 가능한 옵션이 없습니다',
-  INVALID_OPTION_CODE: '존재하지 않는 옵션 코드입니다',
-  INCOMPATIBLE_MODEL_OPTION: '호환되지 않는 모델과 옵션 코드입니다',
+  NO_AVAILABLE_OPTION: '선택 가능한 옵션이 없습니다.',
+  INVALID_OPTION_CODE: '존재하지 않는 옵션 코드입니다.',
+  INVALID_DETAIL_OPTION_CODE: '존재하지 않는 상세 품목 옵션 코드입니다.',
+  INVALID_TUIX_OPTION_CODE: '존재하지 않는 tuix 옵션 코드입니다.',
+  INCOMPATIBLE_MODEL_OPTION: '호환되지 않는 모델과 옵션 코드입니다.',
 
   /** Estimation */
-  NOT_FOUND_ESTIMATION_URL: '존재하지 않는 견적 URL입니다'
+  NOT_FOUND_ESTIMATION_URL: '존재하지 않는 견적 URL입니다.'
 }

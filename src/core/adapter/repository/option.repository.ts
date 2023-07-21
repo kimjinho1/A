@@ -92,6 +92,28 @@ export class OptionRepository {
     })
   }
 
+  async getDetailOption(optionId: number): Promise<Option> {
+    return await this.prisma.option.findFirstOrThrow({
+      where: {
+        optionId,
+        optionType: {
+          optionTypeName: OPTION_TYPE.DETAIL
+        }
+      }
+    })
+  }
+
+  async getTuixOption(optionId: number): Promise<Option> {
+    return await this.prisma.option.findFirstOrThrow({
+      where: {
+        optionId,
+        optionType: {
+          OR: [{ optionTypeName: OPTION_TYPE.HGA }, { optionTypeName: OPTION_TYPE.PERFORMANCE }]
+        }
+      }
+    })
+  }
+
   async getAddPossibleOptions(optionId: number): Promise<AddPossibleOptionsDto> {
     return await this.prisma.activateOption.findMany({
       where: {

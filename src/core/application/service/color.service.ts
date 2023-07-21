@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common'
+import { BadRequestException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common'
 import { ColorRepository } from 'src/core/adapter/repository/color.repository'
 import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../../adapter/web/dto/color/out'
 import { CarModel, ExtColor, IntColor } from '@prisma/client'
@@ -92,11 +92,11 @@ export class ColorService {
   async getChangeableCarModelsWithTrimByIntColor(
     modelCode: string,
     intColorCode: string,
-    beforeCode: string
+    beforeOptionCode: string
   ): Promise<ChangeableCarModelsWithTrimDto> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
-    const optionCodes = beforeCode.length > 0 ? beforeCode.split(',') : []
+    const optionCodes = beforeOptionCode.length > 0 ? beforeOptionCode.split(',') : []
 
     const beforeOptions = await Promise.all(
       optionCodes.map(async optionCode => {
@@ -205,7 +205,7 @@ export class ColorService {
   async checkTrimIntColor(carId: number, trimId: number, intColorId: number): Promise<void> {
     const trimIntColor = await this.colorRepository.getTrimIntColor(carId, trimId, intColorId)
     if (trimIntColor === null) {
-      throw new NotFoundException(ErrorMessages.NON_COMPATIBLE_INTERIOR_COLOR)
+      throw new BadRequestException(ErrorMessages.NON_COMPATIBLE_INTERIOR_COLOR)
     }
   }
 
