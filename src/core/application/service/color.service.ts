@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common'
+import { BadRequestException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common'
 import { ColorRepository } from 'src/core/adapter/repository/color.repository'
 import { ChangeableCarModelsWithTrimDto, ExtColorInfos, IntColorInfos } from '../../adapter/web/dto/color/out'
 import { CarModel, ExtColor, IntColor } from '@prisma/client'
@@ -68,11 +68,12 @@ export class ColorService {
   async getExtColorInfos(modelCode: string, intColorCode: string): Promise<ExtColorInfos> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
+    await this.checkTrimIntColor(carModel.carId, carModel.trimId, intColor.intColorId)
     const allExtColors = await this.getAllExtColors(carModel.carId)
 
     const selectableExtColors = await this.colorRepository.getSelectableExtColorIds(carModel.carId, intColor.intColorId)
     if (selectableExtColors.length === 0) {
-      throw new NotFoundException(ErrorMessages.NO_MATCHING_EXTERIOR_COLOR)
+      throw new NotFoundException(ErrorMessages.NO_MATCHING_COLOR_WITH_INTERIOR)
     }
 
     const selectableExtColorIds = new Set(selectableExtColors.map(extColor => extColor.extColorId))
@@ -91,11 +92,11 @@ export class ColorService {
   async getChangeableCarModelsWithTrimByIntColor(
     modelCode: string,
     intColorCode: string,
-    beforeCode: string
+    beforeOptionCode: string
   ): Promise<ChangeableCarModelsWithTrimDto> {
     const carModel = await this.getCarModel(modelCode)
     const intColor = await this.getIntColor(intColorCode)
-    const optionCodes = beforeCode.length > 0 ? beforeCode.split(',') : []
+    const optionCodes = beforeOptionCode.length > 0 ? beforeOptionCode.split(',') : []
 
     const beforeOptions = await Promise.all(
       optionCodes.map(async optionCode => {
@@ -119,7 +120,11 @@ export class ColorService {
 
     let changeableCarModelWithTrim = null
     for (const carModelWithTrim of anotherCarModelsWithTrim) {
-      const trimIntColor = await this.colorRepository.getTrimIntColor(carModelWithTrim.trim.trimId, intColor.intColorId)
+      const trimIntColor = await this.colorRepository.getTrimIntColor(
+        carModel.carId,
+        carModelWithTrim.trim.trimId,
+        intColor.intColorId
+      )
       if (trimIntColor !== null) {
         changeableCarModelWithTrim = carModelWithTrim
         break
@@ -197,11 +202,10 @@ export class ColorService {
     return allExtColors
   }
 
-  async checkTrimIntColor(trimId: number, intColorId: number): Promise<void> {
-    try {
-      await this.colorRepository.getTrimIntColor(trimId, intColorId)
-    } catch (error) {
-      throw new NotFoundException(ErrorMessages.NON_COMPATIBLE_INTERIOR_COLOR)
+  async checkTrimIntColor(carId: number, trimId: number, intColorId: number): Promise<void> {
+    const trimIntColor = await this.colorRepository.getTrimIntColor(carId, trimId, intColorId)
+    if (trimIntColor === null) {
+      throw new BadRequestException(ErrorMessages.NON_COMPATIBLE_INTERIOR_COLOR)
     }
   }
 
@@ -209,7 +213,7 @@ export class ColorService {
     try {
       await this.colorRepository.getIntExtColor(intColorId, extColorId)
     } catch (error) {
-      throw new NotFoundException(ErrorMessages.NON_PROVIDED_COLOR_WITH_EXTERIOR)
+      throw new BadRequestException(ErrorMessages.NON_PROVIDED_COLOR_WITH_EXTERIOR)
     }
   }
 }

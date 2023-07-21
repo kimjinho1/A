@@ -37,8 +37,8 @@ export class ColorController {
   async getChangeableCarModelsWithTrimByIntColor(
     @Query('modelCode') modelCode: string,
     @Query('intColorCode') intColorCode: string,
-    @Query('beforeCode') beforeCode: string
+    @Query('beforeOptionCode') beforeOptionCode: string
   ): Promise<ChangeableCarModelsWithTrimDto> {
-    return await this.colorService.getChangeableCarModelsWithTrimByIntColor(modelCode, intColorCode, beforeCode)
+    return await this.colorService.getChangeableCarModelsWithTrimByIntColor(modelCode, intColorCode, beforeOptionCode)
   }
 }
