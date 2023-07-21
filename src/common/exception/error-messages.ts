@@ -12,7 +12,7 @@ export const ErrorMessages = {
   /** Color */
   INVALID_INTERIOR_COLOR: '존재하지 않는 내장색상 코드입니다.',
   INVALID_EXTERIOR_COLOR: '존재하지 않는 외장색상 코드입니다.',
-  NON_PROVIDED_COLOR_WITH_EXTERIOR: '선택하신 외장색상과 함께 제공되지 않는 색상입니다.\n외장색상을 변경해주세요.',
+  NON_PROVIDED_COLOR_WITH_EXTERIOR: '선택하신 외장색상과 함께 제공되지 않는 내장색상입니다.',
   NON_COMPATIBLE_INTERIOR_COLOR: '선택하신 차량 모델과 호환되지 않는 내장색상입니다.',
   NO_MATCHING_INTERIOR_COLOR: '선택하신 차량 모델과 매칭되는 내장색상이 없습니다.',
   NO_MATCHING_EXTERIOR_COLOR: '선택하신 차량 모델과 매칭되는 외장색상이 없습니다.',

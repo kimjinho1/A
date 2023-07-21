@@ -154,7 +154,9 @@ export class OptionService {
   }
 
   /**
-   * 같이 선택(EX -> 컨비니언스1 & 인포테이먼트 내비)되어야 하는 옵션들 반환
+   * 같이 상태가 바뀌어야 하는 종속성 있는 옵션들 반환
+   * 같이 선택(EX -> 컨비니언스1 & 인포테이먼트 내비)
+   * 교환(EX -> 익스테리어1 vs 익스테리어 2 플러스)
    */
   async getChangedOptions(modelCode: string, optionCode: string, beforeOptionCode: string): Promise<ChangedOptions> {
     const carModel = await this.colorService.getCarModel(modelCode)
@@ -224,6 +226,7 @@ export class OptionService {
     await Promise.all(
       optionCodes.map(async optionCode => {
         const option = await this.getOption(optionCode)
+        await this.checkOptionTypeIsDetail(option.optionId)
         await this.checkCarModelOption(carModel.modelId, option.optionId)
         const addPossibleOptions = await this.optionRepository.getAddPossibleOptions(option.optionId)
         addPossibleOptions.map(addPossibleOption => {
@@ -235,6 +238,7 @@ export class OptionService {
     await Promise.all(
       tuixCodes.map(async tuixCode => {
         const option = await this.getOption(tuixCode)
+        await this.checkOptionTypeIsTuix(option.optionId)
         await this.checkCarModelOption(carModel.modelId, option.optionId)
         const deactivatedOptions = await this.optionRepository.getDeactivatedOptions(option.optionId)
         deactivatedOptions.map(deactivatedOption => {
@@ -286,6 +290,22 @@ export class OptionService {
       await this.optionRepository.getCarModelOption(modelId, optionId)
     } catch (error) {
       throw new BadRequestException(ErrorMessages.INCOMPATIBLE_MODEL_OPTION)
+    }
+  }
+
+  async checkOptionTypeIsDetail(optionId: number): Promise<void> {
+    try {
+      await this.optionRepository.getDetailOption(optionId)
+    } catch (error) {
+      throw new NotFoundException(ErrorMessages.INVALID_DETAIL_OPTION_CODE)
+    }
+  }
+
+  async checkOptionTypeIsTuix(optionId: number): Promise<void> {
+    try {
+      await this.optionRepository.getTuixOption(optionId)
+    } catch (error) {
+      throw new NotFoundException(ErrorMessages.INVALID_TUIX_OPTION_CODE)
     }
   }
 }

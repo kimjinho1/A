@@ -213,7 +213,7 @@ export class ColorService {
     try {
       await this.colorRepository.getIntExtColor(intColorId, extColorId)
     } catch (error) {
-      throw new NotFoundException(ErrorMessages.NON_PROVIDED_COLOR_WITH_EXTERIOR)
+      throw new BadRequestException(ErrorMessages.NON_PROVIDED_COLOR_WITH_EXTERIOR)
     }
   }
 }
