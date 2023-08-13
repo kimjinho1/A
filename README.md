@@ -7,6 +7,12 @@ TypeScript, NestJS, Prisma, MySQL
 ## ERD 설계  
 <img width="1440" alt="erd" src="https://github.com/kimjinho1/MyCar-Backend-NestJS/assets/29765855/5a911984-88cd-410c-8159-ce45302060e2">
 
+## 인터페이스 명세서
+[URL](https://docs.google.com/document/d/1u5VRWlR4-Ceacigi_vwpc3l1WxwXA2GvZCaHPVUUVok/edit?usp=sharing)
+
+## 화면설계서
+[URL](https://docs.google.com/document/d/1qb4QLTVkDfeKf0HpOyYLfGpiv0HNGrdQuRNH0OMUN44/edit?usp=sharing)
+
 
 ## 실행 방법  
 1. npm 설치 -> https://nodejs.org/ko/download  
