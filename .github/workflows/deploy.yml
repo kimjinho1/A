@@ -41,5 +41,9 @@ jobs:
         run: aws s3 cp --region ap-northeast-2 ./test-build.zip s3://mycar-bucket-test/test-build.zip
 
       - name: Deploy
-        run: aws deploy create-deployment --application-name mycar-code-deploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name mycar-server --s3-location bucket=mycar-bucket-test,key=test-build.zip,bundleType=zip
+        run: aws deploy create-deployment 
+          --application-name mycar-code-deploy
+          --deployment-config-name CodeDeployDefault.AllAtOnce 
+          --deployment-group-name mycar-server
+          --s3-location bucket=mycar-bucket-test/test-build.zip,bundleType=zip
         # run: aws deploy create-deployment --application-name mycar-code-deploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name mycar-server --s3-location bucket=mycar-bucket-test,bundleType=zip
