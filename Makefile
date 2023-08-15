@@ -1,12 +1,13 @@
 all:
-	npm install
-	npm run start
-
-nest:
-	npm run start
+	npx prisma migrate dev --name init
+	npm run seed
+	npm run start:dev
 
 docker:
 	docker-compose up --build
+
+nest:
+	npm run start:dev
 
 migrate:
 	npx prisma migrate dev --name init
@@ -28,5 +29,3 @@ clean:
 
 fclean:	clean
 	sudo rm -rf db
-
-re: fclean all

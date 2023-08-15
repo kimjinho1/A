@@ -1,8 +1,5 @@
 # env
-# .env
-
-# prisma
-prisma/migrations
+.env
 
 # database
 db/

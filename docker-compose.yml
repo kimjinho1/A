@@ -1,17 +1,38 @@
 version: '3.8'
 services:
-  mariadb:
-    image: mariadb:latest
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-      - MYSQL_DATABASE
+  postgres:
+    image: postgres:15.3
+    container_name: matchbox_db
     volumes:
-      - mariadb-data:/var/lib/mysql
+      - ./db/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - '3306:3306'
+      - '5432:5432'
+    networks:
+      - intra
 
-volumes:
-  mariadb-data:
+  backend:
+    image: matchbox-back-img
+    container_name: matchbox_backend
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    command: >
+      bash -c "sleep 15 &&
+        npx prisma migrate deploy &&
+        npm start"
+    networks:
+      - intra
+
+networks:
+  intra:
+    driver: bridge
